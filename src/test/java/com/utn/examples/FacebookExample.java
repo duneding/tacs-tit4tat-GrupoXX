@@ -24,7 +24,8 @@ public class FacebookExample
                                   .apiSecret(apiSecret)
                                   .callback("http://tacs-tit4tat.appspot.com/")
                                   .build();
-    Scanner in = new Scanner(System.in);
+    @SuppressWarnings("resource")
+	Scanner in = new Scanner(System.in);
 
     System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
     System.out.println();

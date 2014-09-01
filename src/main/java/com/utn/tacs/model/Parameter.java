@@ -9,7 +9,11 @@ public class Parameter implements Comparable<Parameter>
 {
   private static final String UTF = "UTF8";
 
-  private final String key;
+  public static String getUtf() {
+	return UTF;
+}
+
+private final String key;
   private final String value;
 
   public Parameter(String key, String value)
