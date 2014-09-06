@@ -20,6 +20,7 @@
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="com.utn.tacs.tit4tat.web.template.JstlView" />
 		<property name="prefix">
 			<value>WEB-INF/views/</value>
 		</property>
