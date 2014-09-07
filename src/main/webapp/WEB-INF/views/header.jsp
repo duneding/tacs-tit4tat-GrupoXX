@@ -18,11 +18,11 @@ Bootstrap
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Tit4Tat</a>
+          <a class="navbar-brand" href="home.htm">Tit4Tat</a>
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-					<li><a href="home.htm">Inicio</a></li>
+					<li><a href="perfil.htm">Perfil</a></li>
 					<li><a href="items.htm">Items</a></li>
 					<li><a href="solicitudes.htm">Solicitudes<span class="badge">3</span></a></li>
 			</ul>
