@@ -23,17 +23,7 @@
 			/WEB-INF/mvc-dispatcher-servlet.xml,
 		</param-value>
 	</context-param>    
-    
-    <!--servlet>
-		<servlet-name>Tacs_tit4tat</servlet-name>
-		<servlet-class>com.utn.Tacs_tit4tatServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Tacs_tit4tat</servlet-name>
-		<url-pattern>/tacs_tit4tat</url-pattern>
-	</servlet-mapping-->
-	
-	<!-- <welcome-file-list>
-		<welcome-file>WEB-INF/views/home.jsp</welcome-file>
-	</welcome-file-list> -->
+	<welcome-file-list>
+		<welcome-file>WEB-INF/views/index.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>
