@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "/perfil")
-public class PerfilController {
+@RequestMapping(value = "/amigos")
+public class AmigosController {
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String handlePerfil() {
+	public String handleAmigos() {
 
-		return "perfil";
+		return "amigos";
 	}
 }

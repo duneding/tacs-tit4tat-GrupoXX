@@ -22,7 +22,7 @@ Bootstrap
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-					<li><a href="perfil.htm">Perfil</a></li>
+					<li><a href="amigos.htm">Amigos</a></li>
 					<li><a href="items.htm">Items</a></li>
 					<li><a href="solicitudes.htm">Solicitudes<span class="badge">3</span></a></li>
 			</ul>
