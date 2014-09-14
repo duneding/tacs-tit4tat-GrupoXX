@@ -34,7 +34,7 @@ public class AppVoidTest {
 	public void connectToFacebook() {
 			
 			// Replace these with your own api key and secret
-		    String apiKey = "1454789934802984";
+		    /* String apiKey = "1454789934802984";
 		    String apiSecret = "3285646780d70cf7ad4c5e05277e428f";
 		    OAuthService service = new ServiceBuilder()
 		                                  .provider(FacebookApi.class)
@@ -77,7 +77,7 @@ public class AppVoidTest {
 		    System.out.println(response.getBody());
 
 		    System.out.println();
-		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
+		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");*/
 			
 	}
 	

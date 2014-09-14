@@ -19,4 +19,9 @@ public class HomeController {
 
 		return new ModelAndView("home");
 	}
+	
+	@RequestMapping(value = "/home", method = RequestMethod.POST)
+	public String signed_request(ModelMap model) {
+		return "home";
+	}
 }
