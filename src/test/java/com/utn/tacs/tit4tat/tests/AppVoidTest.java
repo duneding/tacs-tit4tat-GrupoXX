@@ -5,14 +5,14 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.utn.tacs.tit4tat.builder.ServiceBuilder;
-import com.utn.tacs.tit4tat.builder.api.FacebookApi;
-import com.utn.tacs.tit4tat.model.OAuthRequest;
-import com.utn.tacs.tit4tat.model.Response;
-import com.utn.tacs.tit4tat.model.Token;
-import com.utn.tacs.tit4tat.model.Verb;
-import com.utn.tacs.tit4tat.model.Verifier;
-import com.utn.tacs.tit4tat.oauth.OAuthService;
+import com.utn.tacs.tit4tat.facebook.builder.ServiceBuilder;
+import com.utn.tacs.tit4tat.facebook.builder.api.FacebookApi;
+import com.utn.tacs.tit4tat.facebook.model.OAuthRequest;
+import com.utn.tacs.tit4tat.facebook.model.Response;
+import com.utn.tacs.tit4tat.facebook.model.Token;
+import com.utn.tacs.tit4tat.facebook.model.Verb;
+import com.utn.tacs.tit4tat.facebook.model.Verifier;
+import com.utn.tacs.tit4tat.facebook.oauth.OAuthService;
 
 
 public class AppVoidTest {

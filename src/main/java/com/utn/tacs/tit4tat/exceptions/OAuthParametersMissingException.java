@@ -1,6 +1,6 @@
 package com.utn.tacs.tit4tat.exceptions;
 
-import com.utn.tacs.tit4tat.model.*;
+import com.utn.tacs.tit4tat.facebook.model.*;
 
 /**
  * Specialized exception that represents a missing OAuth parameter. 
