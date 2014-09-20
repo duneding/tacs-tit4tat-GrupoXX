@@ -1,18 +1,21 @@
 package com.utn.tacs.tit4tat.tests;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.util.Properties;
 import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.utn.tacs.tit4tat.facebook.builder.ServiceBuilder;
-import com.utn.tacs.tit4tat.facebook.builder.api.FacebookApi;
-import com.utn.tacs.tit4tat.facebook.model.OAuthRequest;
-import com.utn.tacs.tit4tat.facebook.model.Response;
+import com.mercadolibre.sdk.AuthorizationFailure;
+import com.mercadolibre.sdk.Meli;
+import com.ning.http.client.FluentStringsMap;
+import com.ning.http.client.Response;
 import com.utn.tacs.tit4tat.facebook.model.Token;
-import com.utn.tacs.tit4tat.facebook.model.Verb;
-import com.utn.tacs.tit4tat.facebook.model.Verifier;
-import com.utn.tacs.tit4tat.facebook.oauth.OAuthService;
 
 
 public class AppVoidTest {
@@ -81,5 +84,52 @@ public class AppVoidTest {
 			
 	}
 	
+	@Test
+	public void connectToML() {
+
+		try{
+			//Meli m = new Meli(Long.valueOf("81971512840777418197151284077741"), "NEPHqIlkSkVD5GluZF9icEOx2TMwK0lK");
+			Meli m = new Meli(8197151284077741L, "NEPHqIlkSkVD5GluZF9icEOx2TMwK0lK");
+			String redirectUrl = m.getAuthUrl("http://tit4tat-tacs.appspot.com/");
+			String appTacs = "http://tit4tat-tacs.appspot.com/";
+		    File archivo = new File("mla.properties");
+		    FileReader fr = null;
+		    BufferedReader br = null;		    
+			Scanner in = new Scanner(System.in);
+			String token;
+			
+			Properties propiedades = new Properties();
+			propiedades.load(new FileInputStream("mla.properties"));
+			token = propiedades.getProperty("token");
+			
+			try{
+				
+				m.authorize(token, appTacs);
+				
+			}catch (AuthorizationFailure af){
+				System.out.println("Token nuevo para " + redirectUrl + " ?:");
+				token = in.nextLine();
+			
+				propiedades.setProperty("token",token);
+				FileOutputStream os = new FileOutputStream(archivo);
+				propiedades.store(os, "Propiedades MLA");
+				
+				m.authorize(token, appTacs);
+				
+			}
+
+			FluentStringsMap params = new FluentStringsMap();
+			params.add(token, m.getAccessToken());
+			
+			//Response r = m.get("https://api.mercadolibre.com/sites/MLA/search?q=ipod", params);
+			Response r = m.get("/items/MLA512396772", params);
+			Response response = m.get("/users/dunedan", params);
+			System.out.println(response.getResponseBody());
+			
+			
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+	}	
 }
 
