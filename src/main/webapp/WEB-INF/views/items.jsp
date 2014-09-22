@@ -11,6 +11,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+    <div class="alert alert-danger" id="descriptionEmpty" style="display:none">
+        <a href="#" class="close">&times;</a>
+        <strong>Error!</strong>Debe ingresar una descripcion
+    </div>
 
 	<div class="row row-offcanvas row-offcanvas-left">
 
@@ -34,7 +38,17 @@
 				</h1>
 			</div>
 		</div>
-		<!-- /.row -->
+		
+		<div class="row">
+  			<div class="col-lg-6">
+    			<div class="input-group">
+      				<input type="text" id="itemForSearch" class="form-control">
+      					<span class="input-group-btn">
+        					<button class="btn btn-default" type="button" onclick="searchItem()">Go!</button>
+      					</span>
+    				</div>
+  			</div>
+		</div>
 
 		<!-- Projects Row -->
 		<div class="row">
@@ -137,4 +151,37 @@
 	<!--/.container-->
 </body>
 
+<SCRIPT type="text/javascript">
+
+$(document).ready(function(){
+     $('.alert .close').on('click', function(e) {
+    	    $(this).parent().hide();
+    	});
+});
+
+function searchItem(){
+	debugger;
+	var name = $('#itemForSearch').val();
+	if(name.length == 0 ){
+		$("#descriptionEmpty").show();
+		return;
+	}
+		
+	$.ajax({  
+	     type : "GET",   
+	     url : "getItemsSearch.htm",   
+	     async: false,
+	     data : "name=" + name ,  
+	     success : function(response) {  
+	      alert(response);   
+	     },  
+	     error : function(e) {  
+	      alert('Error:');   
+	     }  
+	    });  
+}
+
+</SCRIPT>
+
 </html>
+

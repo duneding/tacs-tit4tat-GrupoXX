@@ -1,6 +1,7 @@
 package com.utn.tacs.tit4tat.tests;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -89,10 +90,11 @@ public class AppVoidTest {
 	public void connectToML() {
 
 		try{
+			System.out.println("Conectando a ML");
 			Meli meli = new Meli(8197151284077741L, "NEPHqIlkSkVD5GluZF9icEOx2TMwK0lK");
-
+			System.out.println("ML instanciada, obteniendo autorizacion...");
 			getAuthorize(meli);			
-
+			System.out.println("autorizacion obtenida.");
 			FluentStringsMap params = new FluentStringsMap();
 			params.add("access_token", meli.getAccessToken());
 			
