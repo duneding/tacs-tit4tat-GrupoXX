@@ -12,14 +12,14 @@ public class ItemsController {
 
 	@RequestMapping(value = "/items", method = RequestMethod.GET)
 	public String items(ModelMap model) {
-		
+
 		model.addAttribute("recurso", new String("ITEMS"));
 		return "items";
 	}
-	
+
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
-	String getItemsSearch(@RequestParam(value = "name") String name){
+	String getItemsSearch(@RequestParam(value = "name") String name) {
 		return "Nombre del item a buscar: " + name;
 	}
 

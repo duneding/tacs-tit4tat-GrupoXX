@@ -1,6 +1,8 @@
-package com.utn.tacs.tit4tat.dao;
+package com.utn.tacs.tit4tat.dao.impl;
 
 import java.io.Serializable;
+
+import com.utn.tacs.tit4tat.dao.GenericDao;
 
 public abstract class GenericDaoImpl<T extends Serializable , ID extends Serializable> implements GenericDao<T, ID> {
 

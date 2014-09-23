@@ -1,5 +1,7 @@
 package com.utn.tacs.tit4tat.model;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 
 }
