@@ -52,7 +52,7 @@
 		<!-- Projects Row -->
 		<div class="row">
 			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
+				<a href="create.htm"> <img class="img-responsive"
 					src="../../images/auto.jpg" alt="">
 				</a>
 			</div>
@@ -148,6 +148,7 @@
 	</div>
 	<!--/.row-->
 	<!--/.container-->
+
 </body>
 
 <SCRIPT type="text/javascript">
@@ -156,10 +157,28 @@ $(document).ready(function(){
      $('.alert .close').on('click', function(e) {
     	    $(this).parent().hide();
     	});
+     $('#aa').on('click', function(e,t) {
+    	 debugger;
+    	 var id ="id";
+    	 $.ajax({  
+    	     type : "GET",   
+    	     url : "create.htm",   
+    	     async: false,
+    	     data : "id=" + id ,  
+    	     success : function(response) {  
+    	      alert(response); 
+    	      window.location = "/create.htm";
+    	     },  
+    	     error : function(e) {  
+    	      alert('Error:');   
+    	     }  
+    	    });
+ 	});
 });
 
+
+
 function searchItem(){
-	debugger;
 	var name = $('#itemForSearch').val();
 	if(name.length == 0 ){
 		$("#descriptionEmpty").show();
@@ -181,6 +200,7 @@ function searchItem(){
 }
 
 </SCRIPT>
+
 
 </html>
 
