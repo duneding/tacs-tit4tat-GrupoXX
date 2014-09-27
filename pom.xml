@@ -163,7 +163,8 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-
+		
+		<!-- No hace falta porque appengine-api-stubs ya trae integrado hsql -->
 		<!-- hsql Drivers -->
 		<!-- <dependency>
 			<groupId>org.hsqldb</groupId>

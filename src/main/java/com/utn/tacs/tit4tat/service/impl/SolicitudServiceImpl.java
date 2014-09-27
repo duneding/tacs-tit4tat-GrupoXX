@@ -19,31 +19,28 @@ public class SolicitudServiceImpl implements SolicitudService {
 
 	@Override
 	public Solicitud saveSolicitud(Solicitud solicitud) {
-		// TODO Auto-generated method stub
-		return null;
+		Long id = this.solicitudDao.save(solicitud);
+		solicitud.setId(id);
+		return solicitud;
 	}
 
 	@Override
 	public void deleteSolicitud(Solicitud solicitud) {
-		// TODO Auto-generated method stub
-		
+		this.solicitudDao.delete(solicitud);
 	}
 
 	@Override
 	public List<Solicitud> getSolicitudes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.solicitudDao.findAll();
 	}
 
 	@Override
 	public Solicitud getSolicitudesById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.solicitudDao.getById(id);
 	}
 
 	@Override
 	public void updateSolicitud(Solicitud solicitud) {
-		// TODO Auto-generated method stub
-		
+		this.solicitudDao.saveOrUpdate(solicitud);
 	}
 }

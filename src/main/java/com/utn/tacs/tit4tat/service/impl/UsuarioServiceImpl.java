@@ -19,31 +19,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario saveUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		Long id = this.usuarioDao.save(usuario);
+		usuario.setId(id);
+		return usuario;
 	}
 
 	@Override
 	public void deleteUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		
+		this.usuarioDao.delete(usuario);
 	}
 
 	@Override
 	public List<Usuario> getUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.usuarioDao.findAll();
 	}
 
 	@Override
 	public Usuario getUsuariosById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getUsuariosById(id);
 	}
 
 	@Override
 	public void updateUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		
+		this.usuarioDao.saveOrUpdate(usuario);
 	}
 }

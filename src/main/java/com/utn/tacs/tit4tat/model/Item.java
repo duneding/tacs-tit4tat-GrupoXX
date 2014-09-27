@@ -42,6 +42,5 @@ public class Item implements Serializable {
 
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
-	}
-	
+	}	
 }
