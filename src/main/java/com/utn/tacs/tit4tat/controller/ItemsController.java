@@ -22,5 +22,10 @@ public class ItemsController {
 	String getItemsSearch(@RequestParam(value = "name") String name) {
 		return "Nombre del item a buscar: " + name;
 	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public String create(ModelMap model) {
+		return "create";
+	}
 
 }
