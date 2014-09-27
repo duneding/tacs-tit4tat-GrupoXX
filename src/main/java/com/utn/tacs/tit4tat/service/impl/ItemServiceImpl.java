@@ -10,40 +10,37 @@ import com.utn.tacs.tit4tat.dao.ItemDao;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.service.ItemService;
 
-@Service(value="itemService")
-@Scope(value="prototype")
+@Service(value = "itemService")
+@Scope(value = "prototype")
 public class ItemServiceImpl implements ItemService {
-	
+
 	@Autowired
 	private ItemDao itemDao;
-	
+
 	@Override
 	public Item saveItem(Item item) {
-		// TODO Auto-generated method stub
-		return null;
+		Long id = this.itemDao.save(item);
+		item.setId(id);
+		return item;
 	}
 
 	@Override
 	public void deleteItem(Item item) {
-		// TODO Auto-generated method stub
-		
+		itemDao.delete(item);
 	}
 
 	@Override
 	public List<Item> getItems() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.itemDao.findAll();
 	}
 
 	@Override
 	public Item getItemsById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.itemDao.getById(id);
 	}
 
 	@Override
 	public void updateItem(Item item) {
-		// TODO Auto-generated method stub
-		
+		this.itemDao.saveOrUpdate(item);
 	}
 }

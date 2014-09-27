@@ -7,7 +7,7 @@ import com.utn.tacs.tit4tat.dao.ItemDao;
 import com.utn.tacs.tit4tat.model.Item;
 
 @Service("itemDao")
-@Scope("Singleton")
+@Scope("singleton")
 public class ItemDaoImpl extends GenericDaoImpl<Item, Long> implements ItemDao {
 
 }

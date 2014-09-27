@@ -7,7 +7,7 @@ import com.utn.tacs.tit4tat.dao.SolicitudDao;
 import com.utn.tacs.tit4tat.model.Solicitud;
 
 @Service("solicitudDao")
-@Scope("Singleton")
+@Scope("singleton")
 public class SolicitudDaoImpl extends GenericDaoImpl<Solicitud, Long> implements
 		SolicitudDao {
 

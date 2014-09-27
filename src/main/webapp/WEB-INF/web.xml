@@ -16,13 +16,13 @@
 	</servlet-mapping>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	</listener>    
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/mvc-dispatcher-servlet.xml,
 		</param-value>
-	</context-param>    
+	</context-param>
 	<welcome-file-list>
 		<welcome-file>WEB-INF/views/index.jsp</welcome-file>
 	</welcome-file-list>

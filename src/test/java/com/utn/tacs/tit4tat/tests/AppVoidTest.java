@@ -24,22 +24,22 @@ import com.utn.tacs.tit4tat.facebook.model.Token;
 
 public class AppVoidTest {
 
-	private static final String NETWORK_NAME = "Facebook";
-	private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
-	private static final Token EMPTY_TOKEN = null;
-	private Meli meli;
-	
-	@Before
-	public void setUp() throws Exception {
-		try{
-		 meli = new Meli(getAppIdML(), getSecretML());
-		}catch(Exception e){
-			System.out.println(e.toString());
-		}
-	}
-	
-	@Test
-	public void connectToFacebook() {
+//	private static final String NETWORK_NAME = "Facebook";
+//	private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
+//	private static final Token EMPTY_TOKEN = null;
+//	private Meli meli;
+//	
+//	@Before
+//	public void setUp() throws Exception {
+//		try{
+//		 meli = new Meli(getAppIdML(), getSecretML());
+//		}catch(Exception e){
+//			System.out.println(e.toString());
+//		}
+//	}
+//	
+//	@Test
+//	public void connectToFacebook() {
 			
 			// Replace these with your own api key and secret
 		    /* String apiKey = "1454789934802984";
@@ -87,115 +87,115 @@ public class AppVoidTest {
 		    System.out.println();
 		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");*/
 			
-	}
+//	}
 	
-	@Test
-	public void connectToML() {
-
-		try{		
-			getAuthorizeML();			
-			FluentStringsMap params = new FluentStringsMap();
-			params.add("access_token", meli.getAccessToken());
-			
-			Response response = meli.get("/users/me", params);			
-
-			Assert.assertEquals(200, response.getStatusCode());
-			
-		}catch(Exception e){
-			System.out.println(e.toString());
-		}
-	}
-	
-	@Test
-	public void connectToMLAndGetInformation() {
-
-		try{		
-			getAuthorizeML();			
-			FluentStringsMap params = new FluentStringsMap();
-			params.add("access_token", meli.getAccessToken());
-			
-			Response response = meli.get("/items/MLA521071653", params);			
-			System.out.println(response.getResponseBody());	
-			Assert.assertEquals(200, response.getStatusCode());
-			
-		}catch(Exception e){
-			System.out.println(e.toString());
-		}
-	}
-	
-	private Long getAppIdML(){
-		
-		Properties properties = new Properties();
-		return Long.valueOf(getPropertiesML().getProperty("appid"));
-	}
-	
-	private String getSecretML(){
-		
-		Properties properties = new Properties();
-		return getPropertiesML().getProperty("secret");
-	}
-	
-	private String getToken(){
-		
-		Properties properties = new Properties();
-		return getPropertiesML().getProperty("token");
-	}
-	
-	private Properties getPropertiesML(){
-		String propMLAfileName = "mla.properties";
-		File filePropMLA = new File(propMLAfileName);		
-		Properties properties = new Properties();
-		
-		try{
-			properties.load(new FileInputStream(filePropMLA));
-		}catch (FileNotFoundException e){
-			System.out.println(e.toString());
-		}catch (IOException e){
-			System.out.println(e.toString());
-		}
-				
-		return properties;
-		
-	}
-	
-	private void setToken(String token){
-		String propMLAfileName = "mla.properties";
-		File filePropMLA = new File(propMLAfileName);		
-		Properties properties = new Properties();
-		
-		try{
-			properties.load(new FileInputStream(filePropMLA));
-			properties.setProperty("token",token);
-			FileOutputStream os = new FileOutputStream(filePropMLA);
-			properties.store(os, "Propiedades MLA");
-		}catch (FileNotFoundException e){
-			System.out.println(e.toString());
-		}catch (IOException e){
-			System.out.println(e.toString());
-		}		
-	}
-	
-	private void getAuthorizeML(){
-		String  appTacs = "http://tit4tat-tacs.appspot.com/";
-		String redirectUrl = meli.getAuthUrl(appTacs);
-	    FileReader fr = null;
-	    BufferedReader br = null;		    
-		Scanner in = new Scanner(System.in);	
-		String token;
-		
-		try{
-			
-			token = getToken();
-			meli.authorize(token, appTacs);
-			
-		}catch (AuthorizationFailure af){
-			System.out.println("Ingresar Token nuevo para:");
-			System.out.println(redirectUrl);
-			token = in.nextLine();
-		
-			setToken(token);	
-		}				
-	}
-	
+//	@Test
+//	public void connectToML() {
+//
+//		try{		
+//			getAuthorizeML();			
+//			FluentStringsMap params = new FluentStringsMap();
+//			params.add("access_token", meli.getAccessToken());
+//			
+//			Response response = meli.get("/users/me", params);			
+//
+//			Assert.assertEquals(200, response.getStatusCode());
+//			
+//		}catch(Exception e){
+//			System.out.println(e.toString());
+//		}
+//	}
+//	
+//	@Test
+//	public void connectToMLAndGetInformation() {
+//
+//		try{		
+//			getAuthorizeML();			
+//			FluentStringsMap params = new FluentStringsMap();
+//			params.add("access_token", meli.getAccessToken());
+//			
+//			Response response = meli.get("/items/MLA521071653", params);			
+//			System.out.println(response.getResponseBody());	
+//			Assert.assertEquals(200, response.getStatusCode());
+//			
+//		}catch(Exception e){
+//			System.out.println(e.toString());
+//		}
+//	}
+//	
+//	private Long getAppIdML(){
+//		
+//		Properties properties = new Properties();
+//		return Long.valueOf(getPropertiesML().getProperty("appid"));
+//	}
+//	
+//	private String getSecretML(){
+//		
+//		Properties properties = new Properties();
+//		return getPropertiesML().getProperty("secret");
+//	}
+//	
+//	private String getToken(){
+//		
+//		Properties properties = new Properties();
+//		return getPropertiesML().getProperty("token");
+//	}
+//	
+//	private Properties getPropertiesML(){
+//		String propMLAfileName = "mla.properties";
+//		File filePropMLA = new File(propMLAfileName);		
+//		Properties properties = new Properties();
+//		
+//		try{
+//			properties.load(new FileInputStream(filePropMLA));
+//		}catch (FileNotFoundException e){
+//			System.out.println(e.toString());
+//		}catch (IOException e){
+//			System.out.println(e.toString());
+//		}
+//				
+//		return properties;
+//		
+//	}
+//	
+//	private void setToken(String token){
+//		String propMLAfileName = "mla.properties";
+//		File filePropMLA = new File(propMLAfileName);		
+//		Properties properties = new Properties();
+//		
+//		try{
+//			properties.load(new FileInputStream(filePropMLA));
+//			properties.setProperty("token",token);
+//			FileOutputStream os = new FileOutputStream(filePropMLA);
+//			properties.store(os, "Propiedades MLA");
+//		}catch (FileNotFoundException e){
+//			System.out.println(e.toString());
+//		}catch (IOException e){
+//			System.out.println(e.toString());
+//		}		
+//	}
+//	
+//	private void getAuthorizeML(){
+//		String  appTacs = "http://tit4tat-tacs.appspot.com/";
+//		String redirectUrl = meli.getAuthUrl(appTacs);
+//	    FileReader fr = null;
+//	    BufferedReader br = null;		    
+//		Scanner in = new Scanner(System.in);	
+//		String token;
+//		
+//		try{
+//			
+//			token = getToken();
+//			meli.authorize(token, appTacs);
+//			
+//		}catch (AuthorizationFailure af){
+//			System.out.println("Ingresar Token nuevo para:");
+//			System.out.println(redirectUrl);
+//			token = in.nextLine();
+//		
+//			setToken(token);	
+//		}				
+//	}
+//	
 }
 
