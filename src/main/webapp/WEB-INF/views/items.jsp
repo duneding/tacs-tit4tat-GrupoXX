@@ -162,7 +162,7 @@ $(document).ready(function(){
     	 var id ="id";
     	 $.ajax({  
     	     type : "GET",   
-    	     url : "create.htm",   
+    	     url : "create.htm",   	
     	     async: false,
     	     data : "id=" + id ,  
     	     success : function(response) {  

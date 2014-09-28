@@ -43,4 +43,9 @@ public class ItemServiceImpl implements ItemService {
 	public void updateItem(Item item) {
 		this.itemDao.saveOrUpdate(item);
 	}
+
+	@Override
+	public List<Item> getItemsByUser(Long userId) {
+		return this.itemDao.getItemsByUser(userId);
+	}
 }

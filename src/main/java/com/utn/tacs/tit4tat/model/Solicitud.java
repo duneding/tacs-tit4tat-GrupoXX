@@ -15,6 +15,15 @@ public class Solicitud implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+	private String detalle;
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
 
 	
 	public Long getId() {
@@ -23,5 +32,17 @@ public class Solicitud implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	} 
+	}
+	
+	protected Solicitud() {
+	}
+	
+	public Solicitud(String detalle) {
+		this.setDetalle(detalle);
+	}
+
+	@Override
+	public String toString() {
+		return "Solicitud [id=" + id + ", detalle=" + detalle + "]";
+	}
 }
