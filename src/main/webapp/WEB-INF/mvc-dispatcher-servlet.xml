@@ -12,7 +12,7 @@
                      http://www.springframework.org/schema/mvc
                      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-	<context:component-scan base-package="com.utn.tacs.tit4tat.controller" />
+	<context:component-scan	base-package="com.utn.tacs.tit4tat.dao,com.utn.tacs.tit4tat.service,com.utn.tacs.tit4tat.controller" />
 
 	<mvc:annotation-driven />
 
