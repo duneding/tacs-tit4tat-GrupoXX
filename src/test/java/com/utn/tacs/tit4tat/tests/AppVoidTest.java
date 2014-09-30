@@ -1,23 +1,11 @@
 package com.utn.tacs.tit4tat.tests;
 
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mercadolibre.sdk.AuthorizationFailure;
-import com.mercadolibre.sdk.Meli;
-import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Response;
 import com.utn.tacs.tit4tat.facebook.model.Token;
 import com.utn.tacs.tit4tat.meli.MercadoLibre;
@@ -118,9 +106,10 @@ public class AppVoidTest {
 
 		try{							
 			MercadoLibre ml_connection = MercadoLibre.getInstance();								
-			String urlList = ml_connection.getUrlList();			
-			Response response = ml_connection.get(urlList);
-			Assert.assertEquals(200, response.getStatusCode());
+			//String urlList = ml_connection.getUrlList();			
+			//Response response = ml_connection.get(urlList);
+			List list = ml_connection.getItemList();
+			Assert.assertTrue(list.size()>0);
 			
 		}catch(Exception e){
 			System.out.println(e.toString());

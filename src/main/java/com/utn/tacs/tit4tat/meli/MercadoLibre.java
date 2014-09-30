@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -115,7 +117,7 @@ public class MercadoLibre {
 	public Response get(String value){
 		Response response = null;
 		try{
-			response = meli.get(value, params);			
+			response = meli.get(value, params);		
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
@@ -132,6 +134,23 @@ public class MercadoLibre {
 		
 		return urlItems;
 	}
+	
+	public List getItemList(){
+		String urlItems;
+		Properties properties = new Properties();
+		String itemsList = getPropertiesML().getProperty("items");
+		String[] list = itemsList.split(",");
+		Response response;		
+		List items = new ArrayList();
+				
+		for (String item : list) {
+			urlItems = "/items/" + item;
+			response = this.get(urlItems);
+			items.add(response);			
+		}
+						
+		return items;
+	}	
 	
 }
 
