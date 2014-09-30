@@ -22,7 +22,6 @@
     <label for="imagen">Imagen</label>
     <img src="..." alt="..." class="img-thumbnail">
   </div>
-  
   <button type="submit" class="btn btn-default">Agregar</button>
 </form>
 </body>
