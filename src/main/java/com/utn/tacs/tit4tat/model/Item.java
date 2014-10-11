@@ -25,7 +25,7 @@ public class Item implements Serializable {
 
 	private String description;
 	
-	private ByteArrayOutputStream image;
+	private byte[] image;
 	
 	private URL permalink;
 
@@ -65,11 +65,11 @@ public class Item implements Serializable {
 		this.owner = owner;
 	}
 	
-	public ByteArrayOutputStream getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(ByteArrayOutputStream image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}	
 

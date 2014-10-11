@@ -307,7 +307,7 @@ public class MercadoLibre {
 				URL permalink = (URL) element.get("permalink");
 				item.setId(normalizeId((String) element.get("id")));
 				item.setDescription((String) element.get("title"));
-				item.setImage(getImageAsStream((String) element.get("thumbnail")));				
+				item.setImage(getImageAsBytes((String) element.get("thumbnail")));				
 				item.setCategory(getCategory((String) element.get("category_id")));
 				item.setPermalink(permalink);
 				
@@ -326,7 +326,7 @@ public class MercadoLibre {
 		return Long.valueOf(id.substring(3, id.length()));
 	}
 	
-	private ByteArrayOutputStream getImageAsStream(String thumbnail){
+	private byte[] getImageAsBytes(String thumbnail){
 		ByteArrayOutputStream bis = new ByteArrayOutputStream();
 		InputStream is = null;
 		try {
@@ -341,7 +341,8 @@ public class MercadoLibre {
 		}catch(Exception e){
 			//TODO
 		}
-		return bis;		
+		
+		return bis.toByteArray();		
 	}
 	
 }
