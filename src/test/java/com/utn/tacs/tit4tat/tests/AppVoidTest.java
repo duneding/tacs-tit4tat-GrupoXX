@@ -1,7 +1,11 @@
 package com.utn.tacs.tit4tat.tests;
 
+import java.util.Iterator;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +82,7 @@ public class AppVoidTest {
 		
 		try{
 			MercadoLibre ml_connection = MercadoLibre.getInstance();								
-			Response response = ml_connection.get("/users/me");			
+			Response response = ml_connection.getUserMe();			
 
 			Assert.assertEquals(200, response.getStatusCode());
 			
@@ -108,7 +112,7 @@ public class AppVoidTest {
 			MercadoLibre ml_connection = MercadoLibre.getInstance();								
 			//String urlList = ml_connection.getUrlList();			
 			//Response response = ml_connection.get(urlList);
-			List list = ml_connection.getItemList();
+			List<Response> list = ml_connection.getItemFromProp();
 			Assert.assertTrue(list.size()>0);
 			
 		}catch(Exception e){
@@ -116,5 +120,35 @@ public class AppVoidTest {
 		}
 	}	
 		
+	@Test
+	public void searchItemsML() {
+		
+		try{
+			MercadoLibre ml_connection = MercadoLibre.getInstance();
+			Response response = ml_connection.searchItems("ipod");	
+			
+			System.out.println(response.getResponseBody());
+			
+			String body = response.getResponseBody();
+			 
+            JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			// get a String from the JSON object
+			JSONArray results = (JSONArray) jsonObject.get("results");
+			
+			Iterator<?> it = results.iterator();
+			while(it.hasNext()) {
+				JSONObject element = (JSONObject) it.next();
+				String title = (String) element.get("thumbnail");
+				System.out.println("The first name is: " + title);
+      		}
+
+			Assert.assertEquals(200, response.getStatusCode());
+			Assert.assertTrue(response.getHeaders().size()>0);
+			
+			}catch(Exception e){
+				System.out.println(e.toString());
+			}
+	}
 }
 

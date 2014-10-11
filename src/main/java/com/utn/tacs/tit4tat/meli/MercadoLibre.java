@@ -1,11 +1,9 @@
 package com.utn.tacs.tit4tat.meli;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +27,12 @@ public class MercadoLibre {
 	
 	public MercadoLibre(){
 		try{
-		 meli = new Meli(getAppIdML(), getSecretML());
+		 meli = new Meli(getAppId(), getSecret());
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
 		
-		getAuthorizeML();
+		authorize();
 				
 	}
 	 
@@ -45,10 +43,8 @@ public class MercadoLibre {
 		return instance;
 	}
 	
-	private void getAuthorizeML(){		
-		String redirectUrl = meli.getAuthUrl(APPTACS_URL);
-	    FileReader fr = null;
-	    BufferedReader br = null;		    
+	private void authorize(){		
+		String redirectUrl = meli.getAuthUrl(APPTACS_URL);		    
 		Scanner in = new Scanner(System.in);	
 				
 		try{
@@ -59,30 +55,27 @@ public class MercadoLibre {
 		}catch (AuthorizationFailure af){
 			System.out.println("Ingresar Token nuevo para:");
 			System.out.println(redirectUrl);
-			token = in.nextLine();
-		
-			setToken(token);	
+			token = in.nextLine();		
+			setToken(token);				
+			in.close();
 		}
 		params = new FluentStringsMap();
 		params.add("access_token", meli.getAccessToken());
 	}
 	
-	private Long getAppIdML(){	
-		Properties properties = new Properties();
-		return Long.valueOf(getPropertiesML().getProperty("appid"));
+	private Long getAppId(){	
+		return Long.valueOf(getProperties().getProperty("appid"));
 	}
 
-	private String getSecretML(){		
-		Properties properties = new Properties();
-		return getPropertiesML().getProperty("secret");
+	private String getSecret(){				
+		return getProperties().getProperty("secret");
 	}
 
 	private String getToken(){		
-		Properties properties = new Properties();
-		return getPropertiesML().getProperty("token");
+		return getProperties().getProperty("token");
 	}
 
-	private Properties getPropertiesML(){		
+	private Properties getProperties(){		
 		File filePropMLA = new File(PROP_FILE);		
 		Properties properties = new Properties();
 		
@@ -114,7 +107,7 @@ public class MercadoLibre {
 		}		
 	}
 	
-	public Response get(String value){
+	public Response get(String value, FluentStringsMap params){
 		Response response = null;
 		try{
 			response = meli.get(value, params);		
@@ -125,23 +118,42 @@ public class MercadoLibre {
 		return response;
 	}	
 	
-	public String getUrlList(){
-		Properties properties = new Properties();
-		String itemsList = getPropertiesML().getProperty("items");
-		//String[] list = itemsList.split(",");
-		//https://api.mercadolibre.com/items?ids=MLA523431013,MLA524394956
+	public Response get(String value){
+		Response response = null;
+		try{
+			response = meli.get(value);		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return response;
+	}	
+	
+	public Response getUserMe(){
+		Response response = null;
+		try{
+			response = meli.get("/users/me", params);		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return response;
+		
+	}
+	
+	public String getUrlItemsList(){
+		String itemsList = getProperties().getProperty("items");
 		String urlItems = "/items?ids=" + itemsList;
 		
 		return urlItems;
 	}
 	
-	public List getItemList(){
+	public List<Response> getItemFromProp(){
 		String urlItems;
-		Properties properties = new Properties();
-		String itemsList = getPropertiesML().getProperty("items");
+		String itemsList = getProperties().getProperty("items");
 		String[] list = itemsList.split(",");
 		Response response;		
-		List items = new ArrayList();
+		List<Response> items = new ArrayList<Response>();
 				
 		for (String item : list) {
 			urlItems = "/items/" + item;
@@ -151,6 +163,21 @@ public class MercadoLibre {
 						
 		return items;
 	}	
+	
+	public Response searchItems(String query){
+		params = new FluentStringsMap();
+		params.add("q", query);	
+		Response response=null;
+		
+		try{		
+			response = meli.get("/sites/MLA/search", params);		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return  response;
+	
+	}		
 	
 }
 
