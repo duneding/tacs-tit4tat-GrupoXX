@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity
@@ -16,6 +17,8 @@ public class Solicitud implements Serializable {
 	@GeneratedValue
 	private Long id;
 	private String detalle;
+	private int state;
+	
 
 	public String getDetalle() {
 		return detalle;
@@ -34,15 +37,41 @@ public class Solicitud implements Serializable {
 		this.id = id;
 	}
 	
-	protected Solicitud() {
-	}
 	
 	public Solicitud(String detalle) {
 		this.setDetalle(detalle);
+	}
+	
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	@Override
 	public String toString() {
 		return "Solicitud [id=" + id + ", detalle=" + detalle + "]";
 	}
+	
+	protected Solicitud() {
+	}
+
+	public void setAcepted() {
+		this.setState(Solicitud.ACEPTED);
+	}
+	
+	public void setRefused() {
+		this.setState(Solicitud.REFUSED);
+	}
+	
+	@Transient
+	public static final int ACEPTED = 1; 
+	
+	@Transient
+	public static final int REFUSED = -1;
+	
+	@Transient
+	public static final int PENDING = 0;
 }

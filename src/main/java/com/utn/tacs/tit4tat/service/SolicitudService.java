@@ -15,4 +15,6 @@ public interface SolicitudService {
 	public Solicitud getSolicitudesById(Long id);
 
 	public void updateSolicitud(Solicitud solicitud);
+
+	public void changeStateOfSolicitud(String permuteId, String state);
 }

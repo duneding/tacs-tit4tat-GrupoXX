@@ -38,6 +38,13 @@ public class HomeController {
 		return new ModelAndView("home");
 	}
 	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public @ResponseBody String loginUser(@RequestBody Usuario user) {
+		
+		//TODO loggear con datos de usuario, si no existe crear uno
+		return "home";
+	}
+	
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
 	public String signed_request(ModelMap model) {
 		return "home";
@@ -52,12 +59,6 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/user/{userId}/login", method=RequestMethod.POST)
-	public @ResponseBody String loginUser(@PathVariable("userId") String userId, @RequestBody Usuario user) {
-		
-		//TODO loggear con datos de usuario, si no existe crear uno
-		return "home";
-	}
 
 	@RequestMapping(value="/user/{userId}/items", method=RequestMethod.GET)
 	public String getItemsByUser(@PathVariable("userId") String userId, Model model) {

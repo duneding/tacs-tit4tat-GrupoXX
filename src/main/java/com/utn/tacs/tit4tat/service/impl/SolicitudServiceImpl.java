@@ -43,4 +43,17 @@ public class SolicitudServiceImpl implements SolicitudService {
 	public void updateSolicitud(Solicitud solicitud) {
 		this.solicitudDao.saveOrUpdate(solicitud);
 	}
+
+	@Override
+	public void changeStateOfSolicitud(String permuteId, String state) {
+		Solicitud solicitud = this.getSolicitudesById(Long.getLong(permuteId));
+		
+		if (state.equalsIgnoreCase("acepted")) {
+			solicitud.setAcepted();
+		} else if(state.equalsIgnoreCase("refused")) {
+			solicitud.setRefused();
+		} else {
+			throw new RuntimeException("Invalid state"); 
+		}
+	}
 }

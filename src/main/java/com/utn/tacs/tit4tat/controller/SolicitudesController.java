@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -12,23 +14,41 @@ import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Controller
-@RequestMapping("/solicitudes")
+@RequestMapping(value = {"/notifications", "/permute"})
 public class SolicitudesController {
 
 	@Autowired
 	private SolicitudService solicitudService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String items(ModelMap model) {
-
-		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque1"));
-		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque2"));
+	@RequestMapping(method = RequestMethod.POST)
+	public String createPermute(Model model) {
+		return "/permute";
+	}
+	
+	
+	@RequestMapping(value = "/{permuteId}/{state}", method = RequestMethod.PUT)	
+	public String responsePermuteNotification(@PathVariable("permuteId") String permuteId, @PathVariable("state") String state) {
 		
-		for (Solicitud solicitud : this.solicitudService.getSolicitudes()) {
-			System.out.println(solicitud);
-		}
+		this.solicitudService.changeStateOfSolicitud(permuteId, state);
+		
+		return "/permute/{permuteId}";
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String getNotifications(ModelMap model) {
 
-		model.addAttribute("recurso", new String("SOLICITUDES"));
-		return "solicitudes";
+		List<Solicitud> notifications = this.solicitudService.getSolicitudes();
+		model.addAttribute("notifications", notifications);
+		return "/notifications";
+		
+//		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque1"));
+//		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque2"));
+//		
+//		for (Solicitud solicitud : this.solicitudService.getSolicitudes()) {
+//			System.out.println(solicitud);
+//		}
+//
+//		model.addAttribute("recurso", new String("SOLICITUDES"));
+//		return "solicitudes";
 	}
 }
