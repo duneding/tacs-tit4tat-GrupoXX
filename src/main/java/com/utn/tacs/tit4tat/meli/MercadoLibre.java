@@ -52,7 +52,7 @@ public class MercadoLibre {
 		return instance;
 	}
 	
-	private void authorize(){		
+	public void authorize(){		
 		String redirectUrl = meli.getAuthUrl(APPTACS_URL);		    
 		Scanner in = new Scanner(System.in);	
 				
@@ -217,74 +217,99 @@ public class MercadoLibre {
 		return items;
 	}	
 	
-	@SuppressWarnings("unchecked")
-	public JSONObject searchItems(String query){
+	private JSONObject getJSONObject(String body){
+		JSONParser jsonParser = new JSONParser();
+		JSONObject result = null;
+		
+		try{
+			result = (JSONObject) jsonParser.parse(body);
+		}catch (Exception e){
+			//TODO
+		}
+		
+		return result;
+	}
+
+	public JSONObject searchJSONItems(String query){
+		
+		return getJSONResponse(searchItemsMeli(query));
+
+	}		
+	
+	public List<Item> searchlListItems(String query){
+		
+		return getListResponse(searchItemsMeli(query));
+
+	}	
+	
+	private JSONObject searchItemsMeli(String query){
 		params = new FluentStringsMap();
 		params.add("q", query);	
 		Response items=null;
-		JSONObject response= new JSONObject();
+		JSONObject response = null;
 		
 		try{
-			
 			items = meli.get("/sites/MLA/search", params);	
 			String body = items.getResponseBody();
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			response = getJSONObject(body);
 			
-			JSONArray results = (JSONArray) jsonObject.get("results");		
-			JSONArray itemsArray = new JSONArray();
-			Iterator<?> it = results.iterator();
-			while(it.hasNext()) {
-				
-				JSONObject element = (JSONObject) it.next();
-				JSONObject new_element = new JSONObject();
-				new_element.put("id", element.get("id"));				
-				new_element.put("category", element.get("category_id"));
-				new_element.put("description", element.get("title"));
-				new_element.put("image", element.get("thumbnail"));
-				new_element.put("permalink", element.get("permalink"));
-				itemsArray.add(new_element);
-			}
-			
-			response.put("results", itemsArray);
-			response.put("paging", jsonObject.get("paging"));
-			response.put("query", jsonObject.get("query"));			
-			response.put("site_id", jsonObject.get("site_id"));
-			
-			
-		}catch(Exception e){
-			System.out.println(e.toString());
+		}catch (Exception e){
+			//TODO
 		}
 		
-		return  response;	
-	}		
+		return response;
+	}
 	
-	private List<Item> convertItemsList(Response response)
-	{
+	@SuppressWarnings("unchecked")
+	private JSONObject getJSONResponse(JSONObject jsonObject){
+		JSONObject response= new JSONObject();
+		
+		try{			
+				JSONArray results = (JSONArray) jsonObject.get("results");		
+				JSONArray itemsArray = new JSONArray();
+				Iterator<?> it = results.iterator();
+				while(it.hasNext()) {
+					
+					JSONObject element = (JSONObject) it.next();
+					JSONObject new_element = new JSONObject();
+					new_element.put("id", element.get("id"));				
+					new_element.put("category", element.get("category_id"));
+					new_element.put("description", element.get("title"));
+					new_element.put("image", element.get("thumbnail"));
+					new_element.put("permalink", element.get("permalink"));
+					itemsArray.add(new_element);
+				}
+				
+				response.put("results", itemsArray);
+				response.put("paging", jsonObject.get("paging"));
+				response.put("query", jsonObject.get("query"));			
+				response.put("site_id", jsonObject.get("site_id"));
+				
+				
+			}catch(Exception e){
+				System.out.println(e.toString());
+			}
+		
+		return response;
+	}
+	
+	private List<Item> getListResponse(JSONObject jsonObject){
 		List<Item> items = new ArrayList<Item>();
-		try{
-			String body = response.getResponseBody();
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
-			// get a String from the JSON object
-			JSONArray results = (JSONArray) jsonObject.get("results");
+		
+		try{		
+			JSONArray results = (JSONArray) jsonObject.get("results");			
 			Item item;
-			
 			Iterator<?> it = results.iterator();
 			while(it.hasNext()) {
 				item = new Item();
 				
-				JSONObject element = (JSONObject) it.next();
-				String id = (String) element.get("id");
-				String thumbnail = (String) element.get("thumbnail");
-				String description = (String) element.get("title");
-				String category_id = (String) element.get("category_id");
+				JSONObject element = (JSONObject) it.next();			
 				URL permalink = (URL) element.get("permalink");
-				item.setId(normalizeId(id));
-				item.setDescription(description);
-				item.setImage(getImageAsStream(thumbnail));				
-				item.setCategory(getCategory(category_id));
-				item.setUrl(permalink);
+				item.setId(normalizeId((String) element.get("id")));
+				item.setDescription((String) element.get("title"));
+				item.setImage(getImageAsStream((String) element.get("thumbnail")));				
+				item.setCategory(getCategory((String) element.get("category_id")));
+				item.setPermalink(permalink);
 				
 				items.add(item);
 

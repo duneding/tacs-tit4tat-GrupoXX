@@ -77,7 +77,7 @@ public class Item implements Serializable {
 		return permalink;
 	}
 
-	public void setUrl(URL permalink) {
+	public void setPermalink(URL permalink) {
 		this.permalink = permalink;
 	}
 	

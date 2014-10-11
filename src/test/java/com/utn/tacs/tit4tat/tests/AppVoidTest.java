@@ -86,7 +86,8 @@ public class AppVoidTest {
 	public void connectToML() {
 		
 		try{
-			MercadoLibre ml_connection = MercadoLibre.getInstance();								
+			MercadoLibre ml_connection = MercadoLibre.getInstance();		
+			ml_connection.authorize();
 			Response response = ml_connection.getUserMe();			
 
 			Assert.assertEquals(200, response.getStatusCode());
@@ -129,7 +130,7 @@ public class AppVoidTest {
 		try{
 			MercadoLibre ml_connection = MercadoLibre.getInstance();
 			//List<Item> items = ml_connection.searchItems("ipod");
-			JSONObject items = ml_connection.searchItems("ipod");
+			JSONObject items = ml_connection.searchJSONItems("ipod");
 
 			Assert.assertTrue(items.size()>0);
 			
