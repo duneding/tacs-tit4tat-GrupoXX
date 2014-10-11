@@ -1,5 +1,6 @@
 package com.utn.tacs.tit4tat.model;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -19,9 +20,11 @@ public class Item implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	private String name;
+	private String[] category;
 
 	private String description;
+	
+	private ByteArrayOutputStream image;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER_ID")
@@ -35,12 +38,12 @@ public class Item implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String[] getCategory() {
+		return category;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCategory(String[] category) {
+		this.category = category;
 	}
 
 	public String getDescription() {
@@ -58,10 +61,18 @@ public class Item implements Serializable {
 	public void setOwner(Usuario owner) {
 		this.owner = owner;
 	}
+	
+	public ByteArrayOutputStream getImage() {
+		return image;
+	}
+
+	public void setImage(ByteArrayOutputStream image) {
+		this.image = image;
+	}	
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", description="
+		return "Item [id=" + id + ", category=" + category + ", description="
 				+ description + ", owner=" + owner.getName() + "]";
 	}
 }

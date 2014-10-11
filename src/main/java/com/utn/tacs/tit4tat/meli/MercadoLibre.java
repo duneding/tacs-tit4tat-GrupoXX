@@ -1,19 +1,28 @@
 package com.utn.tacs.tit4tat.meli;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.mercadolibre.sdk.AuthorizationFailure;
 import com.mercadolibre.sdk.Meli;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Response;
+import com.utn.tacs.tit4tat.model.Item;
 
 public class MercadoLibre {
 	
@@ -32,7 +41,7 @@ public class MercadoLibre {
 			System.out.println(e.toString());
 		}
 		
-		authorize();
+		//authorize();
 				
 	}
 	 
@@ -129,6 +138,28 @@ public class MercadoLibre {
 		return response;
 	}	
 	
+	public Response getCategory(String value){
+		Response response = null;
+		try{
+			response = meli.get("/categories/"+value);		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return response;
+	}
+	
+	public Response getItem(String value){
+		Response response = null;
+		try{
+			response = meli.get("/items/"+value);		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return response;
+	}
+	
 	public Response getUserMe(){
 		Response response = null;
 		try{
@@ -175,9 +206,61 @@ public class MercadoLibre {
 			System.out.println(e.toString());
 		}
 		
-		return  response;
-	
+		try{
+			String body = response.getResponseBody();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			// get a String from the JSON object
+			JSONArray results = (JSONArray) jsonObject.get("results");
+
+			List<Item> items = new ArrayList<Item>();
+			Item item;
+			
+			Iterator<?> it = results.iterator();
+			while(it.hasNext()) {
+				item = new Item();
+				
+				JSONObject element = (JSONObject) it.next();
+				String id = (String) element.get("id");
+				String thumbnail = (String) element.get("thumbnail");
+				String description = (String) element.get("title");
+				String category_id = (String) element.get("category_id");
+					
+				item.setId(normalizeId(id));
+				item.setDescription(description);
+				item.setImage(getImageAsStream(thumbnail));
+				
+				Response categories = getCategory(category_id);
+
+			}
+		}catch(Exception e){
+			//TODO
+		}		
+		return  response;	
 	}		
+	
+	private Long normalizeId(String id)
+	{
+		return Long.valueOf(id.substring(3, id.length()));
+	}
+	
+	private ByteArrayOutputStream getImageAsStream(String thumbnail){
+		ByteArrayOutputStream bis = new ByteArrayOutputStream();
+		InputStream is = null;
+		try {
+			URL url = new URL(thumbnail);
+			is = url.openStream ();
+			byte[] bytebuff = new byte[4096]; 
+			int n;
+
+			while ( (n = is.read(bytebuff)) > 0 ) {
+				bis.write(bytebuff, 0, n);
+			}
+		}catch(Exception e){
+			//TODO
+		}
+		return bis;		
+	}
 	
 }
 

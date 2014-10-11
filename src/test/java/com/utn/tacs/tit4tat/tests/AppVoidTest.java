@@ -1,5 +1,8 @@
 package com.utn.tacs.tit4tat.tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -96,7 +99,7 @@ public class AppVoidTest {
 
 		try{							
 			MercadoLibre ml_connection = MercadoLibre.getInstance();								
-			Response response = ml_connection.get("/items/MLA521071653");			
+			Response response = ml_connection.getItem("MLA521071653");			
 			System.out.println(response.getResponseBody());	
 			Assert.assertEquals(200, response.getStatusCode());
 			
@@ -110,8 +113,6 @@ public class AppVoidTest {
 
 		try{							
 			MercadoLibre ml_connection = MercadoLibre.getInstance();								
-			//String urlList = ml_connection.getUrlList();			
-			//Response response = ml_connection.get(urlList);
 			List<Response> list = ml_connection.getItemFromProp();
 			Assert.assertTrue(list.size()>0);
 			
@@ -139,8 +140,23 @@ public class AppVoidTest {
 			Iterator<?> it = results.iterator();
 			while(it.hasNext()) {
 				JSONObject element = (JSONObject) it.next();
-				String title = (String) element.get("thumbnail");
-				System.out.println("The first name is: " + title);
+				String thumbnail = (String) element.get("thumbnail");
+				System.out.println("The first name is: " + thumbnail);
+				
+				ByteArrayOutputStream bis = new ByteArrayOutputStream();
+				InputStream is = null;
+				try {
+					URL url = new URL(thumbnail);
+				  is = url.openStream ();
+				  byte[] bytebuff = new byte[4096]; 
+				  int n;
+
+				  while ( (n = is.read(bytebuff)) > 0 ) {
+				    bis.write(bytebuff, 0, n);
+				  }
+				}catch(Exception e){
+					
+				}
       		}
 
 			Assert.assertEquals(200, response.getStatusCode());
