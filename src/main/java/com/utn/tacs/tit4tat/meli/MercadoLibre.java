@@ -138,15 +138,37 @@ public class MercadoLibre {
 		return response;
 	}	
 	
-	public Response getCategory(String value){
+	public String[] getCategory(String value){
 		Response response = null;
+		String[] categories = null; 
+		
 		try{
 			response = meli.get("/categories/"+value);		
+			
+			String body = response.getResponseBody();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			// get a String from the JSON object
+			JSONArray category_tree = (JSONArray) jsonObject.get("path_from_root");
+			
+			categories = new String[category_tree.size()];
+			
+			Iterator<?> it = category_tree.iterator();
+			int index = 0;
+			while(it.hasNext()) {
+				
+				JSONObject element = (JSONObject) it.next();
+				String category = (String) element.get("name");
+				categories[index] = category;
+				index++;
+
+			}
+			
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
 		
-		return response;
+		return categories;
 	}
 	
 	public Response getItem(String value){
@@ -195,25 +217,57 @@ public class MercadoLibre {
 		return items;
 	}	
 	
-	public Response searchItems(String query){
+	@SuppressWarnings("unchecked")
+	public JSONObject searchItems(String query){
 		params = new FluentStringsMap();
 		params.add("q", query);	
-		Response response=null;
+		Response items=null;
+		JSONObject response= new JSONObject();
 		
-		try{		
-			response = meli.get("/sites/MLA/search", params);		
+		try{
+			
+			items = meli.get("/sites/MLA/search", params);	
+			String body = items.getResponseBody();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			
+			JSONArray results = (JSONArray) jsonObject.get("results");		
+			JSONArray itemsArray = new JSONArray();
+			Iterator<?> it = results.iterator();
+			while(it.hasNext()) {
+				
+				JSONObject element = (JSONObject) it.next();
+				JSONObject new_element = new JSONObject();
+				new_element.put("id", element.get("id"));				
+				new_element.put("category", element.get("category_id"));
+				new_element.put("description", element.get("title"));
+				new_element.put("image", element.get("thumbnail"));
+				new_element.put("permalink", element.get("permalink"));
+				itemsArray.add(new_element);
+			}
+			
+			response.put("results", itemsArray);
+			response.put("paging", jsonObject.get("paging"));
+			response.put("query", jsonObject.get("query"));			
+			response.put("site_id", jsonObject.get("site_id"));
+			
+			
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
 		
+		return  response;	
+	}		
+	
+	private List<Item> convertItemsList(Response response)
+	{
+		List<Item> items = new ArrayList<Item>();
 		try{
 			String body = response.getResponseBody();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
 			// get a String from the JSON object
 			JSONArray results = (JSONArray) jsonObject.get("results");
-
-			List<Item> items = new ArrayList<Item>();
 			Item item;
 			
 			Iterator<?> it = results.iterator();
@@ -225,19 +279,22 @@ public class MercadoLibre {
 				String thumbnail = (String) element.get("thumbnail");
 				String description = (String) element.get("title");
 				String category_id = (String) element.get("category_id");
-					
+				URL permalink = (URL) element.get("permalink");
 				item.setId(normalizeId(id));
 				item.setDescription(description);
-				item.setImage(getImageAsStream(thumbnail));
+				item.setImage(getImageAsStream(thumbnail));				
+				item.setCategory(getCategory(category_id));
+				item.setUrl(permalink);
 				
-				Response categories = getCategory(category_id);
+				items.add(item);
 
 			}
 		}catch(Exception e){
 			//TODO
 		}		
-		return  response;	
-	}		
+		
+		return items;
+	}
 	
 	private Long normalizeId(String id)
 	{

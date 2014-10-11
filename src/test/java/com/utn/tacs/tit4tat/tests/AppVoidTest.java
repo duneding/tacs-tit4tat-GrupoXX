@@ -3,6 +3,7 @@ package com.utn.tacs.tit4tat.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.junit.Test;
 import com.ning.http.client.Response;
 import com.utn.tacs.tit4tat.facebook.model.Token;
 import com.utn.tacs.tit4tat.meli.MercadoLibre;
+import com.utn.tacs.tit4tat.model.Item;
 
 
 public class AppVoidTest {
@@ -126,41 +128,10 @@ public class AppVoidTest {
 		
 		try{
 			MercadoLibre ml_connection = MercadoLibre.getInstance();
-			Response response = ml_connection.searchItems("ipod");	
-			
-			System.out.println(response.getResponseBody());
-			
-			String body = response.getResponseBody();
-			 
-            JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
-			// get a String from the JSON object
-			JSONArray results = (JSONArray) jsonObject.get("results");
-			
-			Iterator<?> it = results.iterator();
-			while(it.hasNext()) {
-				JSONObject element = (JSONObject) it.next();
-				String thumbnail = (String) element.get("thumbnail");
-				System.out.println("The first name is: " + thumbnail);
-				
-				ByteArrayOutputStream bis = new ByteArrayOutputStream();
-				InputStream is = null;
-				try {
-					URL url = new URL(thumbnail);
-				  is = url.openStream ();
-				  byte[] bytebuff = new byte[4096]; 
-				  int n;
+			//List<Item> items = ml_connection.searchItems("ipod");
+			JSONObject items = ml_connection.searchItems("ipod");
 
-				  while ( (n = is.read(bytebuff)) > 0 ) {
-				    bis.write(bytebuff, 0, n);
-				  }
-				}catch(Exception e){
-					
-				}
-      		}
-
-			Assert.assertEquals(200, response.getStatusCode());
-			Assert.assertTrue(response.getHeaders().size()>0);
+			Assert.assertTrue(items.size()>0);
 			
 			}catch(Exception e){
 				System.out.println(e.toString());

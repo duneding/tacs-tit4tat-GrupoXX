@@ -2,6 +2,7 @@ package com.utn.tacs.tit4tat.model;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.net.URL;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,6 +26,8 @@ public class Item implements Serializable {
 	private String description;
 	
 	private ByteArrayOutputStream image;
+	
+	private URL permalink;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER_ID")
@@ -70,9 +73,18 @@ public class Item implements Serializable {
 		this.image = image;
 	}	
 
+	public URL getPermalink() {
+		return permalink;
+	}
+
+	public void setUrl(URL permalink) {
+		this.permalink = permalink;
+	}
+	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", category=" + category + ", description="
 				+ description + ", owner=" + owner.getName() + "]";
 	}
+
 }
