@@ -22,9 +22,9 @@ Bootstrap
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-					<li id="amigos"><a href="amigos.htm">Amigos</a></li>
+					<li id="amigos"><a href="friends.htm">Amigos</a></li>
 					<li id="items"><a href="items.htm">Items</a></li>
-					<li id="solicitudes"><a href="solicitudes.htm">Solicitudes<span class="badge">3</span></a></li>
+					<li id="solicitudes"><a href="notifications.htm">Solicitudes<span class="badge">3</span></a></li>
 			</ul>
 			<form action="http://facebook.com" class="navbar-form navbar-right" role="form">
 				<button type="submit" class="btn btn-sm btn-primary">Entrar con Facebook</button>
