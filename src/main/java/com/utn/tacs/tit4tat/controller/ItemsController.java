@@ -1,7 +1,10 @@
 package com.utn.tacs.tit4tat.controller;
 
-import org.json.simple.JSONObject;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 
 @Controller
@@ -50,6 +52,26 @@ public class ItemsController {
 //		JSONObject response  = meli.searchJSONItems(name);
 //		return response.toString();
 		return "El parámetro es: " + name;
+	}
+
+	@RequestMapping(value = "/items/create", method = RequestMethod.GET)
+	public @ResponseBody String createGrillaItem(@RequestParam(value = "idItemMeli") String idItemMeli, Model model) {
+//		MercadoLibre meli = new MercadoLibre();
+//		JSONObject item  = meli.get
+		Item item = new Item();
+		
+		try {
+			item = new Item();
+			item.setId(1L);
+			item.setDescription("IPod 32GB");
+			item.setPermalink(new URL("http://mercadolibre.com.ar/item/ml12312"));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("item", item);
+		
+		return "/items/create";
 	}
 	
 	

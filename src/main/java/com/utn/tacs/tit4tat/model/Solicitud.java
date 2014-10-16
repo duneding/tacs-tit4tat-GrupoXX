@@ -17,8 +17,26 @@ public class Solicitud implements Serializable {
 	@GeneratedValue
 	private Long id;
 	private String detalle;
+	private Item itemOfrecido;
+	private Item itemSolicitado;	
 	private int state;
 	
+	public Item getItemOfrecido() {
+		return itemOfrecido;
+	}
+
+	public void setItemOfrecido(Item itemOfrecido) {
+		this.itemOfrecido = itemOfrecido;
+	}
+
+	
+	public Item getItemSolicitado() {
+		return itemSolicitado;
+	}
+
+	public void setItemSolicitado(Item itemSolicitado) {
+		this.itemSolicitado = itemSolicitado;
+	}
 
 	public String getDetalle() {
 		return detalle;

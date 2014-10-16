@@ -28,7 +28,7 @@ public class SolicitudesController {
 	
 	@RequestMapping(value = "/{permuteId}/{state}", method = RequestMethod.PUT)	
 	public String responsePermuteNotification(@PathVariable("permuteId") String permuteId, @PathVariable("state") String state) {
-		
+		//TODO recibir una solicitud liviana que contenga solo idSolicitud y estado JSon
 		this.solicitudService.changeStateOfSolicitud(permuteId, state);
 		
 		return "/notifications";
