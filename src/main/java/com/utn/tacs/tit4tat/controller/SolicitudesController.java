@@ -14,7 +14,7 @@ import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Controller
-@RequestMapping(value = {"/notifications", "/permute"})
+@RequestMapping("/notifications")
 public class SolicitudesController {
 
 	@Autowired
@@ -22,7 +22,7 @@ public class SolicitudesController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String createPermute(Model model) {
-		return "/permute";
+		return "/notifications";
 	}
 	
 	
@@ -31,7 +31,7 @@ public class SolicitudesController {
 		
 		this.solicitudService.changeStateOfSolicitud(permuteId, state);
 		
-		return "/permute/{permuteId}";
+		return "/notifications";
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -40,15 +40,5 @@ public class SolicitudesController {
 		List<Solicitud> notifications = this.solicitudService.getSolicitudes();
 		model.addAttribute("notifications", notifications);
 		return "/notifications";
-		
-//		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque1"));
-//		this.solicitudService.saveSolicitud(new Solicitud("Solicitud de Trueque2"));
-//		
-//		for (Solicitud solicitud : this.solicitudService.getSolicitudes()) {
-//			System.out.println(solicitud);
-//		}
-//
-//		model.addAttribute("recurso", new String("SOLICITUDES"));
-//		return "solicitudes";
 	}
 }

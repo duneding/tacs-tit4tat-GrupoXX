@@ -51,7 +51,12 @@ public class ItemsController {
 	@RequestMapping(value = "/{itemId}/share", method = RequestMethod.GET)
 	public String shareMyCreationItem(@PathVariable("itemId") String itemid) {
 		
-		return null;
+		return "items";
+	}
+	
+	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
+	public String removeItem(@PathVariable("itemId") String itemId) {
+		return "items";
 	}
 	
 	/*@RequestMapping(value = "/item/{id}", method = RequestMethod.GET)

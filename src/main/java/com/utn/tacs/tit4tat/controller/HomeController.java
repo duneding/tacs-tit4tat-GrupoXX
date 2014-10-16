@@ -67,6 +67,6 @@ public class HomeController {
 		List<Item> items = this.itemService.getItemsByUser(userIdLong);
 		model.addAttribute("items", items);
 		
-		return "/usuario/{userId}/items";
+		return "home";
 	}
 }
