@@ -1,14 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"> -->
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-Bootstrap
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen"> -->
-</head>
-<body>
 	<div class="navbar navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -33,5 +22,3 @@ Bootstrap
         </div><!--/.navbar-collapse -->
       </div>
     </div>
-</body>
-</html>

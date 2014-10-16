@@ -83,8 +83,10 @@ public class Item implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", category=" + category + ", description="
-				+ description + ", owner=" + owner.getName() + "]";
+//		return "Item [id=" + id + ", category=" + category + ", description="
+//				+ description + ", owner=" + owner.getName() + "]";
+		return "Item [id=" + id + ", description="
+				+ description + "]";
 	}
 
 }
