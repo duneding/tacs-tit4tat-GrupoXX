@@ -1,5 +1,6 @@
 package com.utn.tacs.tit4tat.controller;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 
 @Controller
@@ -44,7 +46,10 @@ public class ItemsController {
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
 	String getItemsSearch(@RequestParam(value = "name") String name) {
-		return "Nombre del item a buscar: " + name;
+//		MercadoLibre meli = new MercadoLibre();
+//		JSONObject response  = meli.searchJSONItems(name);
+//		return response.toString();
+		return "El parámetro es: " + name;
 	}
 	
 	

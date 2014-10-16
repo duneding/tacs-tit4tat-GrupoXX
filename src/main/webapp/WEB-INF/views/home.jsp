@@ -62,7 +62,7 @@ function searchItem(){
 		
 	$.ajax({  
 	     type : "GET",   
-	     url : "getItemsSearch.htm",   
+	     url : "items/getItemsSearch.htm",   
 	     async: false,
 	     data : "name=" + name ,  
 	     success : function(response) {  
