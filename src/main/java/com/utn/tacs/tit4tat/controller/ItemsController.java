@@ -2,7 +2,10 @@ package com.utn.tacs.tit4tat.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Item;
+import com.utn.tacs.tit4tat.service.ItemService;
 
 @Controller
 @RequestMapping(value = "/items")
 public class ItemsController {
+	
+	@Autowired
+	private ItemService itemService;
 	
 	/**
 	 * Da de alta el item final
@@ -26,8 +33,7 @@ public class ItemsController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody ModelAndView createItem(@RequestBody Item item) {
-		  return null;
-//        return new ModelAndView("items", "message", message);  
+		  return null;  
 	}
 	
 	/**
@@ -36,8 +42,29 @@ public class ItemsController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getItems() {
-		String message = "WELCOME SPRING MVC";  
-		return new ModelAndView("items", "message", message);  
+//		List<Item> items = this.itemService.getItems();
+		ModelAndView model = new ModelAndView("items");
+		List<Item> items = new ArrayList<Item>();
+		
+		Item item1 = new Item();
+		item1.setId(1L);
+		item1.setDescription("Ipod touch");
+		items.add(item1);
+		
+		Item item2 = new Item();
+		item2.setId(2L);
+		item2.setDescription("Galaxy S5");
+		items.add(item2);
+		
+		Item item3 = new Item();
+		item3.setId(3L);
+		item3.setDescription("Silla");
+		items.add(item3);
+		
+		model.setViewName("items");
+		model.addObject("items", items);
+		model.addObject("message", "Lista de items");
+		return model;
 	}
 	
 	/**
@@ -54,8 +81,14 @@ public class ItemsController {
 		return "El parámetro es: " + name;
 	}
 
+	/**
+	 * Recibe el Id de ML, llena un modelo Item y lo devuelve cargado para el formulario de crear item
+	 * @param idItemMeli
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/items/create", method = RequestMethod.GET)
-	public @ResponseBody String createGrillaItem(@RequestParam(value = "idItemMeli") String idItemMeli, Model model) {
+	public @ResponseBody String createFormItem(@RequestParam(value = "idItemMeli") String idItemMeli, Model model) {
 //		MercadoLibre meli = new MercadoLibre();
 //		JSONObject item  = meli.get
 		Item item = new Item();
@@ -83,6 +116,8 @@ public class ItemsController {
 	
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public String removeItem(@PathVariable("itemId") String itemId) {
+		Item item = this.itemService.getItemsById(Long.parseLong(itemId));
+		this.itemService.deleteItem(item);
 		return "items";
 	}
 	
