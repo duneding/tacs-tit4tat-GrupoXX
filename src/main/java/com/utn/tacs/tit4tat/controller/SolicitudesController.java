@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Item;
@@ -36,6 +38,19 @@ public class SolicitudesController {
 		return "/notifications";
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT)
+	public @ResponseBody
+	String getItemsSearch(@RequestParam(value = "id") String id, @RequestParam(value = "state") String state) {
+		
+		try {
+//			this.solicitudService.changeStateOfSolicitud(id, state);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		return "El parámetro es: " + id + " y " + state;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getNotifications() {
 		ModelAndView model = new ModelAndView("notifications");
@@ -48,6 +63,7 @@ public class SolicitudesController {
 		requestItem.setDescription("Galaxy S5");
 		
 		Solicitud sol = new Solicitud("Solicitud 1", requestItem, offeredItem);
+		sol.setId(1L);
 		
 		List<Solicitud> notifications = new ArrayList<Solicitud>();
 		notifications.add(sol);
