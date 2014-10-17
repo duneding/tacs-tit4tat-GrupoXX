@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -16,34 +18,41 @@ public class Solicitud implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
-	private String detalle;
-	private Item itemOfrecido;
-	private Item itemSolicitado;	
+	private String detail;
+	
+	@ManyToOne
+	@JoinColumn(name="offered_item_id")
+	private Item offeredItem;
+	
+	@ManyToOne
+	@JoinColumn(name="request_item_id")
+	private Item requestItem;
+	
 	private int state;
 	
-	public Item getItemOfrecido() {
-		return itemOfrecido;
+	public Item getOfferedItem() {
+		return offeredItem;
 	}
 
-	public void setItemOfrecido(Item itemOfrecido) {
-		this.itemOfrecido = itemOfrecido;
+	public void setOfferedItem(Item itemOfrecido) {
+		this.offeredItem = itemOfrecido;
 	}
 
 	
-	public Item getItemSolicitado() {
-		return itemSolicitado;
+	public Item getRequestItem() {
+		return requestItem;
 	}
 
-	public void setItemSolicitado(Item itemSolicitado) {
-		this.itemSolicitado = itemSolicitado;
+	public void setRequestItem(Item itemSolicitado) {
+		this.requestItem = itemSolicitado;
 	}
 
-	public String getDetalle() {
-		return detalle;
+	public String getDetail() {
+		return detail;
 	}
 
-	public void setDetalle(String detalle) {
-		this.detalle = detalle;
+	public void setDetail(String detalle) {
+		this.detail = detalle;
 	}
 
 	
@@ -56,8 +65,10 @@ public class Solicitud implements Serializable {
 	}
 	
 	
-	public Solicitud(String detalle) {
-		this.setDetalle(detalle);
+	public Solicitud(String detail, Item requestItem, Item offeredItem) {
+		this.setDetail(detail);
+		this.setRequestItem(requestItem);
+		this.setOfferedItem(offeredItem);
 	}
 	
 	public int getState() {
@@ -70,7 +81,7 @@ public class Solicitud implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Solicitud [id=" + id + ", detalle=" + detalle + "]";
+		return "Solicitud [id=" + id + ", detalle=" + detail + "]";
 	}
 	
 	protected Solicitud() {

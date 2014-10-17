@@ -122,9 +122,9 @@ function searchItem(){
 			<!-- Page Heading -->
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">
-					Comienza buscando tus items!
-				</h1>
+				<h3 class="page-header">
+					Comienza buscando tus items
+				</h3>
 			</div>
 		</div>
 		

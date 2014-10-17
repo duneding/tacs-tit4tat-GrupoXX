@@ -1,15 +1,17 @@
 package com.utn.tacs.tit4tat.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
@@ -35,10 +37,22 @@ public class SolicitudesController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String getNotifications(ModelMap model) {
-
-		List<Solicitud> notifications = this.solicitudService.getSolicitudes();
-		model.addAttribute("notifications", notifications);
-		return "/notifications";
+	public ModelAndView getNotifications() {
+		ModelAndView model = new ModelAndView("notifications");
+		
+//		List<Solicitud> notifications = this.solicitudService.getSolicitudes();
+		Item offeredItem = new Item();
+		offeredItem.setDescription("Ipod Touch");
+		
+		Item requestItem = new Item();
+		requestItem.setDescription("Galaxy S5");
+		
+		Solicitud sol = new Solicitud("Solicitud 1", requestItem, offeredItem);
+		
+		List<Solicitud> notifications = new ArrayList<Solicitud>();
+		notifications.add(sol);
+		model.addObject("notifications", notifications);
+		
+		return model;
 	}
 }
