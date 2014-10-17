@@ -36,6 +36,14 @@ public class ItemsController {
 		  return null;  
 	}
 	
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody String deleteItem(
+            @PathVariable long id) {
+   
+        return "el item fue eliminado correctamente";
+    }
+	
 	/**
 	 * Obtiene los items de un usuario
 	 * @return
