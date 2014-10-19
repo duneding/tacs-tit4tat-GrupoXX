@@ -56,4 +56,9 @@ public class SolicitudServiceImpl implements SolicitudService {
 			throw new RuntimeException("Invalid state"); 
 		}
 	}
+	
+	@Override
+	public List<Solicitud> getSolicitudesPendientes() {
+		return this.solicitudDao.getSolicitudesPendientes();
+	}
 }
