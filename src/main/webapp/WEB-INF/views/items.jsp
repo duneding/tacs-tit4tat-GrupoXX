@@ -7,12 +7,7 @@
 	</div>
 </div>
 
-
-
-${message}
-${items}
-
-<table>
+<table class="table table-striped table-hover">
 <thead>
 <th>Codigo</th>
 <th>Descripcion</th>
@@ -23,7 +18,7 @@ ${items}
 				<tr>
 				<td>${item.id}</td>
 				<td>${item.description}</td>
-				<td><a href="#" onclick="deleteItem(this)">Eliminar</a></td>
+				<td><a href="#"><span onclick="deleteItem(this)" class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 			</c:forEach>
 			</tbody>
@@ -32,24 +27,27 @@ ${items}
 <script type="text/javascript">
 
 function deleteItem(link){
-	debugger;
 	var id = $(link).closest("tr").find("td:eq(0)").text();
-	alert("el item de id:" + id + "se elimino correctamente");
 
-	
-/* 	$.ajax({  
+	$.ajax({  
 	     type : "DELETE",   
-	     url : "items.htm",  
-	     data : "id=" + id,
+	     url : "items/" + id + ".htm",  
+	     contentType: 'application/json; charset=utf-8',
 	     dataType: 'json',
-	      async: true,
+	     cache: false,
+	     async: true,
 	     success : function(response) {  
-	      alert(response);   
-	     },  
-	     error : function(e) {  
-	      alert('Error:');   
-	     }  
-	    }); */  
+	         $(link).closest("tr").remove();
+	         alert(response);   
+  		},  
+  		error: function(jqXHR, textStatus, errorThrown) {
+  			            //alert(jqXHR.status + ' ' + jqXHR.responseText);
+  						alert(jqXHR.responseText);
+  						$(link).closest("tr").remove();
+  			        }
+
+ 	});
+	
 }
 
 </script>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.service.ItemService;
 
@@ -36,13 +37,16 @@ public class ItemsController {
 		  return null;  
 	}
 	
-	
-	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody String deleteItem(
-            @PathVariable long id) {
-   
-        return "el item fue eliminado correctamente";
-    }
+
+	/**
+	 * Elimina Item
+	 * @param itemId
+	 * @return
+	 */
+	@RequestMapping(value="/{itemId}", method = RequestMethod.DELETE)
+	public @ResponseBody String removeItem(@PathVariable("itemId") String itemId) {
+		return "El Item fue eliminado correctamente";
+	}
 	
 	/**
 	 * Obtiene los items de un usuario
@@ -86,6 +90,8 @@ public class ItemsController {
 //		MercadoLibre meli = new MercadoLibre();
 //		JSONObject response  = meli.searchJSONItems(name);
 //		return response.toString();
+		MercadoLibre ml_connection = MercadoLibre.getInstance();
+		//List<Item> items = ml_connection.searchItems(name);
 		return "El parámetro es: " + name;
 	}
 
@@ -122,14 +128,14 @@ public class ItemsController {
 		return "items";
 	}
 	
-	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
+	/*@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public String removeItem(@PathVariable("itemId") String itemId) {
 		Item item = this.itemService.getItemsById(Long.parseLong(itemId));
 		this.itemService.deleteItem(item);
 		return "items";
 	}
 	
-	/*@RequestMapping(value = "/item/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/item/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getItem(@PathVariable("id") String id ) {
 		//serviceItem.GetById(id);
@@ -141,39 +147,4 @@ public class ItemsController {
 //		return "item";
 //	}
 	
-//	private List<String> getItems(){
-//		List<String> list = new ArrayList<String>();
-//		list.add("List A");
-//		list.add("List B");
-//		list.add("List C");
-//		list.add("List D");
-//		list.add("List 1");
-//		list.add("List 2");
-//		list.add("List 3");
-// 
-//		return list;
-//		
-//	}
-
-	/*	@RequestMapping(value = "/items", method = RequestMethod.GET)
-	@ModelAttribute("result1")
-	public ArrayList<String> items() {
-		//model.addAttribute("result1", result1)
-		//ItemServiceImpl service = new ItemServiceImpl();
-		//List<Item> itemsList= service.getItems();
-		//List<String> itemsList= this.getItems();
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("List A");
-		list.add("List B");
-		list.add("List C");
-		list.add("List D");
-		list.add("List 1");
-		list.add("List 2");
-		list.add("List 3");
-		//model.addAttribute("result1", list);
-		//ModelAndView modelAndView1 = new ModelAndView("items");
-		//modelAndView1.addObject("lists",itemsList);
- 
-		return list;
-	}*/
 }
