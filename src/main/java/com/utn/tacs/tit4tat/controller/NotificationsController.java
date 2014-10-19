@@ -48,14 +48,13 @@ public class NotificationsController {
 			throw new RuntimeException(e);
 		}
 		
-		return "El parámetro es: " + id + " y " + state;
+		return "La solicitud proceso correctamente: " + id;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getNotifications() {
 		ModelAndView model = new ModelAndView("notifications");
 		
-//		List<Solicitud> notifications = this.solicitudService.getSolicitudes();
 		Item offeredItem = new Item();
 		offeredItem.setDescription("Ipod Touch");
 		
@@ -64,9 +63,12 @@ public class NotificationsController {
 		
 		Solicitud sol = new Solicitud("Solicitud 1", requestItem, offeredItem);
 		sol.setId(1L);
-		
+//		
+//		this.solicitudService.saveSolicitud(sol);
+//		
 		List<Solicitud> notifications = new ArrayList<Solicitud>();
 		notifications.add(sol);
+//		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
 		model.setViewName("notifications/list");
 		model.addObject("notifications", notifications);
 		
