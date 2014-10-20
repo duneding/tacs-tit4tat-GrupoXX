@@ -22,6 +22,9 @@ import com.mercadolibre.sdk.AuthorizationFailure;
 import com.mercadolibre.sdk.Meli;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Response;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import com.utn.tacs.tit4tat.model.Item;
 
 public class MercadoLibre {
@@ -29,6 +32,9 @@ public class MercadoLibre {
 	private static MercadoLibre instance = null;
 	private final String APPTACS_URL = "http://tit4tat-tacs.appspot.com/";
 	private final String PROP_FILE = "mla.properties";
+	private final String URL_API = "https://api.mercadolibre.com";
+	private final String URL_SEARCH =	"/sites/MLA/search?q=";
+	private final String URL_ITEMS = "/items/";
 	
 	private Meli meli;
 	String token;
@@ -172,7 +178,7 @@ public class MercadoLibre {
 		return categories;
 	}
 	
-	public Response getItem(String value){
+	public Response getItemMeli(String value){
 		Response response = null;
 		try{
 			response = meli.get("/items/"+value);		
@@ -181,6 +187,60 @@ public class MercadoLibre {
 		}
 		
 		return response;
+	}
+
+	private JSONObject getItemJSon(String value){
+		JSONObject response = null;
+		
+		try{		
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = null;
+			
+			Client client = Client.create();		 
+			WebResource webResource = client.resource(URL_API + URL_ITEMS + value);			
+			String responseGet = webResource.accept("application/json").get(String.class);
+			response = (JSONObject) jsonParser.parse(responseGet);			
+
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return response;
+	}
+	
+	public Item getItem(String value){
+		Item item = new Item();
+		try{		
+			JSONParser jsonParser = new JSONParser();
+						
+			Client client = Client.create();		 
+			WebResource webResource = client.resource(URL_API + URL_ITEMS + value);			
+			String responseGet = webResource.accept("application/json").get(String.class);
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(responseGet);
+			item = ConvertJsonToItem(jsonObject);
+
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return item;
+	}
+	
+	private Item ConvertJsonToItem(JSONObject jsonObject){		
+		Item item = new Item();
+		try{										
+			URL permalink = new URL(jsonObject.get("permalink").toString());
+			item.setId(normalizeId((String) jsonObject.get("id")));
+			item.setDescription((String) jsonObject.get("title"));
+			item.setImage(getImageAsBytes((String) jsonObject.get("thumbnail")));				
+			item.setCategory(getCategory((String) jsonObject.get("category_id")));
+			item.setPermalink(permalink);			
+
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}		
+		
+		return item;
 	}
 	
 	public Response getUserMe(){
@@ -233,15 +293,36 @@ public class MercadoLibre {
 
 	public JSONObject searchJSONItems(String query){
 		
-		return getJSONResponse(searchItemsMeli(query));
-
+		//return getJSONResponse(searchItemsMeli(query));
+		return getJSONResponse(searchItemsJersey(query));
 	}		
 	
 	public List<Item> searchlListItems(String query){
 		
-		return getListResponse(searchItemsMeli(query));
+		//return getListResponse(searchItemsMeli(query));
+		return getListResponse(searchItemsJersey(query));
 
 	}	
+	
+	private JSONObject searchItemsJersey(String query){
+		JSONParser jsonParser = new JSONParser();
+		JSONObject response = null;
+		
+		Client client = Client.create();		 
+		WebResource webResource = client.resource(URL_API + URL_SEARCH + query);
+		
+		String responseGet = webResource.accept("application/json").get(String.class);
+		
+		try{
+			response = (JSONObject) jsonParser.parse(responseGet);
+		}catch (Exception e){
+			System.out.println(e.toString());
+		}
+		
+	
+		return response;
+		
+	}
 	
 	private JSONObject searchItemsMeli(String query){
 		params = new FluentStringsMap();
@@ -256,6 +337,7 @@ public class MercadoLibre {
 			
 		}catch (Exception e){
 			//TODO
+			System.out.println(e.toString());
 		}
 		
 		return response;
@@ -316,7 +398,7 @@ public class MercadoLibre {
 
 			}
 		}catch(Exception e){
-			//TODO
+			System.out.println(e.toString());
 		}		
 		
 		return items;
