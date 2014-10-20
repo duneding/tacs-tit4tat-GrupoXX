@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.model;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -11,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.google.appengine.api.datastore.Blob;
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,7 +26,7 @@ public class Item implements Serializable {
 
 	private String description;
 	
-	private byte[] image;
+	private Blob image;
 	
 	private URL permalink;
 
@@ -65,11 +66,11 @@ public class Item implements Serializable {
 		this.owner = owner;
 	}
 	
-	public byte[] getImage() {
+	public Blob getImage() {
 		return image;
 	}
 
-	public void setImage(byte[] image) {
+	public void setImage(Blob image) {
 		this.image = image;
 	}	
 

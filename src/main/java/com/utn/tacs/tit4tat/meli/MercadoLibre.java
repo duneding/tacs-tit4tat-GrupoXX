@@ -18,14 +18,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.google.appengine.api.datastore.Blob;
 import com.mercadolibre.sdk.AuthorizationFailure;
 import com.mercadolibre.sdk.Meli;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Response;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.utn.tacs.tit4tat.model.Item;
+
+import org.apache.commons.io.IOUtils;
 
 public class MercadoLibre {
 	
@@ -35,6 +37,7 @@ public class MercadoLibre {
 	private final String URL_API = "https://api.mercadolibre.com";
 	private final String URL_SEARCH =	"/sites/MLA/search?q=";
 	private final String URL_ITEMS = "/items/";
+	private final String URL_CATEGORIES = "/categories/";
 	
 	private Meli meli;
 	String token;
@@ -150,11 +153,14 @@ public class MercadoLibre {
 		String[] categories = null; 
 		
 		try{
-			response = meli.get("/categories/"+value);		
-			
-			String body = response.getResponseBody();
+			//response = meli.get("/categories/"+value);		
 			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(body);
+			
+			Client client = Client.create();		 
+			WebResource webResource = client.resource(URL_API + URL_CATEGORIES + value);			
+			String responseGet = webResource.accept("application/json").get(String.class);
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(responseGet);
+		
 			// get a String from the JSON object
 			JSONArray category_tree = (JSONArray) jsonObject.get("path_from_root");
 			
@@ -232,7 +238,7 @@ public class MercadoLibre {
 			URL permalink = new URL(jsonObject.get("permalink").toString());
 			item.setId(normalizeId((String) jsonObject.get("id")));
 			item.setDescription((String) jsonObject.get("title"));
-			item.setImage(getImageAsBytes((String) jsonObject.get("thumbnail")));				
+			item.setImage(getImageAsBlob((String) jsonObject.get("thumbnail")));				
 			item.setCategory(getCategory((String) jsonObject.get("category_id")));
 			item.setPermalink(permalink);			
 
@@ -387,10 +393,10 @@ public class MercadoLibre {
 				item = new Item();
 				
 				JSONObject element = (JSONObject) it.next();			
-				URL permalink = (URL) element.get("permalink");
+				URL permalink = new URL(element.get("permalink").toString());
 				item.setId(normalizeId((String) element.get("id")));
 				item.setDescription((String) element.get("title"));
-				item.setImage(getImageAsBytes((String) element.get("thumbnail")));				
+				item.setImage(getImageAsBlob((String) element.get("thumbnail")));				
 				item.setCategory(getCategory((String) element.get("category_id")));
 				item.setPermalink(permalink);
 				
@@ -422,11 +428,30 @@ public class MercadoLibre {
 				bis.write(bytebuff, 0, n);
 			}
 		}catch(Exception e){
-			//TODO
+			System.out.println(e.toString());
 		}
 		
 		return bis.toByteArray();		
 	}
+	
+	private Blob getImageAsBlob(String thumbnail){
+		ByteArrayOutputStream bis = new ByteArrayOutputStream();
+		InputStream is = null;
+		Blob result = null;
+		try {
+			URL url = new URL(thumbnail);
+			is = url.openStream ();
+			byte[] bytebuff = new byte[4096]; 
+			int n;
+			result = new Blob(IOUtils.toByteArray(is));
+			
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		
+		return result;		
+	}	
 	
 }
 
