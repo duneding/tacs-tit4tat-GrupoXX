@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +34,12 @@ public class ItemsController {
 	 * @param item
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody ModelAndView createItem(@RequestBody Item item) {
-		  return null;  
-	}
-	
-
+	@RequestMapping (method = RequestMethod.POST)
+    public String addContact(@ModelAttribute("item")
+    Item item, BindingResult result) {
+		//Insertar Item
+        return "redirect:items.htm";
+    }
 	/**
 	 * Elimina Item
 	 * @param itemId
@@ -75,7 +77,6 @@ public class ItemsController {
 		
 		model.setViewName("items");
 		model.addObject("items", items);
-		model.addObject("message", "Lista de items");
 		return model;
 	}
 	
@@ -86,41 +87,58 @@ public class ItemsController {
 	 */
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
-	String getItemsSearch(@RequestParam(value = "name") String name) {
-//		MercadoLibre meli = new MercadoLibre();
-//		JSONObject response  = meli.searchJSONItems(name);
-//		return response.toString();
-		MercadoLibre ml_connection = MercadoLibre.getInstance();
-		//List<Item> items = ml_connection.searchItems(name);
-		return "El parámetro es: " + name;
+	List<Item> getItemsSearch(@RequestParam(value = "name") String name) {
+		MercadoLibre meli = MercadoLibre.getInstance();
+		List<Item> items2 = meli.searchlListItems(name);
+		
+		List<Item> items = new ArrayList<Item>();
+		String[] categoria = {"Celulares"};
+		
+		Item item1 = new Item();
+		item1.setId(1L);
+		item1.setDescription("Ipod touch");
+		item1.setCategory(categoria);
+		items.add(item1);
+		
+		Item item2 = new Item();
+		item2.setId(2L);
+		item2.setDescription("Galaxy S5");
+		item2.setCategory(categoria);
+		items.add(item2);
+		
+		Item item3 = new Item();
+		item3.setId(3L);
+		item3.setDescription("Silla");
+		item3.setCategory(categoria);
+		items.add(item3);
+		return items;
 	}
 
+	
 	/**
 	 * Recibe el Id de ML, llena un modelo Item y lo devuelve cargado para el formulario de crear item
 	 * @param idItemMeli
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/items/create", method = RequestMethod.GET)
-	public @ResponseBody String createFormItem(@RequestParam(value = "idItemMeli") String idItemMeli, Model model) {
-//		MercadoLibre meli = new MercadoLibre();
-//		JSONObject item  = meli.get
+	@RequestMapping(value = "/create/{idItemMeli}", method = RequestMethod.GET)
+	public ModelAndView createFormItem(@PathVariable("idItemMeli") String idItemMeli) {
 		Item item = new Item();
-		
 		try {
+			String[] categoria = {idItemMeli};
 			item = new Item();
 			item.setId(1L);
 			item.setDescription("IPod 32GB");
 			item.setPermalink(new URL("http://mercadolibre.com.ar/item/ml12312"));
+			item.setCategory(categoria);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
-		model.addAttribute("item", item);
-		
-		return "/items/create";
+		ModelAndView model = new ModelAndView("create");
+		model.addObject("item", item);
+		return model;
 	}
-	
+
 	
 	@RequestMapping(value = "/{itemId}/share", method = RequestMethod.GET)
 	public String shareMyCreationItem(@PathVariable("itemId") String itemid) {

@@ -9,10 +9,10 @@
 <script src="js/jquery-1.11.0.js"></script>
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/bootstrap-table.js"></script>
+<!-- 	<script src="js/bootstrap-table.js"></script> -->
 	<script src="js/tit4tat.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link rel="stylesheet" href="css/bootstrap-table.css">
+<!-- 	<link rel="stylesheet" href="css/bootstrap-table.css"> -->
 	<title><spring:message code="app.title.home" /></title>
 </head>
 <body>

@@ -7,7 +7,7 @@
 </head>
 <body>
 <script>
-  window.fbAsyncInit = function() {
+/*   window.fbAsyncInit = function() {
     FB.init({
       appId      : '1454789934802984',
       xfbml      : true,
@@ -23,7 +23,7 @@
      js = d.createElement(s); js.id = id;
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+   }(document, 'script', 'facebook-jssdk')); */
 </script>
 <h1 id="fb-welcome"></h1>
 
@@ -66,14 +66,37 @@ function searchItem(){
 	     async: false,
 	     data : "name=" + name ,  
 	     success : function(response) {  
-	      alert(response);   
+	    	 $('#gridItems').empty();
+	    	 /* $('#gridItems').append("<div class='row'>");  */
+	    	 $('#gridItems').append("<table class='table table-striped table-hover' id='gridSearch'>" +
+	    			 "<thead>" + 
+	    			 "<th>Categoria</th>"+ 
+	    			  "<th>Descripcion</th>" +
+	    			  "</thead><tbody></tbody></table></div>"); 
+	    	 
+	    	 for (var i = 0; i < response.length; i ++){
+	    		 /* $('#gridItems').append("<div class='col-md-3 portfolio-item'>" +
+	    				 "<a onClick='addItem(this)' id='" + response[i].id + "'><img class='img-responsive'></a></div>"); */ 
+	    				 $('#gridSearch tbody').after( "<tr>" +
+					"<td style = 'display:none'>" + response[i].id + "</td>" + 
+					"<td>" + response[i].category[0] +"</td>" +
+					"<td>" + response[i].description + "</td>" + 
+					 "<td><a href='items/create/"+ response[i].id + ".htm'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
+					"</tr>");
+	    				 
+	    	 }
+
 	     },  
 	     error : function(e) {  
 	      alert('Error:');   
 	     }  
 	    });  
+
 }
-  window.fbAsyncInit = function() {
+
+
+
+/*   window.fbAsyncInit = function() {
     FB.init({
       appId      : '1454789934802984',
       xfbml      : true,
@@ -101,7 +124,7 @@ function searchItem(){
 	      onLogin(response);
 	    }, {scope: 'user_friends, email'});
 	  }
-	});
+	}); */
 </script>
 
 	<div class="container theme-showcase" role="main">
@@ -138,7 +161,7 @@ function searchItem(){
     				</div>
   			</div>
 		</div>
-
+		<div id="gridItems">
 		<!-- Projects Row -->
 		<div class="row">
 			<div class="col-md-3 portfolio-item">
@@ -213,7 +236,7 @@ function searchItem(){
 			</div>
 		</div>
 		<!-- /.row -->
-
+</div>
 		<hr>
 
 		<!-- Pagination -->
