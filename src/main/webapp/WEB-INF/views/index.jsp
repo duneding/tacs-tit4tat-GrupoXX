@@ -7,6 +7,6 @@
 <title>Tit4Tat</title>
 </head>
 <body>
-	<jsp:forward page="/home.htm"></jsp:forward>
+	<jsp:forward page="/home"></jsp:forward>
 </body>
 </html>

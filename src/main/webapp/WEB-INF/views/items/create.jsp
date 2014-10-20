@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<form:form method="POST" commandName="item" action="/items.htm">
+<form:form method="POST" commandName="item" action="/items/list">
   <div class="form-group">
     <label for="category">Categoria:</label>
     <form:input path="category" />

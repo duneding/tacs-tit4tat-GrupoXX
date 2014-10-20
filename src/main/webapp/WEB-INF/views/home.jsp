@@ -37,12 +37,12 @@ $(document).ready(function(){
    	 var id ="id";
    	 $.ajax({  
    	     type : "GET",   
-   	     url : "create.htm",   	
+   	     url : "create",   	
    	     async: false,
    	     data : "id=" + id ,  
    	     success : function(response) {  
    	      alert(response); 
-   	      window.location = "/create.htm";
+   	      window.location = "/create";
    	     },  
    	     error : function(e) {  
    	      alert('Error:');   
@@ -62,7 +62,7 @@ function searchItem(){
 		
 	$.ajax({  
 	     type : "GET",   
-	     url : "items/getItemsSearch.htm",   
+	     url : "items/getItemsSearch",   
 	     async: false,
 	     data : "name=" + name ,  
 	     success : function(response) {  
@@ -81,8 +81,8 @@ function searchItem(){
 					"<td style = 'display:none'>" + response[i].id + "</td>" + 
 					"<td>" + response[i].category[0] +"</td>" +
 					"<td>" + response[i].description + "</td>" + 
-					 "<td><a href='items/create/"+ response[i].id + ".htm'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
-					"</tr>");
+					 "<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
+	 					"</tr>");
 	    				 
 	    	 }
 
@@ -163,7 +163,7 @@ function searchItem(){
 		</div>
 		<div id="gridItems">
 		<!-- Projects Row -->
-		<div class="row">
+		<!--  <div class="row">
 			<div class="col-md-3 portfolio-item">
 				<a href="item.htm"> <img class="img-responsive"
 					src="../../images/auto.jpg" alt="">
@@ -184,11 +184,11 @@ function searchItem(){
 					src="../../images/laptop.jpg" alt="">
 				</a>
 			</div>
-		</div>
+		</div>-->
 		<!-- /.row -->
 
 		<!-- Projects Row -->
-		<div class="row">
+		<!-- <div class="row">
 			<div class="col-md-3 portfolio-item">
 				<a href="#"> <img class="img-responsive"
 					src="../../images/peliculas.jpg" alt="">
@@ -209,11 +209,11 @@ function searchItem(){
 					src="http://placehold.it/750x450" alt="">
 				</a>
 			</div>
-		</div>
+		</div> -->
 		<!-- /.row -->
 
 		<!-- Projects Row -->
-		<div class="row">
+		<!-- <div class="row">
 			<div class="col-md-3 portfolio-item">
 				<a href="#"> <img class="img-responsive"
 					src="http://placehold.it/750x450" alt="">
@@ -234,13 +234,13 @@ function searchItem(){
 					src="http://placehold.it/750x450" alt="">
 				</a>
 			</div>
-		</div>
+		</div> -->
 		<!-- /.row -->
 </div>
 		<hr>
 
 		<!-- Pagination -->
-		<div class="row text-center">
+		<!-- <div class="row text-center">
 			<div class="col-lg-12">
 				<ul class="pagination">
 					<li><a href="#">&laquo;</a></li>
@@ -252,11 +252,12 @@ function searchItem(){
 					<li><a href="#">&raquo;</a></li>
 				</ul>
 			</div>
-		</div>
+		</div> -->
 		<!-- /.row -->
 
 		<hr>
 		</div>
+			
 		<!-- /.col-xs-12 main -->
 	</div>
 

@@ -34,11 +34,11 @@ public class ItemsController {
 	 * @param item
 	 * @return
 	 */
-	@RequestMapping (method = RequestMethod.POST)
+	@RequestMapping (value = "/list", method = RequestMethod.POST)
     public String addContact(@ModelAttribute("item")
     Item item, BindingResult result) {
 		//Insertar Item
-        return "redirect:items.htm";
+        return "redirect:/items/list";
     }
 	/**
 	 * Elimina Item
@@ -75,7 +75,7 @@ public class ItemsController {
 		item3.setDescription("Silla");
 		items.add(item3);
 		
-		model.setViewName("items");
+		model.setViewName("items/list");
 		model.addObject("items", items);
 		return model;
 	}
@@ -134,7 +134,7 @@ public class ItemsController {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		ModelAndView model = new ModelAndView("create");
+		ModelAndView model = new ModelAndView("items/create");
 		model.addObject("item", item);
 		return model;
 	}
@@ -146,6 +146,11 @@ public class ItemsController {
 		return "items";
 	}
 	
+	@RequestMapping(value = "/{itemId}/edit", method = RequestMethod.GET)
+	public String edit(@PathVariable("itemId") String itemid) {
+		
+		return "/{itemId}/edit";
+	}	
 	/*@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public String removeItem(@PathVariable("itemId") String itemId) {
 		Item item = this.itemService.getItemsById(Long.parseLong(itemId));

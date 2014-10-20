@@ -36,7 +36,8 @@ public class MercadoLibre {
 	
 	public MercadoLibre(){
 		try{
-		 meli = new Meli(getAppId(), getSecret());
+		 //meli = new Meli(getAppId(), getSecret());
+			meli = new Meli(8197151284077741L, "NEPHqIlkSkVD5GluZF9icEOx2TMwK0lK");
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}

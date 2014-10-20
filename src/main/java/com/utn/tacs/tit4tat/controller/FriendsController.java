@@ -14,7 +14,7 @@ import com.utn.tacs.tit4tat.service.ItemService;
 
 @Controller
 @RequestMapping(value = "/friends")
-public class AmigosController {
+public class FriendsController {
 
 	@Autowired
 	private ItemService itemService;
@@ -32,6 +32,12 @@ public class AmigosController {
 		List<Item> items = this.itemService.getItemsByUser(userIdLong);
 		model.addAttribute("items", items);
 		
-		return "/{userId}/items";
+		return "friends/{userId}/items";
 	}
+	
+	@RequestMapping(value="/items", method=RequestMethod.GET)
+	public String items() {
+				
+		return "friends/items";
+	}	
 }

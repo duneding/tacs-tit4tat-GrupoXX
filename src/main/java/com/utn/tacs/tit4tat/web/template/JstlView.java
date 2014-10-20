@@ -22,8 +22,8 @@ public class JstlView extends InternalResourceView {
 		String dispatcherPath = prepareForRendering(request, response);
 
 		// set original view being asked for as a request parameter
-		request.setAttribute("partial",
-				dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
+		request.setAttribute("partial", dispatcherPath.subSequence(14, dispatcherPath.length()));
+				//dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
 
 		// force everything to be template.jsp
 		RequestDispatcher requestDispatcher = request
