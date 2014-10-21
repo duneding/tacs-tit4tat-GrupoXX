@@ -11,7 +11,7 @@
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-					<li id="friends"><a href="../friends/items">Amigos</a></li>
+					<li id="friends/items"><a href="../friends/items">Amigos</a></li>
 					<li id="items"><a href="../items/list">Items</a></li>
 					<li id="notifications"><a href="../notifications/list">Solicitudes<span class="badge">3</span></a></li>
 			</ul>

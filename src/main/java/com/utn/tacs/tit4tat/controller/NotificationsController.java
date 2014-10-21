@@ -1,7 +1,11 @@
 package com.utn.tacs.tit4tat.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.Notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
+import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Controller
@@ -80,10 +85,49 @@ public class NotificationsController {
 		return "notifications/list";
 	}
 	
-	@RequestMapping(value = "/create", method = RequestMethod.PUT)
-	public @ResponseBody
-	String create() {
-		
-		return "notifications/create";
-	}	
+	/**
+	 * Recibe el Id de ML, llena un modelo Item y lo devuelve cargado para el formulario de crear item
+	 * @param idItemMeli
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/create/{idItem}", method = RequestMethod.GET)
+	public ModelAndView CreateNotification(@PathVariable("idItem") String idItem) {
+		Item item1 = new Item();
+		Item item2 = new Item();
+			String[] categoria = {idItem};
+			item1 = new Item();
+			item1.setId(1L);
+			item1.setDescription("IPod 32GB");
+			try {
+				item1.setPermalink(new URL("http://mercadolibre.com.ar/item/ml12312"));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			item1.setCategory(categoria);
+			Usuario user = new Usuario("Martin");
+			item1.setOwner(user);
+			
+			item2 = new Item();
+			item2.setId(1L);
+			item2.setDescription("IPod 32GB");
+			try {
+				item2.setPermalink(new URL("http://mercadolibre.com.ar/item/ml12312"));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			item2.setCategory(categoria);
+			Usuario user2 = new Usuario("Franco");
+			item2.setOwner(user2);
+			
+			Solicitud solicitud = new Solicitud("", item1, item2);
+
+		ModelAndView model = new ModelAndView("notifications/create");
+		model.addObject("solicitud", solicitud);
+		return model;
+	}
+	
+
 }
