@@ -384,7 +384,7 @@ public class MercadoLibre {
 	
 	private List<Item> getListResponse(JSONObject jsonObject){
 		List<Item> items = new ArrayList<Item>();
-		
+		int limit = 0;
 		try{		
 			JSONArray results = (JSONArray) jsonObject.get("results");			
 			Item item;
@@ -401,6 +401,11 @@ public class MercadoLibre {
 				item.setPermalink(permalink);
 				
 				items.add(item);
+				
+				limit += 1;
+				
+				if (limit>5)
+					break;
 
 			}
 		}catch(Exception e){

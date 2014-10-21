@@ -1,16 +1,13 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.management.Notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
-import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Controller
@@ -29,18 +25,19 @@ public class NotificationsController {
 	@Autowired
 	private SolicitudService solicitudService;
 
+	List<Solicitud> notifications = new ArrayList<Solicitud>();
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public String createPermute(Model model) {
-		return "/notifications";
+		return "notifications/create";
 	}
-	
-	
+		
 	@RequestMapping(value = "/{permuteId}/{state}", method = RequestMethod.PUT)	
 	public String responsePermuteNotification(@PathVariable("permuteId") String permuteId, @PathVariable("state") String state) {
 		//TODO recibir una solicitud liviana que contenga solo idSolicitud y estado JSon
 		this.solicitudService.changeStateOfSolicitud(permuteId, state);
 		
-		return "/notifications";
+		return "notifications";
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT)
@@ -70,8 +67,7 @@ public class NotificationsController {
 		sol.setId(1L);
 //		
 //		this.solicitudService.saveSolicitud(sol);
-//		
-		List<Solicitud> notifications = new ArrayList<Solicitud>();
+//				
 		notifications.add(sol);
 //		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
 		model.setViewName("notifications/list");
@@ -93,9 +89,10 @@ public class NotificationsController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String CreateNotification(@RequestParam(value = "idItem") String idItem) {
-		return "redirect:/notifications/create";
+	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json")
+	public String CreateNotification(@RequestParam ("json") String json) {
+		
+		return "notifications/list";
 /*		Item item1 = new Item();
 		Item item2 = new Item();
 			String[] categoria = {idItem};
@@ -133,5 +130,34 @@ public class NotificationsController {
 		
 	}
 	
+	@RequestMapping(value = "/edit/{notId}", method = RequestMethod.PUT)
+	public String edit(@PathVariable("notId") String notId) {
+		
+		return "notifications/edit";
+	}
+	
+	@RequestMapping(value = "/delete/{notId}", method = RequestMethod.DELETE)
+	public String delete(@PathVariable("notId") String notId) {
+		
+		return "notifications/delete";
+	}
+	
+	@RequestMapping(value = "/{notId}/accepted", method = RequestMethod.PUT)
+	public String accepted(@PathVariable("notId") String notId) {
+		
+		return "notifications/accepted";
+	}	
+	
+	@RequestMapping(value = "/{notId}/rejected", method = RequestMethod.PUT)
+	public String rejected(@PathVariable("notId") String notId) {
+		
+		return "notifications/rejected";
+	}		
+	
+	@RequestMapping(value = "/{notId}/share", method = RequestMethod.GET)
+	public String share(@PathVariable("notId") String notId) {
+		
+		return "notifications/share";
+	}	
 
 }

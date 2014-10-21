@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<div class="container-fluid">
 <div class="row row-offcanvas row-offcanvas-left">
 
   <div class="col-xs-12 col-sm-9">
@@ -25,24 +25,27 @@
       </c:forEach>
       </tbody>
 </table>      
-
-<script type="text/javascript">
+</div>
+<script>
 
 function createTrueque(link){
-  var id = $(link).closest("tr").find("td:eq(0)").text();
-  
+  var id = $(link).closest("tr").find("td:eq(0)").text();  
+  var owner = $(link).closest("tr").find("td:eq(2)").text();  
+  var json = { "owner" : owner, "item" : id};
   
   $.ajax({  
-	     type : "GET",   
+	     type : "POST",   
 	     url : "/notifications/create",   	
 	     async: false,
-	     data : "idItem=" + id ,  
+	     //data : "idItem=" + id ,
+	     data : JSON.stringify(json),
+	     contentType: "application/json; charset=utf-8",
 	     success : function(response) {  
 	      alert(response); 
 	      window.location = response;
 	     },  
 	     error : function(e) {  
-	      alert('Error:');   
+	      alert('Error:' + e.responseText);   
 	     }  
 	    });
   

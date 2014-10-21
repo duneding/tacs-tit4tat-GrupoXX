@@ -29,6 +29,8 @@ public class ItemsController {
 	@Autowired
 	private ItemService itemService;
 	
+	List<Item> items = new ArrayList<Item>();
+	
 	/**
 	 * Da de alta el item final
 	 * @param item
@@ -38,6 +40,7 @@ public class ItemsController {
     public String addContact(@ModelAttribute("item")
     Item item, BindingResult result) {
 		//Insertar Item
+		items.add(item);
         return "redirect:/items/list";
     }
 	/**
@@ -54,12 +57,11 @@ public class ItemsController {
 	 * Obtiene los items de un usuario
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getItems() {
 //		List<Item> items = this.itemService.getItems();
 		ModelAndView model = new ModelAndView("items");
-		List<Item> items = new ArrayList<Item>();
-		
+				
 		Item item1 = new Item();
 		item1.setId(1L);
 		item1.setDescription("Ipod touch");
@@ -143,14 +145,27 @@ public class ItemsController {
 	@RequestMapping(value = "/{itemId}/share", method = RequestMethod.GET)
 	public String shareMyCreationItem(@PathVariable("itemId") String itemid) {
 		
-		return "items";
+		return "items/share";
 	}
-	
-	@RequestMapping(value = "/{itemId}/edit", method = RequestMethod.GET)
+		
+	@RequestMapping(value = "/edit/{itemId}", method = RequestMethod.PUT)
 	public String edit(@PathVariable("itemId") String itemid) {
 		
-		return "/{itemId}/edit";
-	}	
+		return "items/edit";
+	}
+	
+	@RequestMapping(value = "/delete/{itemId}", method = RequestMethod.DELETE)
+	public String delete(@PathVariable("itemId") String itemid) {
+		
+		return "items/delete";
+	}		
+	
+	@RequestMapping(value = "share/{itemId}", method = RequestMethod.PUT)
+	public String share(@PathVariable("itemId") String itemid) {
+		
+		return "items/share";
+	}
+		
 	/*@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public String removeItem(@PathVariable("itemId") String itemId) {
 		Item item = this.itemService.getItemsById(Long.parseLong(itemId));

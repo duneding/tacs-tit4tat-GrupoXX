@@ -46,7 +46,7 @@ public class FriendsController {
 	@RequestMapping(value = "/items", method = RequestMethod.GET)
 	public ModelAndView getItemsFriends() {
 //		List<Item> items = this.itemService.getItems();
-		ModelAndView model = new ModelAndView("friends/items");
+		ModelAndView model = new ModelAndView("items");
 		List<Item> items = new ArrayList<Item>();
 		
 		Usuario user1 = new Usuario("Franco");
