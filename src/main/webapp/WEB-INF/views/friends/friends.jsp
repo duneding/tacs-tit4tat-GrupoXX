@@ -24,9 +24,7 @@
 			<div class="col-xs-12 col-sm-9">
 				<h1>En construccion</h1>
 				<ul>
-					<li>Ver lista de amigos.</li>
-					<li>Poder ver sus items publicados.</li>
-					<li>Enviar Solicitudes de trueque a items publicados por ellos.</li>
+					<li>Poder ver sus items publicados</li>
 				</ul>
 			</div>	<!-- /.col-xs-12 main -->
 		</div>	<!--/.row-->

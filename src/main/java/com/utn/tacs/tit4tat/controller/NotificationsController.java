@@ -93,9 +93,10 @@ public class NotificationsController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/create/{idItem}", method = RequestMethod.GET)
-	public ModelAndView CreateNotification(@PathVariable("idItem") String idItem) {
-		Item item1 = new Item();
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public String CreateNotification(@RequestParam(value = "idItem") String idItem) {
+		return "redirect:/notifications/create";
+/*		Item item1 = new Item();
 		Item item2 = new Item();
 			String[] categoria = {idItem};
 			item1 = new Item();
@@ -128,7 +129,7 @@ public class NotificationsController {
 
 		ModelAndView model = new ModelAndView("notifications/create");
 		model.addObject("solicitud", solicitud);
-		return model;
+		return model;*/
 		
 	}
 	

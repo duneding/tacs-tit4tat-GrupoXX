@@ -51,8 +51,7 @@ public class FriendsController {
 		
 		Usuario user1 = new Usuario("Franco");
 		Usuario user2 = new Usuario("Fer");
-		Usuario user3 = new Usuario("Martin");
-		
+		Usuario user3 = new Usuario("Martin");	
 		Item item1 = new Item();
 		item1.setId(1L);
 		item1.setDescription("Ipod touch");

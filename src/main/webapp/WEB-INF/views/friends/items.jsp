@@ -30,12 +30,27 @@
 
 function createTrueque(link){
   var id = $(link).closest("tr").find("td:eq(0)").text();
-  var redirect = "notifications/create/" + id + ".htm";
-  window.location.replace(redirect);
+  
+  
+  $.ajax({  
+	     type : "GET",   
+	     url : "/notifications/create",   	
+	     async: false,
+	     data : "idItem=" + id ,  
+	     success : function(response) {  
+	      alert(response); 
+	      window.location = response;
+	     },  
+	     error : function(e) {  
+	      alert('Error:');   
+	     }  
+	    });
+  
+/*   
+  
+  var redirect = "/notifications/create?idItem=" + id;
+  window.location.replace(redirect); */
 }
 
-  
-  
-}
 
 </script>
