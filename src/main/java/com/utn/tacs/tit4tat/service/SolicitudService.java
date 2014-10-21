@@ -11,6 +11,8 @@ public interface SolicitudService {
 	public void deleteSolicitud(Solicitud solicitud);
 
 	public List<Solicitud> getSolicitudes();
+	
+	public List<Solicitud> getSolicitudesPendientes();
 
 	public Solicitud getSolicitudesById(Long id);
 
