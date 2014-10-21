@@ -25,7 +25,7 @@ public class FriendsController {
 		return "friends";
 	}
 	
-	@RequestMapping(value="/{userId}/items", method=RequestMethod.GET)
+	/*@RequestMapping(value="/{userId}/items", method=RequestMethod.GET)
 	public String getItemsByUser(@PathVariable("userId") String userId, Model model) {
 		
 		Long userIdLong = Long.getLong(userId);
@@ -33,7 +33,7 @@ public class FriendsController {
 		model.addAttribute("items", items);
 		
 		return "friends/{userId}/items";
-	}
+	}*/
 	
 	@RequestMapping(value="/items", method=RequestMethod.GET)
 	public String items() {

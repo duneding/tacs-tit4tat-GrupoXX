@@ -19,7 +19,7 @@ import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Controller
 @RequestMapping("/notifications")
-public class SolicitudesController {
+public class NotificationsController {
 
 	@Autowired
 	private SolicitudService solicitudService;
@@ -67,8 +67,23 @@ public class SolicitudesController {
 		
 		List<Solicitud> notifications = new ArrayList<Solicitud>();
 		notifications.add(sol);
+		model.setViewName("notifications/list");
 		model.addObject("notifications", notifications);
 		
 		return model;
 	}
+	
+	@RequestMapping(value = "/list", method = RequestMethod.PUT)
+	public @ResponseBody
+	String list() {
+		
+		return "notifications/list";
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.PUT)
+	public @ResponseBody
+	String create() {
+		
+		return "notifications/create";
+	}	
 }
