@@ -76,5 +76,7 @@ public class FriendsController {
 		return model;
 	}
 	
+	
+	
 
 }

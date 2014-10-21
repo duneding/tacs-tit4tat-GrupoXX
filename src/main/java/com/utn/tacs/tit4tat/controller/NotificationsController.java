@@ -129,6 +129,7 @@ public class NotificationsController {
 		ModelAndView model = new ModelAndView("notifications/create");
 		model.addObject("solicitud", solicitud);
 		return model;
+		
 	}
 	
 
