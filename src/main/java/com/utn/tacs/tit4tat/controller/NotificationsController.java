@@ -85,12 +85,7 @@ public class NotificationsController {
 			solicitud.setId(1L);
 			solicitud.setState(1);
 
-
-		
 		//model.addObject("solicitud", solicitud);		
-		
-		
-		
 		
 		Solicitud notification = new Solicitud();
 		notification.setId(1L);
