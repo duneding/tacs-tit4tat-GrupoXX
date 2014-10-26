@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<form:form method="POST" commandName="solicitud" action="/notifications/create">
+<form:form method="POST" commandName="notification" action="/notifications/list">
   <div class="form-group">
     <label for="category">Detalle:</label>
     <form:input path="detail" />
@@ -20,9 +20,8 @@
     <label for="descripcion">Item a adquirir:</label>
     <form:input path="requestItem.description" />
   </div>
-  <button type="submit" class="btn btn-default">Agregar</button>
+  <button type="submit" class="btn btn-default">Enviar</button>
 </form:form>
-
 
 
 

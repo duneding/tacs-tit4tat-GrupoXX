@@ -42,7 +42,7 @@
 
 			$.ajax({  
 			     type : "PUT",   
-			     url : "notifications",   
+			     url : "edit",   
 			     async: false,
 			     data : { 
 				     		id: id ,
@@ -65,7 +65,7 @@
 
 			$.ajax({  
 			     type : "PUT",   
-			     url : "notifications",   
+			     url : "edit",   
 			     async: false,
 			     data : { 
 				     		id: id ,

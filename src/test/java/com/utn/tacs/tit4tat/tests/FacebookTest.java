@@ -1,9 +1,17 @@
 package com.utn.tacs.tit4tat.tests;
 
-import org.junit.Before;
+import java.util.Scanner;
+
 import org.junit.Test;
 
+import com.utn.tacs.tit4tat.facebook.builder.ServiceBuilder;
+import com.utn.tacs.tit4tat.facebook.builder.api.FacebookApi;
+import com.utn.tacs.tit4tat.facebook.model.OAuthRequest;
+import com.utn.tacs.tit4tat.facebook.model.Response;
 import com.utn.tacs.tit4tat.facebook.model.Token;
+import com.utn.tacs.tit4tat.facebook.model.Verb;
+import com.utn.tacs.tit4tat.facebook.model.Verifier;
+import com.utn.tacs.tit4tat.facebook.oauth.OAuthService;
 
 public class FacebookTest {
 
@@ -15,7 +23,7 @@ private static final Token EMPTY_TOKEN = null;
 	public void connectToFacebook() {
 	
 		// Replace these with your own api key and secret
-		/* String apiKey = "1454789934802984";
+		   String apiKey = "1454789934802984";
 		    String apiSecret = "3285646780d70cf7ad4c5e05277e428f";
 		    OAuthService service = new ServiceBuilder()
 		                                  .provider(FacebookApi.class)
@@ -58,7 +66,7 @@ private static final Token EMPTY_TOKEN = null;
 		    System.out.println(response.getBody());
 	
 		    System.out.println();
-		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");*/
+		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
 	
 	}
 }

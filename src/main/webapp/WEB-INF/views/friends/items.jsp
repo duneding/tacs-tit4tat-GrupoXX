@@ -20,7 +20,7 @@
         <td>${item.id}</td>
         <td>${item.description}</td>
         <td>${item.owner.name}</td>
-        <td><a href="#"><span onclick="createTrueque(this)" class="glyphicon glyphicon-cloud-upload" title="Envia una solicitud de trueque a tu amigo!!"></span></a></td>
+        <td><a><span onclick="createTrueque(this)" class="glyphicon glyphicon-cloud-upload" title="Envia una solicitud de trueque a tu amigo!!"></span></a></td>
         </tr>
       </c:forEach>
       </tbody>
@@ -31,9 +31,9 @@
 function createTrueque(link){
   var id = $(link).closest("tr").find("td:eq(0)").text();  
   var owner = $(link).closest("tr").find("td:eq(2)").text();  
-  var json = { "owner" : owner, "item" : id};
+  var jsonRequest = { "owner" : owner, "item" : id};
   
-  $.ajax({  
+  /*$.ajax({  
 	     type : "POST",   
 	     url : "/notifications/create",   	
 	     async: false,
@@ -47,7 +47,22 @@ function createTrueque(link){
 	     error : function(e) {  
 	      alert('Error:' + e.responseText);   
 	     }  
-	    });
+	    });*/
+  
+  $.ajax({
+      type: "GET",
+      //contentType : 'application/json; charset=utf-8',
+      //dataType : 'json',
+      url: "notify",
+      data: {
+    	  		json:JSON.stringify(jsonRequest)
+    	  	},
+      success :function(result) {
+       // do what ever you want with data
+    	  var redirect = "/notifications/create/1";
+    	  window.location.replace(redirect);
+     }
+  });
   
 /*   
   

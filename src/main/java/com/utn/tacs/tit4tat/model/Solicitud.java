@@ -65,11 +65,11 @@ public class Solicitud implements Serializable {
 	}
 	
 	
-	public Solicitud(String detail, Item requestItem, Item offeredItem) {
+	/*public Solicitud(String detail, Item requestItem, Item offeredItem) {
 		this.setDetail(detail);
 		this.setRequestItem(requestItem);
 		this.setOfferedItem(offeredItem);
-	}
+	}*/
 	
 	public int getState() {
 		return state;
@@ -84,9 +84,6 @@ public class Solicitud implements Serializable {
 		return "Solicitud [id=" + id + ", detalle=" + detail + "]";
 	}
 	
-	protected Solicitud() {
-	}
-
 	public void setAcepted() {
 		this.setState(Solicitud.ACEPTED);
 	}

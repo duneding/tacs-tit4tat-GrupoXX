@@ -31,11 +31,7 @@ public class ItemsController {
 	
 	List<Item> items = new ArrayList<Item>();
 	
-	/**
-	 * Da de alta el item final
-	 * @param item
-	 * @return
-	 */
+
 	@RequestMapping (value = "/list", method = RequestMethod.POST)
     public String addContact(@ModelAttribute("item")
     Item item, BindingResult result) {

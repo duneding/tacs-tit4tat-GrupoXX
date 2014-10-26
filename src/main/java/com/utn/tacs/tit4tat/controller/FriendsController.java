@@ -5,12 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Usuario;
@@ -38,6 +37,16 @@ public class FriendsController {
 		
 		return "friends/{userId}/items";
 	}*/
+	
+	@RequestMapping(value="/notify", method =RequestMethod.GET)
+	//public  @ResponseBody ModelAndView  createNotification(@RequestParam(value = "json") String jsonRequest) {
+	public  String notifyFriend() {
+		
+		/*ModelAndView model = new ModelAndView("/notifications/create");
+		model.addObject("solicitud", jsonRequest);*/
+		String projectUrl = "yahoo.com";
+		return "redirect:/notifications/create/"+1;
+	}
 	
 	/**
 	 * Obtiene los items de mis amigos
