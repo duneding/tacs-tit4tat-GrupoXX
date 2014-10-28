@@ -89,7 +89,7 @@
 	      function (response) {
 	        if (response && !response.error) {
 	        	var names = '';
-	        	for (var i = 0; i >= (response.length >=5 ? 5 : repsonse.length); i++) {
+	        	for (var i = 0; i < (response.length >=5 ? 5 : repsonse.length); i++) {
 	        		names += response[i].name + '\n';
 	        	};
 	          	document.getElementById('status').innerHTML = 'These are some of your friends:\n' + names;
