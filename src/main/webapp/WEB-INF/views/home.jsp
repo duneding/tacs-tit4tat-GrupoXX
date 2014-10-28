@@ -85,6 +85,19 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
+  
+  FB.api(
+      "/me/friends",
+      function (response) {
+        if (response && !response.error) {
+        	var names = '';
+        	for (var i = 0; i >= (response.length >=5 ? 5 : repsonse.length); i++) {
+        		names += response[i].name + '\n';
+        	};
+          	document.getElementById('status').innerHTML = 'These are some of your friends:\n' + names;
+        }
+      }
+  );
 </script>
 <h1 id="fb-welcome"></h1>
 
@@ -324,7 +337,7 @@ function searchItem(){
 
 	</div>
 	
-	<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+	<fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
 </fb:login-button>
 
 <div id="status">
