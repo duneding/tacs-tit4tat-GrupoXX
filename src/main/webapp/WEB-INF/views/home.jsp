@@ -85,7 +85,7 @@
         'Thanks for logging in, ' + response.name + '!';
     });
     FB.api(
-	      "/me/friends",
+	      "/me/friends?fields=installed",
 	      function (response) {
 		  	console.log('Obtained friends: ' + response.length);
 		  	console.log('print response: ' + response);
