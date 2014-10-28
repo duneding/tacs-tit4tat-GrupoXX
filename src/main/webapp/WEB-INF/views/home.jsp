@@ -84,21 +84,42 @@
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
     });
-    FB.api(
-	      "/me/friends?fields=installed",
-	      function (response) {
+
+	FB.api('/me/friends', 
+		function(response) {
+			console.log('Obtained friends: ' + response.length);
+		  	console.log('print response: ' + response);
+			if (response && !response.error) {
+		  		if(response.data) { 
+	        		var names = '';
+		 			console.log('Response without error');
+			 		$.each(response.data,function(index,friend) {
+			 	 		console.log(friend.name + ' has id:' + friend.id); 
+			 	 		names += friend.name + '\n';
+			 		});
+			  		console.log('These are some of your friends:\n' + names);
+		          	document.getElementById('status').innerHTML += 'These are some of your friends:\n' + names; 
+			 	} else {
+			 		console.log("Error!"); 
+			 	} 
+	        } else {
+	  			console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
+	      	}
+		}); 
+
+    FB.api("/me/friends", function (response) {
 		  	console.log('Obtained friends: ' + response.length);
 		  	console.log('print response: ' + response);
 			if (response && !response.error) {
 		  		console.log('Response without error');
-
+		  		var data = response.data;
 	        	var names = '';
 	        	for (var i = 0; i < (response.length >=5 ? 5 : response.length); i++) {
 			  		console.log('Adding friend: ' + response[i].name);
 	        		names += response[i].name + '\n';
 	        	};
 		  		console.log('These are some of your friends:\n' + names);
-	          	document.getElementById('status').innerHTML = 'These are some of your friends:\n' + names;
+	          	document.getElementById('status').innerHTML += 'These are some of your friends:\n' + names;
 	        } else {
 	  			console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
 	      	}
