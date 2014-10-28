@@ -93,7 +93,7 @@
 		  		console.log('Response without error');
 
 	        	var names = '';
-	        	for (var i = 0; i < (response.length >=5 ? 5 : repsonse.length); i++) {
+	        	for (var i = 0; i < (response.length >=5 ? 5 : response.length); i++) {
 			  		console.log('Adding friend: ' + response[i].name);
 	        		names += response[i].name + '\n';
 	        	};
