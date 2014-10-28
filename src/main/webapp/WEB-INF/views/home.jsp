@@ -99,10 +99,10 @@
 	        	};
 		  		console.log('These are some of your friends:\n' + names);
 	          	document.getElementById('status').innerHTML = 'These are some of your friends:\n' + names;
-	        }
-	      } else {
-	  		console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
-	      }
+	        } else {
+	  			console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
+	      	}
+	      } 
 	  );
   }
 </script>
