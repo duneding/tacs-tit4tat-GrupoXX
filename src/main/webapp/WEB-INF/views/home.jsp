@@ -87,13 +87,21 @@
     FB.api(
 	      "/me/friends",
 	      function (response) {
-	        if (response && !response.error) {
+		  	console.log('Obtained friends: ' + response.length);
+		  	console.log('print response: ' + response);
+			if (response && !response.error) {
+		  		console.log('Response without error');
+
 	        	var names = '';
 	        	for (var i = 0; i < (response.length >=5 ? 5 : repsonse.length); i++) {
+			  		console.log('Adding friend: ' + response[i].name);
 	        		names += response[i].name + '\n';
 	        	};
+		  		console.log('These are some of your friends:\n' + names);
 	          	document.getElementById('status').innerHTML = 'These are some of your friends:\n' + names;
 	        }
+	      } else {
+	  		console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
 	      }
 	  );
   }
