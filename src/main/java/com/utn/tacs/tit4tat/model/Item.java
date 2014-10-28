@@ -3,23 +3,15 @@ package com.utn.tacs.tit4tat.model;
 import java.io.Serializable;
 import java.net.URL;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.google.appengine.api.datastore.Blob;
 
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "items")
+//@Entity
+//@Table(name = "items")
 public class Item implements Serializable {
 
-	@Id
-	@GeneratedValue
+//	@Id
+//	@GeneratedValue
 	private Long id;
 
 	private String[] category;
@@ -30,8 +22,8 @@ public class Item implements Serializable {
 	
 	private URL permalink;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OWNER_ID")
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "OWNER_ID")
 	private Usuario owner;
 
 	public Long getId() {

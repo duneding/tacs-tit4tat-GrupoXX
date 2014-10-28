@@ -3,28 +3,22 @@ package com.utn.tacs.tit4tat.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 @SuppressWarnings("serial")
-@Entity
-@Table(name="usuarios")
+//@Entity
+//@Table(name="usuarios")
 public class Usuario implements Serializable {
 	
-	@Id
-	@GeneratedValue
-	
+//	@Id
+//	@GeneratedValue
 	private Long id;
 	
 	private String name;
 	
-	@OneToMany(mappedBy="owner")
+//	@OneToMany(mappedBy="owner")
 	private List<Item> items;
 
 	
+
 	public Long getId() {
 		return id;
 	}
@@ -41,6 +35,14 @@ public class Usuario implements Serializable {
 		this.name = name;
 	}
 
+	public List<Item> getItems() {
+		return items;
+	}
+	
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+	
 	protected Usuario() {
 	}
 	

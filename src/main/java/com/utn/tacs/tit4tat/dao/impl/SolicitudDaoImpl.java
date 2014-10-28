@@ -15,11 +15,7 @@ public class SolicitudDaoImpl extends GenericDaoImpl<Solicitud, Long> implements
 
 	@Override
 	public List<Solicitud> getSolicitudesPendientes() {
-		String hql = "from Solicitud s where s.state = " + 0;
 		
-		@SuppressWarnings("unchecked")
-		List<Solicitud> result = (List<Solicitud>) this.hibernateTemplate.find(hql);
-		
-		return result;
+		return null;
 	}
 }

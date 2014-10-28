@@ -4,30 +4,11 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.utn.tacs.tit4tat.dao.GenericDao;
 
 public abstract class GenericDaoImpl<T extends Serializable , ID extends Serializable> implements GenericDao<T, ID> {
 
-	protected HibernateTemplate hibernateTemplate;
-	protected SessionFactory sessionFactory;
 	private Class<T> persistentClass;
-
-	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		hibernateTemplate = new HibernateTemplate(sessionFactory);
-		this.sessionFactory = sessionFactory;
-	}
-
-	public Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
 	
 	@SuppressWarnings("unchecked")
 	public GenericDaoImpl() {
@@ -44,68 +25,38 @@ public abstract class GenericDaoImpl<T extends Serializable , ID extends Seriali
 	}
 
 	public T loadById(ID id, boolean lock) {
-		
-		T entity;
-		
-		if (lock)
-			entity = (T) hibernateTemplate.load(getPersistentClass(), id, LockMode.UPGRADE);
-		else
-			entity = (T) hibernateTemplate.load(getPersistentClass(), id);
-
-		return entity;
+		return null;
 	}
 
-
-	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
-		return (List<T>) hibernateTemplate.find("from " +getPersistentClass().getName());
+		return null;
 	}
 
 	public T getById(ID id) {
-		return hibernateTemplate.get(getPersistentClass(), id);
+		return null;
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	@Transactional(readOnly = false)
+//	@Transactional(readOnly = false)
 	public ID save(T entity) {
-		return (ID) hibernateTemplate.save(entity);
+		return (ID) null;
 	}
 	
 
-	@Transactional(readOnly = false)
+//	@Transactional(readOnly = false)
 	public void saveOrUpdate(T entity) {
-		hibernateTemplate.saveOrUpdate(entity);;
 	}
 
-	@Transactional(readOnly = false)
+//	@Transactional(readOnly = false)
 	public void delete(T entity) {
-		hibernateTemplate.delete(entity);
 	}
 
-	
-	// ----------------- //
-	
 	public void flush() {
-		hibernateTemplate.flush();
 	}
 
 	public void clear() {
-		hibernateTemplate.clear();
-	}
-	
-	//---------------//
-	public String[] getParams(List<String> array) {
-		String[] ret = new String[array.size()];
-		for(int i = 0; i < ret.length; ++i) {
-			ret[i] = array.get(i);
-		}
-		
-		return ret;
 	}
 	
 	public void saveAll(List<T> entities){
-		hibernateTemplate.saveOrUpdateAll(entities);	
 	}
-
 }

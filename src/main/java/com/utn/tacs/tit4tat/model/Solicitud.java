@@ -2,30 +2,22 @@ package com.utn.tacs.tit4tat.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 @SuppressWarnings("serial")
-@Entity
-@Table(name="Solicitudes")
+//@Entity
+//@Table(name="Solicitudes")
 public class Solicitud implements Serializable {
 
-	@Id
-	@GeneratedValue
+//	@Id
+//	@GeneratedValue
 	private Long id;
 	private String detail;
 	
-	@ManyToOne
-	@JoinColumn(name="offered_item_id")
+//	@ManyToOne
+//	@JoinColumn(name="offered_item_id")
 	private Item offeredItem;
 	
-	@ManyToOne
-	@JoinColumn(name="request_item_id")
+//	@ManyToOne
+//	@JoinColumn(name="request_item_id")
 	private Item requestItem;
 	
 	private int state;
@@ -92,12 +84,12 @@ public class Solicitud implements Serializable {
 		this.setState(Solicitud.REFUSED);
 	}
 	
-	@Transient
+//	@Transient
 	public static final int ACEPTED = 1; 
 	
-	@Transient
+//	@Transient
 	public static final int REFUSED = -1;
 	
-	@Transient
+//	@Transient
 	public static final int PENDING = 0;
 }
