@@ -19,8 +19,9 @@ public class SolicitudServiceImpl implements SolicitudService {
 
 	@Override
 	public Solicitud saveSolicitud(Solicitud solicitud) {
-		Long id = this.solicitudDao.save(solicitud);
-		solicitud.setId(id);
+//		Long id = this.solicitudDao.save(solicitud);
+//		solicitud.setId(id);
+		this.solicitudDao.save(solicitud);
 		return solicitud;
 	}
 

@@ -1,17 +1,16 @@
 package com.utn.tacs.tit4tat.model;
 
-import java.io.Serializable;
 import java.net.URL;
 
 import com.google.appengine.api.datastore.Blob;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.utn.tacs.tit4tat.objectify.Identifiable;
 
-@SuppressWarnings("serial")
-//@Entity
-//@Table(name = "items")
-public class Item implements Serializable {
+@Entity
+public class Item implements Identifiable {
 
-//	@Id
-//	@GeneratedValue
+	@Id
 	private Long id;
 
 	private String[] category;
@@ -22,14 +21,14 @@ public class Item implements Serializable {
 	
 	private URL permalink;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "OWNER_ID")
 	private Usuario owner;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

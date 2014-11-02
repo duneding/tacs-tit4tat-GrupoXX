@@ -19,8 +19,9 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public Item saveItem(Item item) {
-		Long id = this.itemDao.save(item);
-		item.setId(id);
+//		Long id = this.itemDao.save(item);
+//		item.setId(id);
+		this.itemDao.save(item);
 		return item;
 	}
 

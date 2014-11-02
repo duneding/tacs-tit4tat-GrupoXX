@@ -10,8 +10,8 @@ import com.utn.tacs.tit4tat.dao.UsuarioDao;
 import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
-@Service(value="usuarioService")
-@Scope(value="prototype")
+@Service(value = "usuarioService")
+@Scope(value = "prototype")
 public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
@@ -19,8 +19,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario saveUsuario(Usuario usuario) {
-		Long id = this.usuarioDao.save(usuario);
-		usuario.setId(id);
+		// Long id = this.usuarioDao.save(usuario);
+		// usuario.setId(id);
+		this.usuarioDao.save(usuario);
 		return usuario;
 	}
 
@@ -36,7 +37,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario getUsuariosById(Long id) {
-		return this.getUsuariosById(id);
+		return this.usuarioDao.getById(id);
 	}
 
 	@Override

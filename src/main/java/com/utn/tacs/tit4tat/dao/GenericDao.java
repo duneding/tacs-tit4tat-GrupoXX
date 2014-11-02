@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public interface GenericDao<T  extends Serializable, ID extends Serializable> {
+public interface GenericDao<T, ID extends Serializable> {
 
 	/**
 	 * loadById
