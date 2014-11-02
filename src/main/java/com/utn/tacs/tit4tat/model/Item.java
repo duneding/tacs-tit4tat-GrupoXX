@@ -22,6 +22,9 @@ public class Item implements Identifiable {
 	private URL permalink;
 
 	private Usuario owner;
+	
+	public Item() {
+	}
 
 	@Override
 	public Long getId() {
