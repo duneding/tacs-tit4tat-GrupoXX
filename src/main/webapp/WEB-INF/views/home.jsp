@@ -17,6 +17,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      document.getElementById('fbLoginButton').style.display = 'none';
       testAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -134,50 +135,69 @@ $(document).ready(function(){
 	});
 });
 
+/*$(document).ready(function(){
+    var loading = $("#divloader");
+    $(document).ajaxStart(function () {
+        loading.show();
+    });
 
+    $(document).ajaxStop(function () {
+        loading.hide();
+    });
+
+});*/
+
+/*
+ $('#divloader').bind('ajaxStart', function(){
+	    $(this).show();
+ }).bind('ajaxStop', function(){
+     $(this).hide();
+ });
+ */
 
 function searchItem(){
+	
 	var name = $('#itemForSearch').val();
 	if(name.length == 0 ){
 		$("#descriptionEmpty").show();
 		return;
 	}
-		
+	
+ 	$("#divloader").show();	
 	$.ajax({  
-	     type : "GET",   
-	     url : "items/getItemsSearch",   
-	     async: false,
-	     data : "name=" + name ,  
-	     success : function(response) {  
-	    	 $('#gridItems').empty();
-	    	 /* $('#gridItems').append("<div class='row'>");  */
-	    	 $('#gridItems').append("<table class='table table-striped table-hover' id='gridSearch'>" +
-	    			 "<thead>" + 
-	    			 "<th>Categoria</th>"+ 
-	    			  "<th>Descripcion</th>" +
-	    			  "</thead><tbody></tbody></table></div>"); 
-	    	 
-	    	 for (var i = 0; i < response.length; i ++){
-	    		 /* $('#gridItems').append("<div class='col-md-3 portfolio-item'>" +
-	    				 "<a onClick='addItem(this)' id='" + response[i].id + "'><img class='img-responsive'></a></div>"); */ 
-	    				 $('#gridSearch tbody').after( "<tr>" +
-					"<td style = 'display:none'>" + response[i].id + "</td>" + 
-					"<td>" + response[i].category[0] +"</td>" +
-					"<td>" + response[i].description + "</td>" + 
-					 "<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
-	 					"</tr>");
-	    				 
-	    	 }
+    type : "GET",   
+    url : "items/getItemsSearch",   
+    async: true,
+    data : "name=" + name,
+    success : function(response) {  
+     //$("#divloader").hide(); 
+  	 $('#gridItems').empty();
+   	 $('#gridItems').append("<table class='table table-striped table-hover' id='gridSearch'>" +
+   			 "<thead>" + 
+   			 "<th>Categoria</th>"+ 
+   			  "<th>Descripcion</th>" +
+   			  "</thead><tbody></tbody></table></div>"); 
+   	 
+   	 for (var i = 0; i < response.length; i ++){
+   				 $('#gridSearch tbody').after( "<tr>" +
+				"<td style = 'display:none'>" + response[i].id + "</td>" + 
+				"<td>" + response[i].category[0] +"</td>" +
+				"<td>" + response[i].description + "</td>" + 
+				 "<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
+					"</tr>");
+   				 
+   	 }
+   	 
+   },
+    error : function(e,h,j) {  
+     alert('Error:');   
+    },
+    complete: function() {
+    	$("#divloader").hide();  	
+    }
+   });
 
-	     },  
-	     error : function(e) {  
-	      alert('Error:');   
-	     }  
-	    });  
-
-}
-
-
+} 
 
 /*   window.fbAsyncInit = function() {
     FB.init({
@@ -217,7 +237,7 @@ function searchItem(){
  			<p>Aplicacion social que te permite crear e intercambiar items
 				con tus amigos</p> 
 		</div>
-		<div class="alert alert-danger" id="descriptionEmpty" style="display:none">
+		<div class="alert alert-danger" id="descriptionEmpty" style="display:none" align="center">
         <a href="#" class="close">&times;</a>
         <strong>Error!</strong>Debe ingresar una descripcion
     </div>
@@ -226,25 +246,34 @@ function searchItem(){
 		<!-- main area -->
 		<div class="col-xs-12 col-sm-9">
 			<!-- Page Heading -->
-		<div class="row">
-			<div class="col-lg-12">
+		<div class="row" align="center">
+			<div class="col-lg-6 col-lg-offset-4">
 				<h3 class="page-header">
 					Comienza buscando tus items
 				</h3>
 			</div>
 		</div>
-		
+		 
 		<div class="row">
-  			<div class="col-lg-6">
+		 <div class="col-lg-6 col-lg-offset-4"></div>
+  			<div class="col-lg-6 col-lg-offset-4">
     			<div class="input-group">
-      				<input type="text" id="itemForSearch" class="form-control">
+      				<input type="text" id="itemForSearch" class="form-control" align="center"
+      				onkeydown="if (event.keyCode == 13) document.getElementById('go').click()">
       					<span class="input-group-btn">
-        					<button class="btn btn-default" type="button" onclick="searchItem()" data-toggle="tooltip" data-placement="top" title="Busca tus items en MercadoLibre">Go!</button>
+        					<button id="go" class="btn btn-default" type="button" onclick="searchItem()" data-toggle="tooltip" data-placement="top"         					
+        					title="Busca tus items en MercadoLibre">Go!</button>
       					</span>
     				</div>
-  			</div>
+  			</div> 
+  			           <div class="col-lg-6 col-lg-offset-4"></div>
 		</div>
-		<div id="gridItems">
+						
+			<div id="divloader" style="height: 100px; text-align: center; display: none">
+				<img id="ajax-loader" src="../../images/ajax-loader.gif" class="ajax-loader"/>    			
+			</div>
+			
+		<div id="gridItems">		
 		<!-- Projects Row -->
 		<!--  <div class="row">
 			<div class="col-md-3 portfolio-item">
@@ -345,9 +374,11 @@ function searchItem(){
 	</div>
 
 	</div>
-	
-	<fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
-</fb:login-button>
+
+<div id="fbLoginButton">
+    <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
+    </fb:login-button>
+</div>
 
 <div id="status">
 </div>

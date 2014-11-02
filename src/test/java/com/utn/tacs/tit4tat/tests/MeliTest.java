@@ -26,7 +26,7 @@ public class MeliTest {
 	private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
 	private static final Token EMPTY_TOKEN = null;	
 		
-	@Test
+	/*@Test
 	public void testConnectToML() {
 		
 		try{
@@ -39,7 +39,7 @@ public class MeliTest {
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
-	}
+	}*/
 	
 	@Test
 	public void testGetInformation() {

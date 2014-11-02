@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -66,7 +65,7 @@ public class HomeController {
 		return "home";
 	}*/
 
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value="/user/{userId}", method=RequestMethod.GET)
 	public String getUserInfo(@PathVariable("userId") String userId, Model model) {
 
 		Long userIdLong = Long.getLong(userId);

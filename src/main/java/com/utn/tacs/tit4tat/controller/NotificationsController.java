@@ -5,9 +5,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +45,7 @@ public class NotificationsController {
 		return "La solicitud proceso correctamente: " + id;
 	}*/
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getNotifications() {
 		ModelAndView model = new ModelAndView("notifications");
 
@@ -69,11 +73,37 @@ public class NotificationsController {
 	}
 		
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public  @ResponseBody String  create(@RequestParam(value = "json") String jsonRequest) {
+	public  @ResponseBody String  createn(@RequestParam(value = "json") String jsonRequest) {
 
 		//TODO> guardar en DB 
 		return "redirect:create";
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping (method = RequestMethod.POST)
+	public @ResponseBody ModelAndView create(@RequestBody String jsonRequest) {	
+		
+		ModelAndView model = new ModelAndView("create");				
+		JSONObject obj=new JSONObject();
+		obj.put("create","OK");		 
+		model.addObject("response", obj);
+		
+        return model;
+    }	
+	
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping (value="/reply", method = RequestMethod.PUT)
+	public @ResponseBody ModelAndView update(@RequestBody String jsonRequest) {	
+		
+		ModelAndView model = new ModelAndView("edit");				
+		JSONObject obj=new JSONObject();
+		obj.put("update","OK");		 
+		model.addObject("response", obj);
+		
+        return model;
+    }	
 	
 	@RequestMapping(value="/create/{id}", method =RequestMethod.GET)
 	//public  @ResponseBody ModelAndView  createGet(@RequestParam(value = "json") String jsonRequest) { 
@@ -145,10 +175,18 @@ public class NotificationsController {
 		return "notifications/rejected";
 	}		
 	
-	@RequestMapping(value = "/{notId}/share", method = RequestMethod.GET)
-	public String share(@PathVariable("notId") String notId) {
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping (value = "/{notId}/share", method = RequestMethod.POST)
+    //public @ResponseBody ModelAndView create(@ModelAttribute("item") Item item, BindingResult result) {
+	public @ResponseBody ModelAndView share(@PathVariable("notId") String itemId, @RequestBody String jsonRequest) {	
 		
-		return "notifications/share";
-	}	
+		ModelAndView model = new ModelAndView("notifications/share");				
+		JSONObject obj=new JSONObject();
+		obj.put("share","OK");		 
+		model.addObject("response", obj);
+		
+        return model;
+    }	
 
 }
