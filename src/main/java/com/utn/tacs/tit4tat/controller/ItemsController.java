@@ -5,6 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,22 +33,12 @@ public class ItemsController {
 	
 	@Autowired
 	private ItemService itemService;
-	
-	List<Item> items = new ArrayList<Item>();
-	
-
-	@RequestMapping (value = "/list", method = RequestMethod.POST)
-    public String addContact(@ModelAttribute("item")
-    Item item, BindingResult result) {
-		//Insertar Item
-		items.add(item);
-        return "redirect:/items/list";
-    }
+		
 	/**
 	 * Elimina Item
 	 * @param itemId
 	 * @return
-	 */
+	 */	
 	@RequestMapping(value="/{itemId}", method = RequestMethod.DELETE)
 	public @ResponseBody String removeItem(@PathVariable("itemId") String itemId) {
 		return "El Item fue eliminado correctamente";
@@ -53,12 +48,37 @@ public class ItemsController {
 	 * Obtiene los items de un usuario
 	 * @return
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView getItems() {
-//		List<Item> items = this.itemService.getItems();
-		ModelAndView model = new ModelAndView("items");
-				
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView get() {
+		ModelAndView model = new ModelAndView("items/list");
+		
+		model.addObject("items", getItems());
+		return model;
+	}
+	
+	/*
+	@SuppressWarnings("unchecked")
+	@Produces(value ="application/json")
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody ModelAndView getJson() {
+		ModelAndView model = new ModelAndView("items/list");
+		JSONObject jsonResponse = new JSONObject();
+		/SONArray jsItems = new JSONArray();
+		jsItems.add(item1.getId());
+		jsItems.add(item1.getDescription());
+		jsItems.add(item1.getCategory());
+		jsItems.add(item1.getPermalink());		  
+		jsonResponse.put("items",jsItems);	
+		jsonResponse.put("items",getItems());
+		model.addObject("response", jsonResponse);
+		
+		return model;
+	}
+	 */
+	
+	private List<Item> getItems(){
 		Item item1 = new Item();
+		List<Item> items = new ArrayList<Item>();
 		item1.setId(1L);
 		item1.setDescription("Ipod touch");
 		items.add(item1);
@@ -68,14 +88,7 @@ public class ItemsController {
 		item2.setDescription("Galaxy S5");
 		items.add(item2);
 		
-		Item item3 = new Item();
-		item3.setId(3L);
-		item3.setDescription("Silla");
-		items.add(item3);
-		
-		model.setViewName("items/list");
-		model.addObject("items", items);
-		return model;
+		return items;
 	}
 	
 	/**
@@ -136,19 +149,47 @@ public class ItemsController {
 		model.addObject("item", item);
 		return model;
 	}
-
 	
-	@RequestMapping(value = "/{itemId}/share", method = RequestMethod.GET)
-	public String shareMyCreationItem(@PathVariable("itemId") String itemid) {
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping (value = "/{itemId}/share", method = RequestMethod.POST)
+    //public @ResponseBody ModelAndView create(@ModelAttribute("item") Item item, BindingResult result) {
+	public @ResponseBody ModelAndView share(@PathVariable("itemId") String itemId, @RequestBody String jsonRequest) {	
 		
-		return "items/share";
+		ModelAndView model = new ModelAndView("items/share");				
+		JSONObject obj=new JSONObject();
+		obj.put("share","OK");		 
+		model.addObject("response", obj);
+		
+        return model;
+    }	
+	
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping(method = RequestMethod.PUT)
+	public @ResponseBody ModelAndView edit(@RequestBody String jsonRequest) {
+		
+		ModelAndView model = new ModelAndView("items/edit/1");				
+		JSONObject obj=new JSONObject();
+		obj.put("update","OK");		 
+		model.addObject("response", obj);
+		
+		return model;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Consumes(value ="application/json")
+	@RequestMapping (method = RequestMethod.POST)
+    //public @ResponseBody ModelAndView create(@ModelAttribute("item") Item item, BindingResult result) {
+	public @ResponseBody ModelAndView create(@RequestBody String jsonRequest) {	
 		
-	@RequestMapping(value = "/edit/{itemId}", method = RequestMethod.PUT)
-	public String edit(@PathVariable("itemId") String itemid) {
+		ModelAndView model = new ModelAndView("items/create/1");				
+		JSONObject obj=new JSONObject();
+		obj.put("create","OK");		 
+		model.addObject("response", obj);
 		
-		return "items/edit";
-	}
+        return model;
+    }
 	
 	@RequestMapping(value = "/delete/{itemId}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("itemId") String itemid) {

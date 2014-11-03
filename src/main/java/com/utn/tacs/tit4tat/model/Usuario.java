@@ -43,7 +43,7 @@ public class Usuario implements Serializable {
 		this.items = items;
 	}
 	
-	protected Usuario() {
+	public Usuario() {
 	}
 	
 	public Usuario(String name) {
