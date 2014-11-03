@@ -17,6 +17,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      document.getElementById('fbLoginButton').style.display = 'none';
       testAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -373,9 +374,11 @@ function searchItem(){
 	</div>
 
 	</div>
-	
-	<fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
-</fb:login-button>
+
+<div id="fbLoginButton">
+    <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
+    </fb:login-button>
+</div>
 
 <div id="status">
 </div>
