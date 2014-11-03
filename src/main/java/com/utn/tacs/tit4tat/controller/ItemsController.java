@@ -99,7 +99,10 @@ public class ItemsController {
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
 	List<Item> getItemsSearch(@RequestParam(value = "name") String name) {
-		List<Item> items = new ArrayList<Item>();
+		MercadoLibre meli = MercadoLibre.getInstance();
+		List<Item> items = meli.searchlListItems(name);
+		
+		/*List<Item> items = new ArrayList<Item>();
 		String[] categoria = {"Celulares"};
 		
 		Item item1 = new Item();
@@ -118,7 +121,7 @@ public class ItemsController {
 		item3.setId(3L);
 		item3.setDescription("Silla");
 		item3.setCategory(categoria);
-		items.add(item3);
+		items.add(item3);*/
 		return items;
 	}
 
