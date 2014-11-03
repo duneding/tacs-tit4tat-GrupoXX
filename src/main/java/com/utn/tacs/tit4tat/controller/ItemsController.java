@@ -81,15 +81,12 @@ public class ItemsController {
 	/**
 	 * Busca en ML todos los items "name"
 	 * @param name
-	 * @return
+	 * @return 
 	 */
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
 	List<Item> getItemsSearch(@RequestParam(value = "name") String name) {
-		MercadoLibre meli = MercadoLibre.getInstance();
-		List<Item> items = meli.searchlListItems(name);
-		
-		/*List<Item> items = new ArrayList<Item>();
+		List<Item> items = new ArrayList<Item>();
 		String[] categoria = {"Celulares"};
 		
 		Item item1 = new Item();
@@ -108,7 +105,7 @@ public class ItemsController {
 		item3.setId(3L);
 		item3.setDescription("Silla");
 		item3.setCategory(categoria);
-		items.add(item3);*/
+		items.add(item3);
 		return items;
 	}
 
@@ -161,7 +158,7 @@ public class ItemsController {
 		
 		return "items/share";
 	}
-		
+		 
 	/*@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public String removeItem(@PathVariable("itemId") String itemId) {
 		Item item = this.itemService.getItemsById(Long.parseLong(itemId));

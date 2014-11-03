@@ -163,10 +163,48 @@ function searchItem(){
 		return;
 	}
 	
-	$("#divloader").show();	
+	$('#gridItems').show();
+	
+	$('#myItemsSearchResult').bootstrapTable('refresh', {
+        url: 'items/getItemsSearch?name=' + name
+    });
+ } 
+ 
+ 
+ function operateFormatter(value, row, index) {
+     return [
+         '<a class="like" href="javascript:void(0)" title="Like">',
+             '<i class="glyphicon glyphicon-heart"></i>',
+         '</a>',
+         '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
+             '<i class="glyphicon glyphicon-edit"></i>',
+         '</a>',
+         '<a class="remove ml10" href="javascript:void(0)" title="Remove">',
+             '<i class="glyphicon glyphicon-remove"></i>',
+         '</a>'
+     ].join('');
+ }
+
+ window.operateEvents = {
+	        'click .like': function (e, value, row, index) {
+	            alert('You click like icon, row: ' + JSON.stringify(row));
+	            console.log(value, row, index);
+	        },
+	        'click .edit': function (e, value, row, index) {
+	            alert('You click edit icon, row: ' + JSON.stringify(row));
+	            console.log(value, row, index);
+	        },
+	        'click .remove': function (e, value, row, index) {
+	            alert('You click remove icon, row: ' + JSON.stringify(row));
+	            console.log(value, row, index);
+	        }
+	    };
+ 
+ 
+/* 	$("#divloader").show();	
 	$.ajax({  
     type : "GET",   
-    url : "items/getItemsSearch",   
+    url : "items/getItemsSearchA",   
     async: true,
     data : "name=" + name,
     success : function(response) {  
@@ -189,7 +227,7 @@ function searchItem(){
    	 }
    	 
    },
-    error : function(e) {  
+    error : function(e,h,j) {  
      alert('Error:');   
     },
     complete: function() {
@@ -197,7 +235,7 @@ function searchItem(){
     }
    });
 
-}
+} */
 
 /*   window.fbAsyncInit = function() {
     FB.init({
@@ -253,7 +291,7 @@ function searchItem(){
 				</h3>
 			</div>
 		</div>
-		
+		 
 		<div class="row">
 		 <div class="col-lg-6 col-lg-offset-4"></div>
   			<div class="col-lg-6 col-lg-offset-4">
@@ -273,7 +311,16 @@ function searchItem(){
 				<img id="ajax-loader" src="../../images/ajax-loader.gif" class="ajax-loader"/>    			
 			</div>
 			
-		<div id="gridItems">		
+		<div id="gridItems"  style="display:none">	
+		    <table data-toggle="table" data-pagination="true" data-height="400" id="myItemsSearchResult">
+      <thead>
+          <tr>
+              <th data-field="id">Codigo</th>
+              <th data-field="description">Descripcion</th>
+              <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents">Acciones</th>
+          </tr>
+      </thead>
+    </table>	
 		<!-- Projects Row -->
 		<!--  <div class="row">
 			<div class="col-md-3 portfolio-item">
