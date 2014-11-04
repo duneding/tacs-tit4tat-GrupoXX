@@ -36,6 +36,11 @@ public class HomeController {
 		return "home";
 	}
 
+	@RequestMapping(value = "/home", method = RequestMethod.POST)
+	public String go(ModelMap model) {
+		return "home";
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Consumes(value ="application/json")
 	@RequestMapping(value = "/login", method=RequestMethod.POST)

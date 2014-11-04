@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<form:form method="POST" commandName="notification" action="/notifications/list">
+<form:form method="POST" commandName="notification" action="/notifications">
   <div class="form-group">
     <label for="category">Detalle:</label>
     <form:input path="detail" />
