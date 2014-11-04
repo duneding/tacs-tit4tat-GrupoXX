@@ -1,5 +1,7 @@
 package com.utn.tacs.tit4tat.dao.impl;
 
+import static com.utn.tacs.tit4tat.objectify.OfyService.ofy;
+
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -13,9 +15,9 @@ import com.utn.tacs.tit4tat.model.Solicitud;
 public class SolicitudDaoImpl extends GenericDaoImpl<Solicitud, Long> implements
 		SolicitudDao {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Solicitud> getSolicitudesPendientes() {
-		
-		return null;
+		return (List<Solicitud>) ofy().load().type(Solicitud.class).filter("state", Solicitud.PENDING);
 	}
 }

@@ -56,6 +56,8 @@ public class SolicitudServiceImpl implements SolicitudService {
 		} else {
 			throw new RuntimeException("Invalid state"); 
 		}
+		
+		this.updateSolicitud(solicitud);
 	}
 	
 	@Override
