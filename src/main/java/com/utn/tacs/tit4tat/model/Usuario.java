@@ -14,7 +14,7 @@ public class Usuario implements Identifiable {
 
 	private String name;
 
-	private List<Item> items;
+//	private List<Item> items;
 
 	@Override
 	public Long getId() {
@@ -34,13 +34,13 @@ public class Usuario implements Identifiable {
 		this.name = name;
 	}
 	
-	public List<Item> getItems() {
-		return items;
-	}
-	
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
+//	public List<Item> getItems() {
+//		return items;
+//	}
+//	
+//	public void setItems(List<Item> items) {
+//		this.items = items;
+//	}
 	
 	public Usuario() {
 	}
