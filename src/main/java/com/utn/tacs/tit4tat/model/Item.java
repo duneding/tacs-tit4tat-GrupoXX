@@ -3,8 +3,10 @@ package com.utn.tacs.tit4tat.model;
 import java.net.URL;
 
 import com.google.appengine.api.datastore.Blob;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
 @Entity
@@ -21,7 +23,9 @@ public class Item implements Identifiable {
 	
 	private URL permalink;
 
-	private Usuario owner;
+	@Index
+	private Ref<Usuario> owner;
+	
 	
 	public Item() {
 	}
@@ -53,11 +57,11 @@ public class Item implements Identifiable {
 	}
 
 	public Usuario getOwner() {
-		return owner;
+		return owner.get();
 	}
 
 	public void setOwner(Usuario owner) {
-		this.owner = owner;
+		this.owner = Ref.create(owner);
 	}
 	
 	public Blob getImage() {

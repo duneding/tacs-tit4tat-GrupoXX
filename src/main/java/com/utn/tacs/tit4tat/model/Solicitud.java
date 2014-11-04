@@ -1,7 +1,9 @@
 package com.utn.tacs.tit4tat.model;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
 @Entity
@@ -11,27 +13,28 @@ public class Solicitud implements Identifiable {
 	private Long id;
 	private String detail;
 	
-	private Item offeredItem;
+	private Ref<Item> offeredItem;
 	
-	private Item requestItem;
-	
+	private Ref<Item> requestItem;
+
+	@Index
 	private int state;
 	
 	public Item getOfferedItem() {
-		return offeredItem;
+		return offeredItem.get();
 	}
 
 	public void setOfferedItem(Item itemOfrecido) {
-		this.offeredItem = itemOfrecido;
+		this.offeredItem = Ref.create(itemOfrecido);
 	}
 
 	
 	public Item getRequestItem() {
-		return requestItem;
+		return requestItem.get();
 	}
 
 	public void setRequestItem(Item itemSolicitado) {
-		this.requestItem = itemSolicitado;
+		this.requestItem = Ref.create(itemSolicitado);
 	}
 
 	public String getDetail() {

@@ -1,7 +1,5 @@
 package com.utn.tacs.tit4tat.model;
 
-import java.util.List;
-
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
@@ -14,7 +12,7 @@ public class Usuario implements Identifiable {
 
 	private String name;
 
-//	private List<Item> items;
+//	private List<Ref<Item>> items = new ArrayList<Ref<Item>>();
 
 	@Override
 	public Long getId() {
