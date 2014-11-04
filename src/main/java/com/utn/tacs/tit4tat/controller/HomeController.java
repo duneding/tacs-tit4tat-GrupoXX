@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -24,7 +23,7 @@ import com.utn.tacs.tit4tat.service.UsuarioService;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -70,24 +69,39 @@ public class HomeController {
 	public String signed_request(ModelMap model) {
 		return "home";
 	}*/
-	
+
 	@RequestMapping(value="/user/{userId}", method=RequestMethod.GET)
 	public String getUserInfo(@PathVariable("userId") String userId, Model model) {
-		
+
 		Long userIdLong = Long.getLong(userId);
 		Usuario user = this.usuarioService.getUsuariosById(userIdLong);
 		model.addAttribute("user", user);
 		return "home";
 	}
-	
 
-	@RequestMapping(value="/user/{userId}/items", method=RequestMethod.GET)
-	public String getItemsByUser(@PathVariable("userId") String userId, Model model) {
-		
+	@RequestMapping(value = "/user/{userId}/items", method = RequestMethod.GET)
+	public String getItemsByUser(@PathVariable("userId") String userId,
+			Model model) {
+
 		Long userIdLong = Long.getLong(userId);
 		List<Item> items = this.itemService.getItemsByUser(userIdLong);
 		model.addAttribute("items", items);
-		
+
+		return "home";
+	}
+
+	@RequestMapping(value = "/test/persistUsers", method = RequestMethod.GET)
+	public String executeTest(Model model) {
+
+//		Usuario user1 = new Usuario("Martin Dagostino");
+
+//		this.usuarioService.saveUsuario(user1);
+
+		for (Usuario usuario : this.usuarioService.getUsuarios()) {
+			System.out.println(usuario);
+//			this.usuarioService.deleteUsuario(usuario);
+		}
+
 		return "home";
 	}
 }

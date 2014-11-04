@@ -1,23 +1,18 @@
 package com.utn.tacs.tit4tat.model;
 
-import java.io.Serializable;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.utn.tacs.tit4tat.objectify.Identifiable;
 
-@SuppressWarnings("serial")
-//@Entity
-//@Table(name="Solicitudes")
-public class Solicitud implements Serializable {
+@Entity
+public class Solicitud implements Identifiable {
 
-//	@Id
-//	@GeneratedValue
+	@Id
 	private Long id;
 	private String detail;
 	
-//	@ManyToOne
-//	@JoinColumn(name="offered_item_id")
 	private Item offeredItem;
 	
-//	@ManyToOne
-//	@JoinColumn(name="request_item_id")
 	private Item requestItem;
 	
 	private int state;
@@ -47,15 +42,15 @@ public class Solicitud implements Serializable {
 		this.detail = detalle;
 	}
 
-	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 	
 	/*public Solicitud(String detail, Item requestItem, Item offeredItem) {
 		this.setDetail(detail);
@@ -84,12 +79,12 @@ public class Solicitud implements Serializable {
 		this.setState(Solicitud.REFUSED);
 	}
 	
-//	@Transient
+	public Solicitud() {
+	}
+
 	public static final int ACEPTED = 1; 
 	
-//	@Transient
 	public static final int REFUSED = -1;
 	
-//	@Transient
 	public static final int PENDING = 0;
 }
