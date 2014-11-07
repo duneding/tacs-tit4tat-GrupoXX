@@ -46,7 +46,9 @@ public class ItemsController {
 	 * @return
 	 */	
 	@RequestMapping(value="/{itemId}", method = RequestMethod.DELETE)
-	public @ResponseBody String removeItem(@PathVariable("itemId") String itemId) {
+	public @ResponseBody String removeItem(@PathVariable("itemId") String itemId) {	
+		Item item = this.itemService.getItemsById(Long.valueOf(itemId));
+		this.itemService.deleteItem(item);
 		return "El Item fue eliminado correctamente";
 	}
 	

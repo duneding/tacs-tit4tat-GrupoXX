@@ -16,6 +16,7 @@
 <tbody>
 <c:forEach var="item" items="${items}">
 				<tr>
+				<td style = 'display:none'>${item.id}</td>
 				<td>${item.shortDescription}</td>
 				<td>${item.description}</td>
 				<td><a href="#"><span onclick="deleteItem(this)" class="glyphicon glyphicon-remove"></span></a></td>
@@ -31,7 +32,7 @@ function deleteItem(link){
 
 	$.ajax({  
 	     type : "DELETE",   
-	     url : "items/" + id + ".htm",  
+	     url : "items/" + id,  
 	     contentType: 'application/json; charset=utf-8',
 	     dataType: 'json',
 	     cache: false,
