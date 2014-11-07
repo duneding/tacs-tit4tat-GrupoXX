@@ -44,11 +44,11 @@ public class FriendsController {
 	 */
 	@RequestMapping(value = "/items", method = RequestMethod.GET)
 	public ModelAndView getItemsFriends() {
-		ModelAndView model = new ModelAndView("items");
+		ModelAndView model = new ModelAndView("friends/items");
 
-		List<Item> items = this.itemService.getItems();
-		model.setViewName("friends/items");
+		List<Item> items = this.itemService.getItems();	
 		model.addObject("items", items);
+		//items.get(0).getOwner()
 		
 		return model;
 	}

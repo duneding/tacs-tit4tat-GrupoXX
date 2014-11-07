@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
+import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,8 +27,8 @@ import com.ning.http.client.Response;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.utn.tacs.tit4tat.model.Item;
-
-import org.apache.commons.io.IOUtils;
+import com.utn.tacs.tit4tat.model.ItemMeli;
+import com.utn.tacs.tit4tat.objectify.Utils;
 
 public class MercadoLibre {
 	
@@ -238,9 +239,9 @@ public class MercadoLibre {
 			URL permalink = new URL(jsonObject.get("permalink").toString());
 			item.setId(normalizeId((String) jsonObject.get("id")));
 			item.setDescription((String) jsonObject.get("title"));
-			item.setImage(getImageAsBlob((String) jsonObject.get("thumbnail")));				
+			item.setImage(Utils.getImageAsBlob((String) jsonObject.get("thumbnail")));				
 			item.setCategory(getCategory((String) jsonObject.get("category_id")));
-			item.setPermalink(permalink);			
+			item.setPermalink(jsonObject.get("permalink").toString());			
 
 		}catch(Exception e){
 			System.out.println(e.toString());
@@ -303,7 +304,7 @@ public class MercadoLibre {
 		return getJSONResponse(searchItemsJersey(query));
 	}		
 	
-	public List<Item> searchlListItems(String query){
+	public List<ItemMeli> searchlListItems(String query){
 		
 		//return getListResponse(searchItemsMeli(query));
 		return getListResponse(searchItemsJersey(query));
@@ -382,21 +383,21 @@ public class MercadoLibre {
 		return response;
 	}
 	
-	private List<Item> getListResponse(JSONObject jsonObject){
-		List<Item> items = new ArrayList<Item>();
+	private List<ItemMeli> getListResponse(JSONObject jsonObject){
+		List<ItemMeli> items = new ArrayList<ItemMeli>();
 		int limit = 0;
 		try{		
 			JSONArray results = (JSONArray) jsonObject.get("results");			
-			Item item;
+			ItemMeli item;
 			Iterator<?> it = results.iterator();
 			while(it.hasNext()) {
-				item = new Item();
+				item = new ItemMeli();
 				
 				JSONObject element = (JSONObject) it.next();			
 				URL permalink = new URL(element.get("permalink").toString());
 				item.setId(normalizeId((String) element.get("id")));
 				item.setDescription((String) element.get("title"));
-				item.setImage(getImageAsBlob((String) element.get("thumbnail")));				
+				item.setImage(Utils.getImageAsBlob((String) element.get("thumbnail")));				
 				item.setCategory(getCategory((String) element.get("category_id")));
 				item.setPermalink(permalink);
 				
@@ -439,7 +440,7 @@ public class MercadoLibre {
 		return bis.toByteArray();		
 	}
 	
-	private Blob getImageAsBlob(String thumbnail){
+	/*private Blob getImageAsBlob(String thumbnail){
 		ByteArrayOutputStream bis = new ByteArrayOutputStream();
 		InputStream is = null;
 		Blob result = null;
@@ -456,7 +457,7 @@ public class MercadoLibre {
 		
 		
 		return result;		
-	}	
+	}	*/
 	
 }
 

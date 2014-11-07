@@ -1,19 +1,17 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +21,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.appengine.api.datastore.Blob;
 import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
+import com.utn.tacs.tit4tat.model.ItemMeli;
+import com.utn.tacs.tit4tat.model.Usuario;
+import com.utn.tacs.tit4tat.objectify.Utils;
 import com.utn.tacs.tit4tat.service.ItemService;
+import com.utn.tacs.tit4tat.service.UsuarioService;
 
 @Controller
 @RequestMapping(value = "/items")
 public class ItemsController {
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	private ItemService itemService;
@@ -51,8 +57,13 @@ public class ItemsController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get() {
 		ModelAndView model = new ModelAndView("items/list");
+		List<Item> items = new ArrayList<Item>();
 		
-		model.addObject("items", getItems());
+		for (Item item : this.itemService.getItems()) {
+			items.add(item);	
+		}
+				
+		model.addObject("items", items);
 		return model;
 	}
 	
@@ -76,21 +87,6 @@ public class ItemsController {
 	}
 	 */
 	
-	private List<Item> getItems(){
-		Item item1 = new Item();
-		List<Item> items = new ArrayList<Item>();
-		item1.setId(1L);
-		item1.setDescription("Ipod touch");
-		items.add(item1);
-		
-		Item item2 = new Item();
-		item2.setId(2L);
-		item2.setDescription("Galaxy S5");
-		items.add(item2);
-		
-		return items;
-	}
-	
 	/**
 	 * Busca en ML todos los items "name"
 	 * @param name
@@ -98,26 +94,25 @@ public class ItemsController {
 	 */
 	@RequestMapping(value = "/getItemsSearch", method = RequestMethod.GET)
 	public @ResponseBody
-	List<Item> getItemsSearch(@RequestParam(value = "name") String name) {
+	List<ItemMeli> getItemsSearch(@RequestParam(value = "name") String name) {
 		MercadoLibre meli = MercadoLibre.getInstance();
-		List<Item> items = meli.searchlListItems(name);
+		List<ItemMeli> items = meli.searchlListItems(name);
 		
-		/*List<Item> items = new ArrayList<Item>();
-		String[] categoria = {"Celulares"};
-		
-		Item item1 = new Item();
+		/*List<ItemMeli> items = new ArrayList<ItemMeli>();
+		String[] categoria = {"Celulares"};		
+		ItemMeli item1 = new ItemMeli();
 		item1.setId(1L);
 		item1.setDescription("Ipod touch");
 		item1.setCategory(categoria);
 		items.add(item1);
 		
-		Item item2 = new Item();
+		ItemMeli item2 = new ItemMeli();
 		item2.setId(2L);
 		item2.setDescription("Galaxy S5");
 		item2.setCategory(categoria);
 		items.add(item2);
 		
-		Item item3 = new Item();
+		ItemMeli item3 = new ItemMeli();
 		item3.setId(3L);
 		item3.setDescription("Silla");
 		item3.setCategory(categoria);
@@ -132,11 +127,13 @@ public class ItemsController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/create/{idItemMeli}", method = RequestMethod.GET)
-	public ModelAndView createFormItem(@PathVariable("idItemMeli") String idItemMeli) {
+	/*@Consumes(value ="application/json")
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public ModelAndView createPost(@RequestBody String jsonRequest) {
+	//public ModelAndView createFormItem(String jsonRequest) {
 		Item item = new Item();
 		try {
-			String[] categoria = {idItemMeli};
+			String[] categoria = {"electronic"};
 			item = new Item();
 			item.setId(1L);
 			item.setDescription("IPod 32GB");
@@ -145,8 +142,83 @@ public class ItemsController {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		ModelAndView model = new ModelAndView("items/create");
+		ModelAndView model = new ModelAndView("items/create/"+jsonRequest);
 		model.addObject("item", item);
+		return model;
+	}*/
+	
+	@RequestMapping(value="/create", method = RequestMethod.GET)
+	public ModelAndView getCreate(HttpSession session) {
+			
+		ModelAndView model = new ModelAndView("items/create");
+		/*Item item = new Item();
+		item.setId(Long.valueOf(session.getAttribute("id").toString()));
+		item.setDescription(session.getAttribute("description").toString());
+		item.setShortDescription(session.getAttribute("shortDescription").toString());
+		item.setCategory((String[])session.getAttribute("category"));
+		item.setImage((Blob)session.getAttribute("image"));
+		item.setPermalink(session.getAttribute("permalink").toString());;
+		item.setOwner((Usuario) session.getAttribute("user").toString());*/
+		
+		
+		model.addObject("item", session.getAttribute("item"));
+		model.addObject("category", session.getAttribute("category").toString());
+		model.addObject("image", session.getAttribute("image").toString());
+		//model.addObject("category", session.getAttribute("category"));
+		return model;
+	}
+	
+	@Consumes(value ="application/json")
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	//public ModelAndView createGet(String new_item) {
+	public ModelAndView createFormItem(@RequestBody String new_item, HttpSession session) {
+			
+		Item item = new Item();
+		ModelAndView model = new ModelAndView("items/create");
+		try {
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonRequest = (JSONObject) jsonParser.parse(new_item);
+			long id = Long.valueOf(jsonRequest.get("id").toString());
+			String category = jsonRequest.get("category").toString();
+			String description = jsonRequest.get("description").toString();						
+			String permalink = jsonRequest.get("permalink").toString();			
+			//Blob image = Utils.getImageAsBlob( jsonRequest.get("image").toString());
+			Blob image = new Blob(jsonRequest.get("image").toString().getBytes());
+			String imageStr = jsonRequest.get("image").toString();
+			String[] categoria = {category};
+			item = new Item();
+			item.setId(id);
+			item.setDescription(description);
+			item.setImage(image);
+			item.setPermalink(permalink);
+			item.setCategory(categoria);
+			
+			Usuario user1 = new Usuario("Martin Dagostino");
+			user1.setId(1l);
+			this.usuarioService.saveUsuario(user1);
+			item.setOwner(user1);
+		
+		/*session.setAttribute("id", item.getId());
+		session.setAttribute("description", item.getDescription());
+		session.setAttribute("shortDescription", item.getShortDescription());
+		session.setAttribute("owner", item.getOwner().getName());
+		session.setAttribute("permalink", item.getPermalink());
+		session.setAttribute("image", item.getImage());
+		session.setAttribute("category", item.getCategory());*/
+		session.setAttribute("item", item);
+		session.setAttribute("category", category);
+		session.setAttribute("image", imageStr);
+		model.addObject("item", item);
+		//model.addObject("category", item.flatCategories());
+		//model.addObject("image", jsonRequest.get("image").toString());
+		/*ModelMap model = new ModelMap();
+		model.addAttribute("id", "1");
+		model.addAttribute("description", "algooo");*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return model;
 	}
 	
@@ -181,12 +253,39 @@ public class ItemsController {
 	@Consumes(value ="application/json")
 	@RequestMapping (method = RequestMethod.POST)
     //public @ResponseBody ModelAndView create(@ModelAttribute("item") Item item, BindingResult result) {
-	public @ResponseBody ModelAndView create(@RequestBody String jsonRequest) {	
+	//public @ResponseBody ModelAndView create(@RequestBody String jsonRequest) {
+	public ModelAndView create(@RequestBody String request) {
 		
-		ModelAndView model = new ModelAndView("items/create/1");				
+		ModelAndView model = new ModelAndView("items");				
 		JSONObject obj=new JSONObject();
 		obj.put("create","OK");		 
 		model.addObject("response", obj);
+		
+		try{
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
+			String description = jsonRequest.get("description").toString();
+			String shortDescription = jsonRequest.get("short_description").toString();			
+			String permalink = jsonRequest.get("permalink").toString();			
+			Long id = Long.valueOf(jsonRequest.get("id").toString());
+			Usuario owner = Utils.generateUser(jsonRequest.get("owner").toString());
+			//Blob image = (Blob)jsonRequest.get("image");
+			String[] category = {jsonRequest.get("category").toString()};
+			Blob image = Utils.getImageAsBlob(jsonRequest.get("image").toString());
+			
+			Item item = new Item();
+			item.setDescription(description);
+			item.setShortDescription(shortDescription);	
+			item.setOwner(owner);
+			item.setId(id);
+			item.setPermalink(permalink);
+			item.setImage(image);
+			item.setCategory(category);
+			this.itemService.saveItem(item);
+		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
 		
         return model;
     }

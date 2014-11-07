@@ -111,7 +111,7 @@
 </script>
 <h1 id="fb-welcome"></h1>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
     $('.alert .close').on('click', function(e) {
    	    $(this).parent().hide();
@@ -180,12 +180,14 @@ function searchItem(){
    	 
    	 for (var i = 0; i < response.length; i ++){
    				 $('#gridSearch tbody').after( "<tr>" +
-				"<td style = 'display:none'>" + response[i].id + "</td>" + 
-				"<td>" + response[i].category[0] +"</td>" +
-				"<td>" + response[i].description + "</td>" + 
-				 "<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
-					"</tr>");
-   				 
+				"<td style = 'display:none' id='id'>" + response[i].id + "</td>" + 
+				"<td style = 'display:none' id='image" + i + "'>" + response[i].image.bytes + "</td>" +
+				"<td style = 'display:none' id='permalink'>" + response[i].permalink + "</td>" +
+				"<td id='category'>" + response[i].category[0] +"</td>" +
+				"<td id='description'>" + response[i].description + "</td>" + 
+				 //"<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
+				 "<td><a onclick='createItem("+ i + ")'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +
+					"</tr>");   				 
    	 }
    	 
    },
@@ -199,14 +201,50 @@ function searchItem(){
 
 } 
 
+function createItem(row) {
+	 
+	var name = $('#itemForSearch').val();
+	var id = document.getElementById('gridSearch').rows[row].children[0].innerText;
+	var image = document.getElementById('gridSearch').rows[row].children[1].innerText;
+	var permalink = document.getElementById('gridSearch').rows[row].children[2].innerText;
+	var category = document.getElementById('gridSearch').rows[row].children[3].innerText;
+	var description = document.getElementById('gridSearch').rows[row].children[4].innerText;
+	
+	var jsonRequest = {
+            id: id,
+            category: category,
+            description: description,
+            image: image,
+            permalink: permalink
+    };
+	
+	//var request = "new_item="+JSON.stringify(jsonRequest)
+	//document.location.href="items/create?"+request;
+	
+	$.ajax({  
+		    type : "POST",   
+		    url : "items/create",   
+		    async: false,
+		    //dataType: 'json',
+		    //contentType: "application/json",
+		    //contentType: "application/json",
+		    data : JSON.stringify(jsonRequest),
+		    success : function(response) {  
+		    	//alert(response);  
+		    	//document.location.href="items/create";
+		    	//document.location.href=response;
+		    	//document.write(response);
+		    	document.location.href="items/create";
+		   	 },
+		    error : function(e,h,j) {  
+		     alert('Error: ' + j);   
+		    }
+	})
+	 
+ }
+ 
  function onLogin(response) {
 	  if (response.status == 'connected') {
-		  FB.api('/me', function(response) {
-			  $('.faceUser').text(response.name);
-			  $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
-		    });
-		  
-		  
 	    FB.api('/me?fields=first_name', function(data) {
 	      var welcomeBlock = document.getElementById('fb-welcome');
 	      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';

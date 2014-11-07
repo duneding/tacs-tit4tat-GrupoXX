@@ -1,8 +1,6 @@
 package com.utn.tacs.tit4tat.model;
 
-import java.io.Serializable;
-
-import org.springframework.context.annotation.Scope;
+import java.net.URL;
 
 import com.google.appengine.api.datastore.Blob;
 import com.googlecode.objectify.Ref;
@@ -12,27 +10,20 @@ import com.googlecode.objectify.annotation.Index;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
 @Entity
-@Scope("session")
-public class Item implements Identifiable, Serializable {
+public class ItemMeli implements Identifiable {
 
 	@Id
 	private Long id;
 
 	private String[] category;
 
-	private String shortDescription;
-	
 	private String description;
 	
 	private Blob image;
 	
-	private String permalink;
-
-	@Index
-	private Ref<Usuario> owner;
+	private URL permalink;	
 	
-	
-	public Item() {
+	public ItemMeli() {
 	}
 
 	@Override
@@ -60,22 +51,6 @@ public class Item implements Identifiable, Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public String getShortDescription() {
-		return shortDescription;
-	}
-
-	public void setShortDescription(String description) {
-		this.shortDescription = description;
-	}
-	
-	public Usuario getOwner() {
-		return owner.get();
-	}
-
-	public void setOwner(Usuario owner) {
-		this.owner = Ref.create(owner);
-	}
 	
 	public Blob getImage() {
 		return image;
@@ -85,11 +60,11 @@ public class Item implements Identifiable, Serializable {
 		this.image = image;
 	}	
 
-	public String getPermalink() {
+	public URL getPermalink() {
 		return permalink;
 	}
 
-	public void setPermalink(String permalink) {
+	public void setPermalink(URL permalink) {
 		this.permalink = permalink;
 	}
 	
@@ -100,14 +75,5 @@ public class Item implements Identifiable, Serializable {
 		return "Item [id=" + id + ", description="
 				+ description + "]";
 	}
-	
-	public String flatCategories() {
-		StringBuilder builder = new StringBuilder();
-		for(String s : category) {
-		    builder.append(s);
-		}
-		return builder.toString();
 
-	}
-	
 }

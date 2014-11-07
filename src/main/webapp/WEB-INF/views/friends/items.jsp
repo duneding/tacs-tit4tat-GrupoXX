@@ -9,7 +9,7 @@
 
 <table class="table table-striped table-hover">
 <thead>
-<th>Codigo</th>
+<th>Nombre</th>
 <th>Descripcion</th>
 <th>Propietario</th>
 <th>Acciones</th>
@@ -17,7 +17,7 @@
 <tbody>
 <c:forEach var="item" items="${items}">
         <tr>
-        <td>${item.id}</td>
+        <td>${item.shortDescription}</td>
         <td>${item.description}</td>
         <td>${item.owner.name}</td>
         <td><a><span onclick="createTrueque(this)" class="glyphicon glyphicon-cloud-upload" title="Envia una solicitud de trueque a tu amigo!!"></span></a></td>

@@ -1,10 +1,13 @@
 package com.utn.tacs.tit4tat.model;
 
+import org.springframework.context.annotation.Scope;
+
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
 @Entity
+@Scope("session")
 public class Usuario implements Identifiable {
 
 	@Id

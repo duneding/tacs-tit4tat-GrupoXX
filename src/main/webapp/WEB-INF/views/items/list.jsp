@@ -9,14 +9,14 @@
 
 <table class="table table-striped table-hover">
 <thead>
-<th>Codigo</th>
+<th>Nombre</th>
 <th>Descripcion</th>
 <th>Acciones</th>
 </thead>
 <tbody>
 <c:forEach var="item" items="${items}">
 				<tr>
-				<td>${item.id}</td>
+				<td>${item.shortDescription}</td>
 				<td>${item.description}</td>
 				<td><a href="#"><span onclick="deleteItem(this)" class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>

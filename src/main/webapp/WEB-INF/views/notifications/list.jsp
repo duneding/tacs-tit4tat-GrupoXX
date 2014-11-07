@@ -6,7 +6,7 @@
 			<table id="tbsolicitudes" class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th>Id</th>
+						<th>Estado</th>
 						<th>Item Solicitado</th>
 						<th>Dueño (Solicitado)</th>
 						<th>Item Ofrecido</th>
@@ -15,12 +15,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${notifications}" var="notification">
+					<c:forEach var="notification" items="${notifications}">
 						<tr>
-							<td>${notification.id}</td>
-							<td>${notification.requestItem.description}</td>
+							<td>${notification.state}</td>
+							<td>${notification.requestItem.shortDescription}</td>
 							<td>${notification.requestItem.owner.name}</td>
-							<td>${notification.offeredItem.description}</td>
+							<td>${notification.offeredItem.shortDescription}</td>
 							<td>${notification.offeredItem.owner.name}</td>
 							<td>
 							<a href="#"><span id="acceptBtn" class="glyphicon glyphicon-ok"></span></a>
@@ -42,43 +42,24 @@
 
 			$.ajax({  
 			     type : "PUT",   
-			     url : "edit",   
+			     url : "notifications.htm",   
 			     async: false,
 			     data : { 
 				     		id: id ,
 				     		state: state
 				     	},  
-			 success : function(response) {  
-				 $(this).closest("tr").remove();
-		         alert(response);
+			     success : function(response) {  
+			      alert(response);   
 		     },  
 			     error : function(e) {  
-			      alert('Error:' + e);   
+			      alert('Error:');   
 			     }  
 		    });
 			
 		});
 
 		$('#refuseBtn').click(function() {
-			var id = $(this).closest("tr").children(":first").text(); 
-			var state = "refused";
-
-			$.ajax({  
-			     type : "PUT",   
-			     url : "edit",   
-			     async: false,
-			     data : { 
-				     		id: id ,
-				     		state: state
-				     	},  
-		     success : function(response) {  
-		    	 $(this).closest("tr").remove();
-		         alert(response);      
-		     },  
-			     error : function(e) {  
-			      alert('Error:' + e);   
-			     }  
-		    });
+			alert("Handler for .click() on " + this + " called.");
 		});
 	});
 </script>

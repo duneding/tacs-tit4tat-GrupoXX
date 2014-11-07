@@ -173,7 +173,7 @@ public class RestfulTest {
 	
 	/*
 	 5.    Como usuario quiero poder aceptar o rechazar una solicitud de trueque que me haya sido enviada
-		    PUT /notifications (Datos en el body)
+		    PUT /notifications/{idNotifications}/reply (Datos en el body)
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
@@ -185,7 +185,7 @@ public class RestfulTest {
 			jsonPut.put("estado","accepted");
 			
 			Client client = Client.create();		 
-			WebResource webResource = client.resource("http://localhost:8888/notifications/reply");			
+			WebResource webResource = client.resource("http://localhost:8888/notifications/1/reply");			
 			ClientResponse response = webResource.
 													accept("application/json").
 													header("Content-Length", jsonPut.toJSONString().length()).
