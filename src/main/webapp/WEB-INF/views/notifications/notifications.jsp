@@ -18,7 +18,7 @@
 					<c:forEach items="${notifications}" var="notification">
 						<tr>
 							<td>${notification.state}</td>
-							<td>${notification.getRequestItem().description}</td>
+							<td>${notification.requestItem.description}</td>
 							<td>${notification.requestItem.owner.name}</td>
 							<td>${notification.offeredItem.description}</td>
 							<td>${notification.offeredItem.owner.name}</td>
