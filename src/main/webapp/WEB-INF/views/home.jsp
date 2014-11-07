@@ -245,6 +245,11 @@ function createItem(row) {
  
  function onLogin(response) {
 	  if (response.status == 'connected') {
+		  FB.api('/me', function(response) {
+			  $('.faceUser').text(response.name);
+			  $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
+		    });
+		  		  
 	    FB.api('/me?fields=first_name', function(data) {
 	      var welcomeBlock = document.getElementById('fb-welcome');
 	      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
