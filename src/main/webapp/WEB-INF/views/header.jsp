@@ -18,8 +18,7 @@
 			<!-- <form action="http://facebook.com" class="navbar-form navbar-right" role="form">
 				<button type="submit" class="btn btn-sm btn-primary">Entrar con Facebook</button>				
 			</form>-->
-        </div><!--/.navbar-collapse -->
-                <div class="navbar-right">
+			                <div class="navbar-right">
                     <ul class="nav navbar-nav">
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -43,5 +42,7 @@
                         </li>
                     </ul>
                 </div>
+        </div><!--/.navbar-collapse -->
+
       </div>
     </div>

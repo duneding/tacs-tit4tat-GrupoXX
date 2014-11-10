@@ -56,7 +56,7 @@ public class ItemsController {
 	 * Obtiene los items de un usuario
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView get() {
 		ModelAndView model = new ModelAndView("items/list");
 		List<Item> items = new ArrayList<Item>();
@@ -322,5 +322,19 @@ public class ItemsController {
 //	public String SaveItem(ModelMap model) {
 //		return "item";
 //	}
+	
+	
+	@RequestMapping(value = "/listItems", method = RequestMethod.GET)
+	public @ResponseBody
+	List<Item>  listItems() {
+List<Item> items = new ArrayList<Item>();
+		
+		for (Item item : this.itemService.getItems()) {
+			items.add(item);	
+		}
+
+		
+		return items;
+	}
 	
 }

@@ -19,7 +19,7 @@ private static final String NETWORK_NAME = "Facebook";
 private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
 private static final Token EMPTY_TOKEN = null;	
 
-	@Test
+	/*@Test
 	public void connectToFacebook() {
 	
 		// Replace these with your own api key and secret
@@ -68,5 +68,5 @@ private static final Token EMPTY_TOKEN = null;
 		    System.out.println();
 		    System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
 	
-	}
+	}*/
 }
