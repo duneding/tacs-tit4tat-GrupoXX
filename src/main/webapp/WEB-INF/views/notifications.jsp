@@ -48,18 +48,37 @@
 				     		id: id ,
 				     		state: state
 				     	},  
-			     success : function(response) {  
-			      alert(response);   
-		     },  
-			     error : function(e) {  
-			      alert('Error:');   
-			     }  
+			 	success : function(response) {
+			 		$('#acceptBtn').closest("tr").remove();  
+			      	alert(response);   
+		     	},  
+			    error : function(e) {  
+			      alert('Error:' + e);   
+			    }  
 		    });
 			
 		});
 
 		$('#refuseBtn').click(function() {
-			alert("Handler for .click() on " + this + " called.");
+			var id = $(this).closest("tr").children(":first").text(); 
+			var state = "refused";
+
+			$.ajax({  
+			     type : "PUT",   
+			     url : "notifications.htm",   
+			     async: false,
+			     data : { 
+				     		id: id ,
+				     		state: state
+				     	},  
+			 	success : function(response) {
+			 		$('#refuseBtn').closest("tr").remove();  
+			      	alert(response);   
+		     	},  
+			    error : function(e) {  
+			      alert('Error:' + e);   
+			    }  
+		    });
 		});
 	});
 </script>

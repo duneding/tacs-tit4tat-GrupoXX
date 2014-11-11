@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,27 +34,13 @@ public class NotificationsController {
 	
 	List<Solicitud> notifications = new ArrayList<Solicitud>();
 	
-	/*@RequestMapping(value = "/edit", method = RequestMethod.PUT)
-	public @ResponseBody
-	String getItemsSearch(@RequestParam(value = "id") String id,
-			@RequestParam(value = "state") String state) {
-
-		try {
-			this.solicitudService.changeStateOfSolicitud(id, state);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		return "La solicitud proceso correctamente: " + id;
-	}*/
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getNotifications() {
-		ModelAndView model = new ModelAndView("notifications/list");
+		ModelAndView model = new ModelAndView("notifications");
 		Usuario me = new Usuario("martin");
 		me.setId(1l);
 		//Usuario user1 = new Usuario("Martin Dagostino");
-
+		
 		this.usuarioService.saveUsuario(me);
 		
 		Item offeredItem = new Item();
@@ -82,15 +67,22 @@ public class NotificationsController {
 		//model.setViewName("notifications");
 		model.addObject("notifications", notifications);
 		
-
+		
 		return model;
 	}
-		
-	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public  @ResponseBody String  createn(@RequestParam(value = "json") String jsonRequest) {
+	
+	@RequestMapping(method = RequestMethod.PUT)
+	public @ResponseBody
+	String getItemsSearch(@RequestParam(value = "id") String id,
+			@RequestParam(value = "state") String state) {
 
-		//TODO> guardar en DB 
-		return "redirect:create";
+		try {
+			this.solicitudService.changeStateOfSolicitud(id, state);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		return "La solicitud proceso correctamente: " + id;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -103,21 +95,28 @@ public class NotificationsController {
 		obj.put("create","OK");		 
 		model.addObject("response", obj);
 		
-        return model;
-    }	
+		return model;
+	}
+		
+//	@RequestMapping(value="/create", method = RequestMethod.POST)
+//	public  @ResponseBody String  createn(@RequestParam(value = "json") String jsonRequest) {
+// 
+//		return "redirect:create";
+//	}
 	
-	@SuppressWarnings("unchecked")
-	@Consumes(value ="application/json")
-	@RequestMapping (value="/{idNotifications}/reply", method = RequestMethod.PUT)
-	public @ResponseBody ModelAndView update(@PathVariable("idNotifications") String id, @RequestBody String jsonRequest) {	
-		
-		ModelAndView model = new ModelAndView("edit");				
-		JSONObject obj=new JSONObject();
-		obj.put("update","OK");		 
-		model.addObject("response", obj);
-		
-        return model;
-    }	
+	
+//	@SuppressWarnings("unchecked")
+//	@Consumes(value ="application/json")
+//	@RequestMapping (value="/{idNotifications}/reply", method = RequestMethod.PUT)
+//	public @ResponseBody ModelAndView update(@PathVariable("idNotifications") String id, @RequestBody String jsonRequest) {	
+//		
+//		ModelAndView model = new ModelAndView("edit");				
+//		JSONObject obj=new JSONObject();
+//		obj.put("update","OK");		 
+//		model.addObject("response", obj);
+//		
+//        return model;
+//    }	
 	
 	@RequestMapping(value="/create/{id}", method =RequestMethod.GET)
 	//public  @ResponseBody ModelAndView  createGet(@RequestParam(value = "json") String jsonRequest) { 
@@ -164,30 +163,6 @@ public class NotificationsController {
 		//model.setViewName("notifications/create");
 		return model;
 	}
-		
-	@RequestMapping(value = "/edit/{notId}", method = RequestMethod.PUT)
-	public String edit(@PathVariable("notId") String notId) {
-		
-		return "notifications/edit";
-	}
-	
-	@RequestMapping(value = "/delete/{notId}", method = RequestMethod.DELETE)
-	public String delete(@PathVariable("notId") String notId) {
-		
-		return "notifications/delete";
-	}
-	
-	@RequestMapping(value = "/{notId}/accepted", method = RequestMethod.PUT)
-	public String accepted(@PathVariable("notId") String notId) {
-		
-		return "notifications/accepted";
-	}	
-	
-	@RequestMapping(value = "/{notId}/rejected", method = RequestMethod.PUT)
-	public String rejected(@PathVariable("notId") String notId) {
-		
-		return "notifications/rejected";
-	}		
 	
 	@SuppressWarnings("unchecked")
 	@Consumes(value ="application/json")
@@ -201,6 +176,29 @@ public class NotificationsController {
 		model.addObject("response", obj);
 		
         return model;
-    }	
-
+    }
+		
+//	@RequestMapping(value = "/edit/{notId}", method = RequestMethod.PUT)
+//	public String edit(@PathVariable("notId") String notId) {
+//		
+//		return "notifications/edit";
+//	}
+	
+//	@RequestMapping(value = "/delete/{notId}", method = RequestMethod.DELETE)
+//	public String delete(@PathVariable("notId") String notId) {
+//		
+//		return "notifications/delete";
+//	}
+//	
+//	@RequestMapping(value = "/{notId}/accepted", method = RequestMethod.PUT)
+//	public String accepted(@PathVariable("notId") String notId) {
+//		
+//		return "notifications/accepted";
+//	}	
+//	
+//	@RequestMapping(value = "/{notId}/rejected", method = RequestMethod.PUT)
+//	public String rejected(@PathVariable("notId") String notId) {
+//		
+//		return "notifications/rejected";
+//	}		
 }
