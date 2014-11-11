@@ -48,7 +48,8 @@ public class FriendsController {
 	public ModelAndView getItemsFriends() {
 		ModelAndView model = new ModelAndView("friends/items");
 
-		List<Item> items = this.itemService.getItems();	
+		List<Item> items = this.itemService.getItems();
+		
 		model.addObject("items", items);
 		//items.get(0).getOwner()
 		

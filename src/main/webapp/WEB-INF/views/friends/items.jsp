@@ -125,7 +125,7 @@ function createSolicitud(link){
     }
 	
     /*-----AJAX POST A NOTIFICATION POST!--------*/
-    
+
     
 	$("#_MyItemList").modal("toggle");
 }

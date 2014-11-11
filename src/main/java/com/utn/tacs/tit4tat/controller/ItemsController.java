@@ -56,7 +56,7 @@ public class ItemsController {
 	 * Obtiene los items de un usuario
 	 * @return
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get() {
 		ModelAndView model = new ModelAndView("items/list");
 		List<Item> items = new ArrayList<Item>();
@@ -200,23 +200,12 @@ public class ItemsController {
 			user1.setId(1l);
 			this.usuarioService.saveUsuario(user1);
 			item.setOwner(user1);
-		
-		/*session.setAttribute("id", item.getId());
-		session.setAttribute("description", item.getDescription());
-		session.setAttribute("shortDescription", item.getShortDescription());
-		session.setAttribute("owner", item.getOwner().getName());
-		session.setAttribute("permalink", item.getPermalink());
-		session.setAttribute("image", item.getImage());
-		session.setAttribute("category", item.getCategory());*/
-		session.setAttribute("item", item);
-		session.setAttribute("category", category);
-		session.setAttribute("image", imageStr);
-		model.addObject("item", item);
-		//model.addObject("category", item.flatCategories());
-		//model.addObject("image", jsonRequest.get("image").toString());
-		/*ModelMap model = new ModelMap();
-		model.addAttribute("id", "1");
-		model.addAttribute("description", "algooo");*/
+
+			session.setAttribute("item", item);
+			session.setAttribute("category", category);
+			session.setAttribute("image", imageStr);
+			model.addObject("item", item);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -243,7 +232,7 @@ public class ItemsController {
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody ModelAndView edit(@RequestBody String jsonRequest) {
 		
-		ModelAndView model = new ModelAndView("items/edit/1");				
+		ModelAndView model = new ModelAndView("items");				
 		JSONObject obj=new JSONObject();
 		obj.put("update","OK");		 
 		model.addObject("response", obj);
