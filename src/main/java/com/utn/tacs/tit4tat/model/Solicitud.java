@@ -13,8 +13,10 @@ public class Solicitud implements Identifiable {
 	private Long id;
 	private String detail;
 	
+	private Ref<Usuario> offeredUser;	
 	private Ref<Item> offeredItem;
 	
+	private Ref<Usuario> requestUser;
 	private Ref<Item> requestItem;
 
 	@Index
@@ -53,6 +55,22 @@ public class Solicitud implements Identifiable {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Usuario getOfferedUser() {
+		return offeredUser.get();
+	}
+
+	public void setOfferedUser(Usuario offeredUser) {
+		this.offeredUser = Ref.create(offeredUser);
+	}
+
+	public Usuario getRequestUser() {
+		return requestUser.get();
+	}
+
+	public void setRequestUser(Usuario requestUser) {
+		this.requestUser = Ref.create(requestUser);
 	}
 	
 	/*public Solicitud(String detail, Item requestItem, Item offeredItem) {

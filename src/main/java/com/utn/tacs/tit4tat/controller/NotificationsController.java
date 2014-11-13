@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.appengine.api.datastore.Blob;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.model.Usuario;
+import com.utn.tacs.tit4tat.objectify.Utils;
+import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
@@ -31,6 +35,9 @@ public class NotificationsController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private ItemService itemService;
 	
 	List<Solicitud> notifications = new ArrayList<Solicitud>();
 	
@@ -88,13 +95,43 @@ public class NotificationsController {
 	@SuppressWarnings("unchecked")
 	@Consumes(value ="application/json")
 	@RequestMapping (method = RequestMethod.POST)
-	public @ResponseBody ModelAndView create(@RequestBody String jsonRequest) {	
+	public ModelAndView create(@RequestBody String request) {	
 		
-		ModelAndView model = new ModelAndView("create");				
+		ModelAndView model = new ModelAndView("notifications");				
 		JSONObject obj=new JSONObject();
 		obj.put("create","OK");		 
 		model.addObject("response", obj);
 		
+		try{
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);	
+			Long owner_id = Long.valueOf(jsonRequest.get("owner_id").toString());
+			Long item_id = Long.valueOf(jsonRequest.get("item_id").toString());
+			Long user_id = Long.valueOf(jsonRequest.get("user_id").toString());
+			Long user_item_id = Long.valueOf(jsonRequest.get("user_item_id").toString());
+			
+			Item offeredItem = this.itemService.getItemsById(user_item_id);
+			Item requestedItem = this.itemService.getItemsById(item_id);
+			
+			Usuario offeredUser = this.usuarioService.getUsuariosById(user_id);
+			Usuario requestedUser = this.usuarioService.getUsuariosById(owner_id);
+			
+			Solicitud sol = new Solicitud();
+			sol.setOfferedItem(offeredItem);
+			sol.setOfferedUser(offeredUser);
+			
+			sol.setRequestItem(requestedItem);
+			sol.setRequestUser(requestedUser);
+			
+			sol.setState(0);
+			
+			this.solicitudService.saveSolicitud(sol);
+		
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+	
 		return model;
 	}
 		
