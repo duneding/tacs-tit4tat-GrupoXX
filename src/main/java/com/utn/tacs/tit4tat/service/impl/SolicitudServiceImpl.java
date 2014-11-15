@@ -47,7 +47,7 @@ public class SolicitudServiceImpl implements SolicitudService {
 
 	@Override
 	public void changeStateOfSolicitud(String permuteId, String state) {
-		Solicitud solicitud = this.getSolicitudesById(Long.getLong(permuteId));
+		Solicitud solicitud = this.getSolicitudesById(Long.parseLong(permuteId));
 		
 		if (state.equalsIgnoreCase("acepted")) {
 			solicitud.setAcepted();

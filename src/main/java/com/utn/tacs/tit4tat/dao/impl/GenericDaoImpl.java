@@ -40,18 +40,18 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
 //	@Transactional(readOnly = false)
 	@SuppressWarnings("unchecked")
 	public ID save(T entity) {
-		ofy().save().entity(entity);
+		ofy().save().entity(entity).now();
 		return (ID) ((Identifiable) entity).getId();
 	}
 	
 
 //	@Transactional(readOnly = false)
 	public void saveOrUpdate(T entity) {
-		ofy().save().entity(entity);
+		ofy().save().entity(entity).now();
 	}
 
 	public void saveAll(List<T> entities){
-		ofy().save().entities(entities);
+		ofy().save().entities(entities).now();
 	}
 	
 //	@Transactional(readOnly = false)

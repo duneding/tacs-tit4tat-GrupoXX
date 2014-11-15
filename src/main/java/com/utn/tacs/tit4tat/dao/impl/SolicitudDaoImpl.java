@@ -18,6 +18,6 @@ public class SolicitudDaoImpl extends GenericDaoImpl<Solicitud, Long> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Solicitud> getSolicitudesPendientes() {
-		return (List<Solicitud>) ofy().load().type(Solicitud.class).filter("state", Solicitud.PENDING);
+		return (List<Solicitud>) ofy().load().type(Solicitud.class).filter("state", Solicitud.PENDING).list();
 	}
 }

@@ -6,7 +6,7 @@
 			<table id="tbsolicitudes" class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th>Estado</th>
+						<th>Id</th>
 						<th>Item Solicitado</th>
 						<th>Dueño (Solicitado)</th>
 						<th>Item Ofrecido</th>
@@ -17,7 +17,7 @@
 				<tbody>
 					<c:forEach items="${notifications}" var="notification">
 						<tr>
-							<td>${notification.state}</td>
+							<td>${notification.id}</td>
 							<td>${notification.requestItem.description}</td>
 							<td>${notification.requestItem.owner.name}</td>
 							<td>${notification.offeredItem.description}</td>
@@ -73,7 +73,8 @@
 				     	},  
 			 	success : function(response) {
 			 		$('#refuseBtn').closest("tr").remove();  
-			      	alert(response);   
+			      	alert(response);
+			      	$(location).attr('href','/notifications');   
 		     	},  
 			    error : function(e) {  
 			      alert('Error:' + e);   

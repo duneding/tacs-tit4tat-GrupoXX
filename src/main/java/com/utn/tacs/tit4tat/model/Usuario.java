@@ -9,8 +9,10 @@ import com.googlecode.objectify.annotation.Id;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
 @Entity
-@Scope("session")
-public class Usuario implements Identifiable, Serializable{
+//@Scope("session")
+public class Usuario implements Identifiable, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	private Long id;
