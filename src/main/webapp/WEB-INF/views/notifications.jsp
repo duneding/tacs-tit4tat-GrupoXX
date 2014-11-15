@@ -42,8 +42,10 @@
 
 			$.ajax({  
 			     type : "PUT",   
-			     url : "notifications.htm",   
-			     async: false,
+			     url : "notifications",
+			     cache: false,
+			     async: true,   
+			     //async: false,
 			     data : { 
 				     		id: id ,
 				     		state: state

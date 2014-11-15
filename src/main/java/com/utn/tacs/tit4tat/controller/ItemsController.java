@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +10,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +25,7 @@ import com.utn.tacs.tit4tat.model.ItemMeli;
 import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.objectify.Utils;
 import com.utn.tacs.tit4tat.service.ItemService;
+import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
 @Controller
@@ -39,6 +37,9 @@ public class ItemsController {
 	
 	@Autowired
 	private ItemService itemService;
+
+	@Autowired
+	private SolicitudService solicitudService;
 		
 	/**
 	 * Elimina Item
@@ -49,6 +50,8 @@ public class ItemsController {
 	public @ResponseBody String removeItem(@PathVariable("itemId") String itemId) {	
 		Item item = this.itemService.getItemsById(Long.valueOf(itemId));
 		this.itemService.deleteItem(item);
+		//TODO Se debe que eliminar las solicitudes que contengan el item
+		//this.solicitudService.deleteSolicitudWithItem(item);
 		return "El Item fue eliminado correctamente";
 	}
 	
