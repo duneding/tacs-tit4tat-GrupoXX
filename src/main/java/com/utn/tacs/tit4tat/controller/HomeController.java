@@ -89,5 +89,12 @@ public class HomeController {
 
 		return "home";
 	}
+	
+	
+	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
+	public void setUser(@PathVariable("userId") String userId) {
+		String nuevoUser= "";
+		nuevoUser = userId;
+	}
 
 }

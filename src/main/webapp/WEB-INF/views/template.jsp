@@ -9,9 +9,9 @@
 <script src="../../js/jquery-1.11.0.js"></script>
 	<script src="http://code.jquery.com/jquery.js"></script>
   <script src="../../js/bootstrap.min.js"></script>
-  <script src="../../js/tit4tat.js"></script>
+  <script src="../../js/tit4tat.js" type="text/javascript"></script>
   <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<title><!--  <spring:message code="app.title.home" />--> Tit4Tat!</title>
+	<title>Tit4Tat!</title>
 </head>
 <body>
 	<jsp:include page="header.jsp" />
