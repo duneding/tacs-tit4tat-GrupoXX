@@ -7,39 +7,17 @@
 </head>
 <body>
 <script>
-  // This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      document.getElementById('fbLoginButton').style.display = 'none';
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
 
-  // This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
+// Cargamos SDK en forma asincronica
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 
+//Inicializamos SDK
   window.fbAsyncInit = function() {
   FB.init({
     appId      : '813592025350948',
@@ -66,15 +44,37 @@
   });
 
   };
+  
+  
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
 
-  // Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+    if (response.status === 'connected') {
+
+      document.getElementById('fbLoginButton').style.display = 'none';
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  //Se llama cuando se finaliza con el login (boton)
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
@@ -82,6 +82,10 @@
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
+      console.log('colocando foto:  ' + response.name);
+      $('.faceUser').text(response.name);
+      $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
+      
       document.getElementById('status').innerHTML +=
         ' Thanks for logging in, ' + response.name + '!';
     });
@@ -108,6 +112,33 @@
 	      	}
 		}); 
   }
+  
+  
+/*   function onLogin(response) {
+	  console.log('onLongin');
+	  console.log('print response: ' + response);
+	  if (response.status == 'connected') {
+
+		  		  
+	    FB.api('/me?fields=first_name', function(data) {
+	      var welcomeBlock = document.getElementById('fb-welcome');
+	      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
+	    });
+	  }
+	} */
+// 	FB.getLoginStatus(function(response) {
+// 	  // Check login status on load, and if the user is
+// 	  // already logged in, go directly to the welcome message.
+// 	  if (response.status == 'connected') {
+// 	    onLogin(response);
+// 	  } else {
+// 	    // Otherwise, show Login dialog first.
+// 	    FB.login(function(response) {
+// 	      onLogin(response);
+// 	    }, {scope: 'user_friends, email'});
+// 	  }
+// 	});
+  
 </script>
 <h1 id="fb-welcome"></h1>
 
@@ -134,26 +165,6 @@ $(document).ready(function(){
    	    });
 	});
 });
-
-/*$(document).ready(function(){
-    var loading = $("#divloader");
-    $(document).ajaxStart(function () {
-        loading.show();
-    });
-
-    $(document).ajaxStop(function () {
-        loading.hide();
-    });
-
-});*/
-
-/*
- $('#divloader').bind('ajaxStart', function(){
-	    $(this).show();
- }).bind('ajaxStop', function(){
-     $(this).hide();
- });
- */
 
 function searchItem(){
 	
@@ -241,63 +252,7 @@ function createItem(row) {
 		    }
 	})
 	 
- }
- 
- function onLogin(response) {
-	  if (response.status == 'connected') {
-		  FB.api('/me', function(response) {
-			  $('.faceUser').text(response.name);
-			  $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
-		    });
-		  		  
-	    FB.api('/me?fields=first_name', function(data) {
-	      var welcomeBlock = document.getElementById('fb-welcome');
-	      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
-	    });
-	  }
-	}
-	FB.getLoginStatus(function(response) {
-	  // Check login status on load, and if the user is
-	  // already logged in, go directly to the welcome message.
-	  if (response.status == 'connected') {
-	    onLogin(response);
-	  } else {
-	    // Otherwise, show Login dialog first.
-	    FB.login(function(response) {
-	      onLogin(response);
-	    }, {scope: 'user_friends, email'});
-	  }
-	});
-	
-/*   window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1454789934802984',
-      xfbml      : true,
-      version    : 'v2.1'
-    });
-  };
-
-  function onLogin(response) {
-	  if (response.status == 'connected') {
-	    FB.api('/me?fields=first_name', function(data) {
-	      var welcomeBlock = document.getElementById('fb-welcome');
-	      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
-	    });
-	  }
-	}
-
-	FB.getLoginStatus(function(response) {
-	  // Check login status on load, and if the user is
-	  // already logged in, go directly to the welcome message.
-	  if (response.status == 'connected') {
-	    onLogin(response);
-	  } else {
-	    // Otherwise, show Login dialog first.
-	    FB.login(function(response) {
-	      onLogin(response);
-	    }, {scope: 'user_friends, email'});
-	  }
-	}); */
+ }	
 </script>
 
 	<div class="container theme-showcase" role="main">
