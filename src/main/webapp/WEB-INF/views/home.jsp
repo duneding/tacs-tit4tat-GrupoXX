@@ -42,7 +42,7 @@
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
-
+  
   };
   
   
@@ -113,7 +113,15 @@
 		}); 
   }
   
-  
+  function share(){
+      var share = {
+          method: 'stream.share',
+          u: 'http://t4t-tacs.appspot.com/'
+      };
+      FB.ui(share, function(response) {
+    	  console.log("Proceso terminado");
+      });
+  }
 /*   function onLogin(response) {
 	  console.log('onLongin');
 	  console.log('print response: ' + response);
@@ -299,107 +307,17 @@ function createItem(row) {
 			</div>
 			
 		<div id="gridItems">		
-		<!-- Projects Row -->
-		<!--  <div class="row">
-			<div class="col-md-3 portfolio-item">
-				<a href="item.htm"> <img class="img-responsive"
-					src="../../images/auto.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="item.htm"> <img class="img-responsive"
-					src="../../images/bike.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="../../images/guitarra.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="../../images/laptop.jpg" alt="">
-				</a>
-			</div>
-		</div>-->
-		<!-- /.row -->
-
-		<!-- Projects Row -->
-		<!-- <div class="row">
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="../../images/peliculas.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="../../images/saxo.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="../../images/tv.jpg" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="http://placehold.it/750x450" alt="">
-				</a>
-			</div>
-		</div> -->
-		<!-- /.row -->
-
-		<!-- Projects Row -->
-		<!-- <div class="row">
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="http://placehold.it/750x450" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="http://placehold.it/750x450" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="http://placehold.it/750x450" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 portfolio-item">
-				<a href="#"> <img class="img-responsive"
-					src="http://placehold.it/750x450" alt="">
-				</a>
-			</div>
-		</div> -->
-		<!-- /.row -->
-</div>
+		</div>
 		<hr>
-
-		<!-- Pagination -->
-		<!-- <div class="row text-center">
-			<div class="col-lg-12">
-				<ul class="pagination">
-					<li><a href="#">&laquo;</a></li>
-					<li class="active"><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
-					<li><a href="#">&raquo;</a></li>
-				</ul>
-			</div>
-		</div> -->
-		<!-- /.row -->
-
 		<hr>
 		</div>
 			
-		<!-- /.col-xs-12 main -->
 	</div>
 
 	</div>
-
+	<div class="fb-send" data-href="http://t4t-tacs.appspot.com/" data-colorscheme="light"></div>
+<a href="#" onclick="share();">Compartir web</a>
+<div class="fb-share-button" data-href="http://t4t-tacs.appspot.com/" data-layout="icon_link"></div>
 <div id="fbLoginButton">
     <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
     </fb:login-button>

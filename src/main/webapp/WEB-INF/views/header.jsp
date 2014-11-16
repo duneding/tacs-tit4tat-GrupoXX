@@ -32,12 +32,12 @@
                                     <p class="faceUser">
                                     </p>
                                 </li>
-                                <!-- Menu Footer-->
+<!--                                 Menu Footer
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="#" class="btn btn-default btn-flat" id="logOutButton">Deslogear</a>
                                     </div>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                     </ul>

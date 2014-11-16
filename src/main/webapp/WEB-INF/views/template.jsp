@@ -11,7 +11,7 @@
   <script src="../../js/bootstrap.min.js"></script>
   <script src="../../js/tit4tat.js"></script>
   <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<title><spring:message code="app.title.home" /></title>
+	<title><!--  <spring:message code="app.title.home" />--> Tit4Tat!</title>
 </head>
 <body>
 	<jsp:include page="header.jsp" />
