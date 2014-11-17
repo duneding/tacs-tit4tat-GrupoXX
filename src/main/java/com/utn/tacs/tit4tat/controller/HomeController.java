@@ -90,18 +90,4 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/test/persistUsers", method = RequestMethod.GET)
-	public String executeTest(Model model) {
-
-//		Usuario user1 = new Usuario("Martin Dagostino");
-
-//		this.usuarioService.saveUsuario(user1);
-
-		for (Usuario usuario : this.usuarioService.getUsuarios()) {
-			System.out.println(usuario);
-//			this.usuarioService.deleteUsuario(usuario);
-		}
-
-		return "home";
-	}
 }

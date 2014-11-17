@@ -48,47 +48,11 @@ public class NotificationsController {
 		List<Solicitud> notifications = this.solicitudService
 				.getSolicitudesPendientes();
 
-			this.populateData();
-
 		model.addObject("notifications", notifications);
 
 		return model;
 	}
 
-	private void populateData() {
-		Usuario me = new Usuario("Martin");
-		Usuario other = new Usuario("Walter");
-		// Usuario user1 = new Usuario("Martin Dagostino");
-
-		this.usuarioService.saveUsuario(me);
-		this.usuarioService.saveUsuario(other);
-
-		Item offeredItem = new Item();
-		offeredItem.setDescription("Ipod Touch");
-		offeredItem.setOwner(me);
-		// offeredItem.setId(2l);
-
-		Item requestItem = new Item();
-		requestItem.setDescription("Galaxy S5");
-		requestItem.setOwner(other);
-		// requestItem.setId(1l);
-
-		this.itemService.saveItem(requestItem);
-		this.itemService.saveItem(offeredItem);
-
-		Solicitud sol = new Solicitud();
-		// sol.setId(99L);
-		sol.setDetail("Solicitud 1");
-		sol.setRequestItem(requestItem);
-		sol.setOfferedItem(offeredItem);
-
-		this.solicitudService.saveSolicitud(sol);
-
-		// notifications.add(sol);
-		// List<Solicitud> notifications =
-		// this.solicitudService.getSolicitudesPendientes();
-		// model.setViewName("notifications");
-	}
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
@@ -138,7 +102,7 @@ public class NotificationsController {
 			sol.setRequestItem(requestedItem);
 			sol.setRequestUser(requestedUser);
 
-			sol.setState(0);
+			sol.setState(Solicitud.PENDING);
 
 			this.solicitudService.saveSolicitud(sol);
 
@@ -148,13 +112,6 @@ public class NotificationsController {
 
 		return model;
 	}
-
-	// @RequestMapping(value="/create", method = RequestMethod.POST)
-	// public @ResponseBody String createn(@RequestParam(value = "json") String
-	// jsonRequest) {
-	//
-	// return "redirect:create";
-	// }
 
 	@RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
 	// public @ResponseBody ModelAndView createGet(@RequestParam(value = "json")
@@ -197,7 +154,6 @@ public class NotificationsController {
 			e.printStackTrace();
 		}
 
-		// model.setViewName("notifications/create");
 		return model;
 	}
 
@@ -217,4 +173,39 @@ public class NotificationsController {
 
 		return model;
 	}
+	
+//	private void populateData() {
+//		Usuario me = new Usuario("Martin");
+//		Usuario other = new Usuario("Walter");
+//		// Usuario user1 = new Usuario("Martin Dagostino");
+//
+//		this.usuarioService.saveUsuario(me);
+//		this.usuarioService.saveUsuario(other);
+//
+//		Item offeredItem = new Item();
+//		offeredItem.setDescription("Ipod Touch");
+//		offeredItem.setOwner(me);
+//		// offeredItem.setId(2l);
+//
+//		Item requestItem = new Item();
+//		requestItem.setDescription("Galaxy S5");
+//		requestItem.setOwner(other);
+//		// requestItem.setId(1l);
+//
+//		this.itemService.saveItem(requestItem);
+//		this.itemService.saveItem(offeredItem);
+//
+//		Solicitud sol = new Solicitud();
+//		// sol.setId(99L);
+//		sol.setDetail("Solicitud 1");
+//		sol.setRequestItem(requestItem);
+//		sol.setOfferedItem(offeredItem);
+//
+//		this.solicitudService.saveSolicitud(sol);
+//
+//		// notifications.add(sol);
+//		// List<Solicitud> notifications =
+//		// this.solicitudService.getSolicitudesPendientes();
+//		// model.setViewName("notifications");
+//	}
 }
