@@ -173,6 +173,7 @@ function createItem(row) {
 	</div>
 
 	</div>
+	<a href="#" onclick="sendNotification();">Enviar notificacion</a>
 	<div class="fb-send" data-href="http://t4t-tacs.appspot.com/" data-colorscheme="light"></div>
 <a href="#" onclick="share();">Compartir web</a>
 <div class="fb-share-button" data-href="http://t4t-tacs.appspot.com/" data-layout="icon_link"></div>

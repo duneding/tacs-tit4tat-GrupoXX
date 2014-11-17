@@ -101,7 +101,14 @@
       if( document.getElementById('status') != null)
     	  document.getElementById('status').innerHTML +=' Thanks for logging in, ' + response.name + '!';
     });
-
+    
+/*    FB.ui({method: 'apprequests',
+        message: "aaaa",
+        to: ["10203938494275881"],
+        new_style_message: true
+    }, function (response) {debugger;});
+    alert('Notification Sent!');*/
+    
 	FB.api('/me/friends', 
 		function(response) {
 			console.log('Obtained friends: ' + response.length);
@@ -134,6 +141,15 @@
       FB.ui(share, function(response) {
     	  console.log("Proceso terminado");
       });
+  }
+  
+  function sendNotification(userIds){
+	  	var ids = ["10152511164937672","10204394795602905", "900069580003957"];
+	    FB.ui({method: 'apprequests',
+	        message: "Tit4Tat! - Social App",
+	        to: ids,
+	        new_style_message: true
+	    }, function (response) {debugger;});
   }
   
   
