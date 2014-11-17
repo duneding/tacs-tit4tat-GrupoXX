@@ -23,8 +23,8 @@
 							<td>${notification.offeredItem.description}</td>
 							<td>${notification.offeredItem.owner.name}</td>
 							<td>
-							<a href="#"><span id="acceptBtn" class="glyphicon glyphicon-ok"></span></a>
-							<a href="#"><span id="refuseBtn" class="glyphicon glyphicon-remove"></span></a>
+							<a href="#"><span id="acceptBtn" onclick="acceptNotification(this)" class="glyphicon glyphicon-ok"></span></a>
+							<a href="#"><span id="refuseBtn" onclick="refuseNotification(this)" class="glyphicon glyphicon-remove"></span></a>
 							</td>
 						</tr>
 					</c:forEach>
@@ -35,7 +35,55 @@
 	</div>
 </div>
 <script>
-	$(function() {
+	function acceptNotification(link) {
+		var id = $(link).closest("tr").children(":first").text(); 
+		var state = "acepted";
+
+		$.ajax({  
+		     type : "PUT",   
+		     url : "notifications",
+		     cache: false,
+		     async: true,   
+		     //async: false,
+		     data : { 
+			     		id: id ,
+			     		state: state
+			     	},  
+		 	success : function(response) {
+		 		$(link).closest("tr").remove();  
+		      	alert(response);   
+	     	},  
+		    error : function(jqXHR, textStatus, errorThrown) {
+		    	alert(jqXHR.responseText);
+		    }  
+	    });
+	}
+
+	function refuseNotification(link) {
+		var id = $(link).closest("tr").children(":first").text(); 
+		var state = "refused";
+
+		$.ajax({  
+		     type : "PUT",   
+		     url : "notifications",
+		     cache: false,
+		     async: true,    
+		     //async: false,
+		     data : { 
+			     		id: id ,
+			     		state: state
+			     	},  
+		 	success : function(response) {
+		 		$(link).closest("tr").remove();  
+		      	alert(response);   
+	     	},  
+		    error : function(jqXHR, textStatus, errorThrown) {
+		    	alert(jqXHR.responseText);;   
+		    }  
+	    });
+	}
+	
+	/* $(function() {
 		$('#acceptBtn').click(function() {
 			var id = $(this).closest("tr").children(":first").text(); 
 			var state = "acepted";
@@ -83,5 +131,5 @@
 			    }  
 		    });
 		});
-	});
+	}); */
 </script>
