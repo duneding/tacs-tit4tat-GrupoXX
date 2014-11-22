@@ -1,5 +1,5 @@
 
-//Cargamos SDK en forma asincronica
+/*//Cargamos SDK en forma asincronica
 (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
@@ -75,7 +75,7 @@
       console.log('Successful login for: ' + response.name);
       console.log('colocando foto:  ' + response.name);
       
-      /*Seteamos al usuario actual*/
+      Seteamos al usuario actual
       
       
       $.ajax({  
@@ -94,7 +94,7 @@
    });
       
       
-      /*-----------------------------*/
+      -----------------------------
       $('.faceUser').text(response.name);
       $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
       
@@ -102,12 +102,12 @@
     	  document.getElementById('status').innerHTML +=' Thanks for logging in, ' + response.name + '!';
     });
     
-/*    FB.ui({method: 'apprequests',
+    FB.ui({method: 'apprequests',
         message: "aaaa",
         to: ["10203938494275881"],
         new_style_message: true
     }, function (response) {debugger;});
-    alert('Notification Sent!');*/
+    alert('Notification Sent!');
     
 	FB.api('/me/friends', 
 		function(response) {
@@ -144,13 +144,13 @@
   }
   
   function sendNotification(userIds){
-	  	var ids = ["10152511164937672","10204394795602905", "900069580003957"];
+	  	var ids = ["10152511164937672","10204394795602905", "900069580003957", "10203938494275881"];
 	    FB.ui({method: 'apprequests',
 	        message: "Tit4Tat! - Social App",
 	        to: ids,
 	        new_style_message: true
 	    }, function (response) {debugger;});
-  }
+  }*/
   
   
   

@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover" id="itemFriendGrid">
 <thead>
 <th>Nombre</th>
 <th>Descripcion</th>
@@ -15,7 +15,7 @@
 <th>Acciones</th>
 </thead>
 <tbody>
-<c:forEach var="item" items="${items}">
+<%-- <c:forEach var="item" items="${items}">
         <tr>
 		<td style = 'display:none' id="item_id">${item.id}</td>
 		<td style = 'display:none' id="owner_id">${item.owner.id}</td>
@@ -24,7 +24,7 @@
         <td>${item.owner.name}</td>
         <td><a><span onclick="createTrueque(this)" class="glyphicon glyphicon-cloud-upload" title="Envia una solicitud de trueque a tu amigo!!"></span></a></td>
         </tr>
-      </c:forEach>
+      </c:forEach> --%>
       </tbody>
 </table> 
 
@@ -56,6 +56,120 @@
 </div>
 <script>
 
+$(document).ready(function(){
+	//Cargamos SDK en forma asincronica
+	(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+	//Inicializamos SDK
+	  window.fbAsyncInit = function() {
+	  FB.init({
+	    appId      : '813592025350948',
+	    cookie     : true,  // enable cookies to allow the server to access 
+	                        // the session
+	    xfbml      : true,  // parse social plugins on this page
+	    version    : 'v2.1' // use version 2.1
+	  });
+
+
+	  FB.getLoginStatus(function(response) {
+	    statusChangeCallback(response);
+	  });
+	  
+	  };
+	  
+	  function statusChangeCallback(response) {
+		    console.log('statusChangeCallback');
+		    console.log(response);
+
+		    if (response.status === 'connected') {
+		    	if( document.getElementById('fbLoginButton') != null)
+		    		document.getElementById('fbLoginButton').style.display = 'none';
+		      testAPI();
+		    } else if (response.status === 'not_authorized') {
+		      // The person is logged into Facebook, but not your app.
+		    	if( document.getElementById('status') != null)
+		    		document.getElementById('status').innerHTML = 'Please log into this app.';
+		    } else {
+		      // The person is not logged into Facebook, so we're not sure if
+		      // they are logged into this app or not.
+		    	if( document.getElementById('status') != null)
+		    		document.getElementById('status').innerHTML = 'Please log into Facebook.';
+		    }
+		  }
+	  
+	  function testAPI() {
+		    FB.api('/me', function(response) {
+		      $('.faceUser').text(response.name);
+		      $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
+		    });
+		    		    
+			FB.api('/me/friends', 
+				function(response) {
+					if (response && !response.error) {
+				  		if(response.data) { 
+			        		var friendIds = '';
+					 		$.each(response.data,function(index,friend) {
+					 	 		friendIds = friendIds + "," + friend.id;
+/* 					 	 		names += friend.name + ', '; */
+					 		});
+					 		
+					 		/*------------------------------------------*/
+					 			$.ajax({  
+	    type : "GET",   
+	    url : "/friends/ItemsJson/idFriends" + friendIds,   
+	    async: false,
+	     data : { 
+	    	 idFriends: friendIds
+	     	}, 
+	    success : function(response) {  	    	
+	    
+	    	 for (var i = 0; i < response.length; i ++){
+   				 $('#itemFriendGrid tbody').after( "<tr>" +
+				"<td style = 'display:none'>" + response[i].id + "</td>" + 
+				"<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
+				"<td >" + response[i].shortDescription +"</td>" +
+				"<td >" + response[i].description +"</td>" +
+				"<td >" + response[i].owner.name +"</td>" + 
+				 "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
+					"</tr>");   				 
+   	 }
+	    	
+	    	
+	   	 },
+	    error : function(e,h,j) {  
+	     alert('Error: ' + j);   
+	    }
+})
+					 		
+					 		
+					 		
+					 		
+					 		/*------------------------------------------*/
+					 		
+					 		
+					 		
+					 		
+					 	} else {
+					 		console.log("Error!"); 
+					 	} 
+			        } else {
+			  			console.log('problems occurred when retrieving friends: ' + (response ? response.error : 'null'));
+			      	}
+				}); 
+		  }
+	  
+	
+	
+	
+	
+});
+
 function createTrueque(link){
   var item_id = $(link).closest("tr").find("td:eq(0)").text();  
   var owner_id = $(link).closest("tr").find("td:eq(1)").text();  
@@ -66,17 +180,7 @@ function createTrueque(link){
       url: "/items/listItems",
       async: true,
       success :function(response) {    	  
-    	  //$('#myItemsTable').empty();
-     	  /*for (var i = 0; i < response.length; i ++){
-    	  $('#myItemsTable tbody').after( "<tr>" +
-  				"<td style = 'display:none' id='user_item_id'>" + response[i].id + "</td>" + 
-  				"<td style = 'display:none' id='user_id'>" + response[i].owner.id + "</td>" +
-  				"<td><a onclick='createSolicitud(" + i + "," + item_id + "," + owner_id + ")' title='Envie la solicitud de trueque a su amigo!'><span class='glyphicon glyphicon-ok-sign'></span></a></td>" +
-  				"<td>" + response[i].shortDescription + "</td>" +
-  				"<td>" + response[i].description + "</td>" +
-  				 "</tr>");   
-    	  }*/ 
-    	  
+
     	  $('#myItems').empty();
     	   	 $('#myItems').append("<table class='table table-striped table-hover' id='myItemsTable'>" +
     	   			 "<thead>" + 
@@ -98,45 +202,6 @@ function createTrueque(link){
      } 
   }});
   
-  
-  
-  
-  
-  /*$.ajax({  
-	     type : "POST",   
-	     url : "/notifications/create",   	
-	     async: false,
-	     //data : "idItem=" + id ,
-	     data : JSON.stringify(json),
-	     contentType: "application/json; charset=utf-8",
-	     success : function(response) {  
-	      alert(response); 
-	      window.location = response;
-	     },  
-	     error : function(e) {  
-	      alert('Error:' + e.responseText);   
-	     }  
-	    });
-/*---OLD--
-  $.ajax({
-      type: "GET",
-      //contentType : 'application/json; charset=utf-8',
-      //dataType : 'json',
-      url: "notify",
-      data: {
-    	  		json:JSON.stringify(jsonRequest)
-    	  	},
-      success :function(result) {
-       // do what ever you want with data
-    	  var redirect = "/notifications/create/1";
-    	  window.location.replace(redirect);
-     }
-  });
-  */
-/*   
-  
-  var redirect = "/notifications/create?idItem=" + id;
-  window.location.replace(redirect); */
 }
 
 function createSolicitud(link, item_id, owner_id){

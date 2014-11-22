@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,17 +46,27 @@ public class FriendsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/items", method = RequestMethod.GET)
-	public ModelAndView getItemsFriends() {
-		ModelAndView model = new ModelAndView("friends/items");
+	public String getItemsFriends() {
+/*		ModelAndView model = new ModelAndView("friends/items");
 
 		List<Item> items = this.itemService.getItems();
 		
 		model.addObject("items", items);
 		//items.get(0).getOwner()
-		
-		return model;
+*/		
+		return "friends/items";
 	}
 	
+	
+	@RequestMapping(value = "/ItemsJson/{idFriends}", method = RequestMethod.GET)
+	public @ResponseBody
+	List<Item>  getItemsJsonFriends(@PathVariable("idFriends") String idFriends) {
+
+		List<Item> items = this.itemService.getItems();
+		
+		
+		return items;
+	}
 
 	
 }
