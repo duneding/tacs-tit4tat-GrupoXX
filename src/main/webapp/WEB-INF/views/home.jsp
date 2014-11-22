@@ -80,7 +80,7 @@ function searchItem(){
 } 
 
 function createItem(row) {
-	 
+  	
 	var name = $('#itemForSearch').val();
 	var id = document.getElementById('gridSearch').rows[row].children[0].innerText;
 	var image = document.getElementById('gridSearch').rows[row].children[1].innerText;
@@ -88,16 +88,22 @@ function createItem(row) {
 	var category = document.getElementById('gridSearch').rows[row].children[3].innerText;
 	var description = document.getElementById('gridSearch').rows[row].children[4].innerText;
 	
-	var jsonRequest = {
+	$('#nameNewItem').val(name);
+	$('#idNewItem').val(id);
+	$('#imageNewItem').val(image);
+	$('#permalinkNewItem').val(permalink);
+	$('#categoryNewItem').val(category);
+	$('#descriptionNewItem').val(description);
+	$('#short_description').val("");
+	$('#_MyItemCreate').modal('show');
+	
+/* 	var jsonRequest = {
             id: id,
             category: category,
             description: description,
             image: image,
             permalink: permalink
     };
-	
-	//var request = "new_item="+JSON.stringify(jsonRequest)
-	//document.location.href="items/create?"+request;
 	
 	$.ajax({  
 		    type : "POST",   
@@ -108,18 +114,54 @@ function createItem(row) {
 		    //contentType: "application/json",
 		    data : JSON.stringify(jsonRequest),
 		    success : function(response) {  
-		    	//alert(response);  
-		    	//document.location.href="items/create";
-		    	//document.location.href=response;
-		    	//document.write(response);
 		    	document.location.href="items/create";
 		   	 },
 		    error : function(e,h,j) {  
 		     alert('Error: ' + j);   
 		    }
-	})
+	}) */
 	 
  }	
+ 
+function AgregarItem(){
+	
+	var id = $('#idNewItem').val();
+	var image = $('#imageNewItem').val();
+	var permalink = $('#permalinkNewItem').val();
+	var category =  $("#categoryNewItem").val();
+	var owner =  $("#currentUser").val();
+	var description = $('#descriptionNewItem').val();
+	var short_description = $('#short_description').val();
+	
+
+	
+	var jsonRequest = {
+            id: id,
+            short_description: short_description,
+            description: description,
+            image: image,
+            permalink: permalink,
+            owner: owner,
+            category: category
+    }
+			
+	$.ajax({  
+		    type : "POST",   
+		    url : "items",   
+		    async: false,
+		    //dataType: 'json',
+		    //contentType: "application/json",
+		    data : JSON.stringify(jsonRequest),		    
+		    success : function(response) {  
+		    	document.location.href="/items";  		    	
+		   	 },
+		    error : function(e,h,j) {  
+		     alert('Error:' + j);   
+		    }
+		    	
+	});
+
+} 
 </script>
 
 <script type="text/javascript">
@@ -203,7 +245,7 @@ function createItem(row) {
       
       var userId =  response.id;
       var userName = response.first_name + " " + response.last_name;
-      
+      $("#currentUser").val(userId);
       $.ajax({  
     type : "POST",   
     url : "/user",  
@@ -322,11 +364,37 @@ function createItem(row) {
 			<div id="divloader" style="height: 100px; text-align: center; display: none">
 				<img id="ajax-loader" src="../../images/ajax-loader.gif" class="ajax-loader"/>    			
 			</div>
-			
+		
+		
 		<div id="gridItems">		
 		</div>
-		<hr>
-		<hr>
+		<div class="modal fade" id="_MyItemCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Crea tu item!</h4>
+      </div>
+      <div class="modal-body" id="myItemCreate">
+      	<div class="form-group">
+    		<label for="short_description" class="label-control">Descripcion Corta:</label>
+   			<input type="text" class="form-control" id="short_description"/>
+  		</div>
+  
+    	<div class="form-group">
+    		<label for="descripcion" class="label-control">Descripcion:</label>
+   		    <textarea id="descriptionNewItem" class="form-control" rows="10" cols="30"></textarea>    
+  		</div>  
+  		<input type="hidden" id="idNewItem"/>
+  		<input type="hidden" id="imageNewItem"/>
+  		<input type="hidden" id="permalinkNewItem"/>
+  		<input type="hidden" id="categoryNewItem"/>
+  		<input type="hidden" id="currentUser"/>
+  		<button type="button" onclick="AgregarItem()" class="btn btn-default">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
 		</div>
 			
 	</div>
