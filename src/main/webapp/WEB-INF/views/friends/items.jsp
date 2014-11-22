@@ -164,15 +164,13 @@ $(document).ready(function(){
 				}); 
 		  }
 	  
-	
-	
-	
+
 	
 });
 
 function createTrueque(link){
-  var item_id = $(link).closest("tr").find("td:eq(0)").text();  
-  var owner_id = $(link).closest("tr").find("td:eq(1)").text();  
+  var owner_id= $(link).closest("tr").find("td:eq(0)").text();  
+  var item_id = $(link).closest("tr").find("td:eq(1)").text();  
   var jsonRequest = { "owner" : owner_id, "item" : item_id};
 
    $.ajax({
@@ -222,7 +220,7 @@ function createSolicitud(link, item_id, owner_id){
     }
 	
     /*-----AJAX POST A NOTIFICATION POST!--------*/
-
+debugger;
     	$.ajax({  
 		    type : "POST",   
 		    url : "/notifications",   
@@ -236,6 +234,10 @@ function createSolicitud(link, item_id, owner_id){
 		    	//document.location.href="items/create";
 		    	//document.location.href=response;
 		    	//document.write(response);
+		    	
+		    	/*Enviamos solicitud facebook*/
+		    	sendNotification(owner_id);
+		    	
 		    	document.location.href="/notifications";
 		   	 },
 		    error : function(e,h,j) {  
@@ -246,5 +248,15 @@ function createSolicitud(link, item_id, owner_id){
 	$("#_MyItemList").modal("toggle");
 }
 
+function sendNotification(userIds){
+	debugger;
+	var ids = [];
+	ids.push(userIds);
+    FB.ui({method: 'apprequests',
+        message: "Tit4Tat! - Social App: Te han enviado una solicitud de trueque!",
+        to: ids,
+        new_style_message: true
+    }, function (response) {debugger;});
+}
 
 </script>

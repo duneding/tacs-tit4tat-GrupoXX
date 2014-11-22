@@ -201,11 +201,17 @@ function createItem(row) {
       
       /*Seteamos al usuario actual*/
       
+      var userId =  response.id;
+      var userName = response.first_name + " " + response.last_name;
       
       $.ajax({  
     type : "POST",   
-    url : "user/" + response.id,   
+    url : "/user",  
     async: true,
+    data : { 
+    	userId: userId ,
+    	userName: userName
+ 	},
     error : function(e,h,j) {  
     	console.log('Error al querer persistir usuario');
     }
