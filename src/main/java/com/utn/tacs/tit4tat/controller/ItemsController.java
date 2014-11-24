@@ -244,51 +244,73 @@ public class ItemsController {
 		return model;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.POST)
-	// public @ResponseBody ModelAndView create(@ModelAttribute("item") Item
-	// item, BindingResult result) {
-	// public @ResponseBody ModelAndView create(@RequestBody String jsonRequest)
-	// {
-	public ModelAndView create(@RequestBody String request) {
+	public @ResponseBody
+	String createItem(	@RequestParam(value = "id") String id,
+						@RequestParam(value = "short_description") String shortDescription,
+						@RequestParam(value = "description") String description,
+						@RequestParam(value = "image") String image,
+						@RequestParam(value = "permalink") String permalink,
+						@RequestParam(value = "owner") String ownerId,
+						@RequestParam(value = "category") String category) {
 
-		ModelAndView model = new ModelAndView("items");
-		JSONObject obj = new JSONObject();
-		obj.put("create", "OK");
-		model.addObject("response", obj);
+		Item newItem = new Item();
+		newItem.setId(Long.parseLong(id));
+		newItem.setShortDescription(shortDescription);
+		newItem.setDescription(description);
+		newItem.setImage(Utils.getImageAsBlob(image));
+		newItem.setPermalink(permalink);
+		String[] arrCategory = {category};
+		newItem.setCategory(arrCategory);
+		
+		Usuario owner = this.usuarioService.getUsuariosById(Long.parseLong(ownerId));
+		
+		newItem.setOwner(owner);
 
-		try {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
-			String description = jsonRequest.get("description").toString();
-			String shortDescription = jsonRequest.get("short_description")
-					.toString();
-			String permalink = jsonRequest.get("permalink").toString();
-			Long id = Long.valueOf(jsonRequest.get("id").toString());
-			Usuario owner = Utils.generateUser(jsonRequest.get("owner")
-					.toString());
-			// Blob image = (Blob)jsonRequest.get("image");
-			String[] category = { jsonRequest.get("category").toString() };
-			Blob image = Utils.getImageAsBlob(jsonRequest.get("image")
-					.toString());
-
-			Item item = new Item();
-			item.setDescription(description);
-			item.setShortDescription(shortDescription);
-			item.setOwner(owner);
-			item.setId(id);
-			item.setPermalink(permalink);
-			item.setImage(image);
-			item.setCategory(category);
-			this.itemService.saveItem(item);
-
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-
-		return model;
+		return "Item creado correctamente. Id = " + id;
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	@Consumes(value = "application/json")
+//	@RequestMapping(method = RequestMethod.POST)
+//	public ModelAndView create(@RequestBody String request) {
+//
+//		ModelAndView model = new ModelAndView("items");
+//		JSONObject obj = new JSONObject();
+//		obj.put("create", "OK");
+//		model.addObject("response", obj);
+//
+//		try {
+//			JSONParser jsonParser = new JSONParser();
+//			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
+//			String description = jsonRequest.get("description").toString();
+//			String shortDescription = jsonRequest.get("short_description")
+//					.toString();
+//			String permalink = jsonRequest.get("permalink").toString();
+//			Long id = Long.valueOf(jsonRequest.get("id").toString());
+//			Usuario owner = Utils.generateUser(jsonRequest.get("owner")
+//					.toString());
+//			// Blob image = (Blob)jsonRequest.get("image");
+//			String[] category = { jsonRequest.get("category").toString() };
+//			Blob image = Utils.getImageAsBlob(jsonRequest.get("image")
+//					.toString());
+//
+//			Item item = new Item();
+//			item.setDescription(description);
+//			item.setShortDescription(shortDescription);
+//			item.setOwner(owner);
+//			item.setId(id);
+//			item.setPermalink(permalink);
+//			item.setImage(image);
+//			item.setCategory(category);
+//			this.itemService.saveItem(item);
+//
+//		} catch (Exception e) {
+//			System.out.println(e.toString());
+//		}
+//
+//		return model;
+//	}
 
 	@RequestMapping(value = "/delete/{itemId}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("itemId") String itemid) {

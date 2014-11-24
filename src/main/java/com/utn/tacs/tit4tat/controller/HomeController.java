@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -91,10 +92,21 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
-	public void setUser(@PathVariable("userId") String userId) {
-		String nuevoUser= "";
-		nuevoUser = userId;
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
+			@RequestParam(value = "userName") String userName) {
+		
+		Usuario usuario = new Usuario();
+		usuario.setId(Long.parseLong(userId));
+		usuario.setName(userName);
+		
+		Usuario persistUser = this.usuarioService.getUsuariosById(usuario.getId());
+		
+		if (persistUser != null) {
+			return;
+		}
+		
+		this.usuarioService.saveUsuario(usuario);
 	}
 
 }
