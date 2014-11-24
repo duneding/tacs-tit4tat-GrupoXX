@@ -2,8 +2,6 @@ package com.utn.tacs.tit4tat.model;
 
 import java.io.Serializable;
 
-import org.springframework.context.annotation.Scope;
-
 import com.google.appengine.api.datastore.Blob;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -11,8 +9,9 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.utn.tacs.tit4tat.objectify.Identifiable;
 
+@SuppressWarnings("serial")
 @Entity
-@Scope("session")
+//@Scope("session")
 public class Item implements Identifiable, Serializable {
 
 	@Id

@@ -277,9 +277,9 @@ public class ItemsController {
 	public @ResponseBody
 	List<Item> listItems(@RequestParam(value = "userId") String userId) {
 		List<Item> items = new ArrayList<Item>();
+		Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(userId));
 
-		//TODO traer solo mis items
-		for (Item item : this.itemService.getItems()) {
+		for (Item item : this.itemService.getItemsByUser(usuario)) {
 			items.add(item);
 		}
 

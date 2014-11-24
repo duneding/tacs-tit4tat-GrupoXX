@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.utn.tacs.tit4tat.dao.ItemDao;
 import com.utn.tacs.tit4tat.model.Item;
+import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.ItemService;
 
 @Service(value = "itemService")
@@ -46,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public List<Item> getItemsByUser(Long userId) {
-		return this.itemDao.getItemsByUser(userId);
+	public List<Item> getItemsByUser(Usuario usuario) {
+		return this.itemDao.getItemsByUser(usuario);
 	}
 }

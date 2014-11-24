@@ -3,6 +3,7 @@ package com.utn.tacs.tit4tat.service;
 import java.util.List;
 
 import com.utn.tacs.tit4tat.model.Item;
+import com.utn.tacs.tit4tat.model.Usuario;
 
 public interface ItemService {
 	
@@ -12,7 +13,7 @@ public interface ItemService {
 
 	public List<Item> getItems();
 	
-	public List<Item> getItemsByUser(Long userId);
+	public List<Item> getItemsByUser(Usuario usuario);
 
 	public Item getItemsById(Long id);
 

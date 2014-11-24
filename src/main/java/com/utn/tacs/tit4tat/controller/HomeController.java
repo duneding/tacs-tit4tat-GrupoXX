@@ -80,16 +80,16 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/user/{userId}/items", method = RequestMethod.GET)
-	public String getItemsByUser(@PathVariable("userId") String userId,
-			Model model) {
-
-		Long userIdLong = Long.getLong(userId);
-		List<Item> items = this.itemService.getItemsByUser(userIdLong);
-		model.addAttribute("items", items);
-
-		return "home";
-	}
+//	@RequestMapping(value = "/user/{userId}/items", method = RequestMethod.GET)
+//	public String getItemsByUser(@PathVariable("userId") String userId,
+//			Model model) {
+//
+//		Long userIdLong = Long.getLong(userId);
+//		List<Item> items = this.itemService.getItemsByUser(userIdLong);
+//		model.addAttribute("items", items);
+//
+//		return "home";
+//	}
 	
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
