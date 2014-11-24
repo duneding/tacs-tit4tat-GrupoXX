@@ -323,43 +323,44 @@ function shareItemCreate(short_description, description, nameUser){
 
 /*-------------------MOSTRAR ITEMS DE MIS AMIGOS-------------------------*/
 function showAmigos(){
-	$('#friendsItemBody').empty();
-  	 $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
-   			 "<thead>" + 
-   			 "<th>Nombre</th>"+ 
-   			  "<th>Descripcion</th>" +  
-   			  "<th>Propietario</th>" + 
-   			  "<th>Acciones</th>" +
-   			  "</thead><tbody></tbody></table>"); 
-	
-		$.ajax({  
-		    type : "GET",   
-		    url : "/friends/items",   
-		    async: false,
-		     data : { 
-		    	 idFriends: friends
-		     	}, 
-		    success : function(response) {  	    	
-		    
-		    	 for (var i = 0; i < response.length; i ++){
-	   				 $('#itemFriendGrid tbody').after( "<tr>" +
-					"<td style = 'display:none'>" + response[i].id + "</td>" + 
-					"<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
-					"<td >" + response[i].shortDescription +"</td>" +
-					"<td >" + response[i].description +"</td>" +
-					"<td >" + response[i].owner.name +"</td>" + 
-					 "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
-						"</tr>");   				 
-	   	 }
-		    	
-		    	$("#_FriendPopUp").modal('show');
-		   	 },
-		    error : function(e,h,j) {  
-		     alert('Error: ' + j);   
-		    }
-	});
-		
-	
+  $('#friendsItemBody').empty();
+     $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
+         "<thead>" + 
+         "<th>Nombre</th>"+ 
+          "<th>Descripcion</th>" +  
+          "<th>Propietario</th>" + 
+          "<th>Acciones</th>" +
+          "</thead><tbody></tbody></table>"); 
+
+     
+    $.ajax({  
+        type : "GET",   
+        url : "/friends/items",   
+        dataType: 'json',
+        data : {"idFriends":friends}, 
+        contentType: 'application/json',
+        mimeType: 'application/json',
+        success : function(response) {          
+        
+           for (var i = 0; i < response.length; i ++){
+             $('#itemFriendGrid tbody').after( "<tr>" +
+          "<td style = 'display:none'>" + response[i].id + "</td>" + 
+          "<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
+          "<td >" + response[i].shortDescription +"</td>" +
+          "<td >" + response[i].description +"</td>" +
+          "<td >" + response[i].owner.name +"</td>" + 
+           "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
+            "</tr>");            
+       }
+          
+          $("#_FriendPopUp").modal('show');
+         },
+        error : function(e,h,j) {  
+         alert('Error: ' + j);   
+        }
+  });
+    
+  
 }
 
 /*-------------------CREAR TRUEQUES-------------------------*/
@@ -555,7 +556,7 @@ function showMyNotifications(){
 function acceptNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
 	var state = "acepted";
-
+	var oldOwner = $(link).closest("tr").children(":first").text(); 
 	$.ajax({  
 	     type : "PUT",   
 	     url : "notifications",
@@ -569,6 +570,9 @@ function acceptNotification(link) {
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
+	      	shareAcceptNotification();
+	      	sendNotificationToOwner();
+	      	
      	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);
@@ -600,3 +604,20 @@ function refuseNotification(link) {
     });
 }
 
+
+function shareAcceptNotification(){
+	var text = "Tit4Tat! - Social App!"  + $('span.faceUser').text() + " acaba de realizar un trueque!"
+	
+	//TODO : Se debe capturar el id de la persona dueña de la solicitud
+	//"10203938494275881"
+  	var idOldOwner = [];
+    FB.ui({method: 'apprequests',
+    	title:"Avisale a tu amigo que has aceptado el intercambio!",
+        message: text,
+        to: idOldOwner,
+        new_style_message: true
+    }, function (response) {
+    	console.log(response);
+    	alert("Se ha notificado a tu amigo que has aceptado el trueque!");
+    });
+}
