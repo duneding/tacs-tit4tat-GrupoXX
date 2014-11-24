@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.appengine.api.datastore.Blob;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.model.Usuario;
-import com.utn.tacs.tit4tat.objectify.Utils;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
@@ -42,17 +40,25 @@ public class NotificationsController {
 	List<Solicitud> notifications = new ArrayList<Solicitud>();
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView getNotifications() {
-		ModelAndView model = new ModelAndView("notifications");
+	public @ResponseBody List<Solicitud> getNotifications(@RequestParam(value = "userId") String userId) {
 
-		List<Solicitud> notifications = this.solicitudService
-				.getSolicitudesPendientes();
+		//TODO Falta filtrar por usuario 
+		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
+//		List<Solicitud> notifications = this.solicitudService.getSolicitudesByUsuario(userId);
 
-		model.addObject("notifications", notifications);
-
-		return model;
+		return notifications;
 	}
-
+	
+//	@RequestMapping(method = RequestMethod.GET)
+//	public ModelAndView getNotifications() {
+//		ModelAndView model = new ModelAndView("notifications");
+//		
+//		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
+//		
+//		model.addObject("notifications", notifications);
+//		
+//		return model;
+//	}
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
@@ -113,55 +119,51 @@ public class NotificationsController {
 		return model;
 	}
 
-	@RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
-	// public @ResponseBody ModelAndView createGet(@RequestParam(value = "json")
-	// String jsonRequest) {
-	public ModelAndView createGet() {
-		Item item = new Item();
-		Solicitud solicitud = new Solicitud();
-		ModelAndView model = new ModelAndView("notifications/create");
-		try {
-			solicitud.setId(1L);
-			solicitud.setState(1);
-
-			// model.addObject("solicitud", solicitud);
-
-			Solicitud notification = new Solicitud();
-			notification.setId(1L);
-			notification.setDetail("mydetails");
-
-			Item itemOfrecido = new Item();
-			itemOfrecido.setId(1L);
-			itemOfrecido.setDescription("IPod 32GB");
-			itemOfrecido
-					.setPermalink("http://mercadolibre.com.ar/item/ml12312");
-			String[] category = { "Electronica" };
-			itemOfrecido.setCategory(category);
-			notification.setOfferedItem(itemOfrecido);
-
-			Item itemSolicitado = new Item();
-			itemSolicitado.setId(1L);
-			itemSolicitado.setDescription("Bike");
-			itemSolicitado
-					.setPermalink("http://mercadolibre.com.ar/item/ml12312");
-			String[] category2 = { "NO SE" };
-			item.setCategory(category2);
-
-			notification.setRequestItem(itemSolicitado);
-			model.addObject("notification", notification);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return model;
-	}
+	// @RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
+	// public ModelAndView createGet() {
+	// Item item = new Item();
+	// Solicitud solicitud = new Solicitud();
+	// ModelAndView model = new ModelAndView("notifications/create");
+	// try {
+	// solicitud.setId(1L);
+	// solicitud.setState(1);
+	//
+	// // model.addObject("solicitud", solicitud);
+	//
+	// Solicitud notification = new Solicitud();
+	// notification.setId(1L);
+	// notification.setDetail("mydetails");
+	//
+	// Item itemOfrecido = new Item();
+	// itemOfrecido.setId(1L);
+	// itemOfrecido.setDescription("IPod 32GB");
+	// itemOfrecido
+	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
+	// String[] category = { "Electronica" };
+	// itemOfrecido.setCategory(category);
+	// notification.setOfferedItem(itemOfrecido);
+	//
+	// Item itemSolicitado = new Item();
+	// itemSolicitado.setId(1L);
+	// itemSolicitado.setDescription("Bike");
+	// itemSolicitado
+	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
+	// String[] category2 = { "NO SE" };
+	// item.setCategory(category2);
+	//
+	// notification.setRequestItem(itemSolicitado);
+	// model.addObject("notification", notification);
+	//
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return model;
+	// }
 
 	@SuppressWarnings("unchecked")
 	@Consumes(value = "application/json")
 	@RequestMapping(value = "/{notId}/share", method = RequestMethod.POST)
-	// public @ResponseBody ModelAndView create(@ModelAttribute("item") Item
-	// item, BindingResult result) {
 	public @ResponseBody
 	ModelAndView share(@PathVariable("notId") String itemId,
 			@RequestBody String jsonRequest) {
@@ -173,39 +175,4 @@ public class NotificationsController {
 
 		return model;
 	}
-	
-//	private void populateData() {
-//		Usuario me = new Usuario("Martin");
-//		Usuario other = new Usuario("Walter");
-//		// Usuario user1 = new Usuario("Martin Dagostino");
-//
-//		this.usuarioService.saveUsuario(me);
-//		this.usuarioService.saveUsuario(other);
-//
-//		Item offeredItem = new Item();
-//		offeredItem.setDescription("Ipod Touch");
-//		offeredItem.setOwner(me);
-//		// offeredItem.setId(2l);
-//
-//		Item requestItem = new Item();
-//		requestItem.setDescription("Galaxy S5");
-//		requestItem.setOwner(other);
-//		// requestItem.setId(1l);
-//
-//		this.itemService.saveItem(requestItem);
-//		this.itemService.saveItem(offeredItem);
-//
-//		Solicitud sol = new Solicitud();
-//		// sol.setId(99L);
-//		sol.setDetail("Solicitud 1");
-//		sol.setRequestItem(requestItem);
-//		sol.setOfferedItem(offeredItem);
-//
-//		this.solicitudService.saveSolicitud(sol);
-//
-//		// notifications.add(sol);
-//		// List<Solicitud> notifications =
-//		// this.solicitudService.getSolicitudesPendientes();
-//		// model.setViewName("notifications");
-//	}
 }

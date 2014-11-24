@@ -1,7 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
@@ -65,11 +62,6 @@ public class HomeController {
 
 		return new ModelAndView("home");
 	}
-	
-	/*@RequestMapping(value = "/home", method = RequestMethod.POST)
-	public String signed_request(ModelMap model) {
-		return "home";
-	}*/
 
 	@RequestMapping(value="/user/{userId}", method=RequestMethod.GET)
 	public String getUserInfo(@PathVariable("userId") String userId, Model model) {
@@ -79,18 +71,6 @@ public class HomeController {
 		model.addAttribute("user", user);
 		return "home";
 	}
-
-//	@RequestMapping(value = "/user/{userId}/items", method = RequestMethod.GET)
-//	public String getItemsByUser(@PathVariable("userId") String userId,
-//			Model model) {
-//
-//		Long userIdLong = Long.getLong(userId);
-//		List<Item> items = this.itemService.getItemsByUser(userIdLong);
-//		model.addAttribute("items", items);
-//
-//		return "home";
-//	}
-	
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
