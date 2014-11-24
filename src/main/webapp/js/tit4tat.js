@@ -1,4 +1,4 @@
-var friends = [];
+var friends = '';
 
 /*----------------AUTENTICACION FACEBOOK--------------------------*/
 
@@ -124,7 +124,7 @@ function testAPI() {
 			 		$.each(response.data,function(index,friend) {
 			 	 		console.log(friend.name + ' has id:' + friend.id); 
 			 	 		names += friend.name + ', ';
-			 	 		friends.push(friend.id);
+			 	 		friends+= friend.id + ',';
 			 		});
 
 			  		console.log('These are some of your friends:' + names);
@@ -142,11 +142,19 @@ function testAPI() {
 function share(){
     var share = {
         method: 'stream.share',
-        u: 'http://t4t-tacs.appspot.com/'
+        u: 'http://t4t-tacs.appspot.com/',
+        description: 'Dialogs provide a simple, consistent interface for applications to interface with users.',
+        caption: 'Reference Documentation',
+        name: 'Facebook Dialogs'
     };
+    
+    
     FB.ui(share, function(response) {
   	  console.log("Proceso terminado");
     });
+    
+    
+
 }
 
 function sendNotification(userIds){
@@ -279,7 +287,8 @@ function AgregarItem(){
 		    data : jsonRequest,		    
 		    success : function(response) {  
 		    	alert(response);
-		    	document.location.href="/items";  		    	
+		    	$('#_MyItemCreate').modal('toggle');
+		    	shareItemCreate(short_description, description, $('span.faceUser').text());
 		   	 },
 		    error : function(e,h,j) {  
 		     alert('Error:' + j);   
@@ -290,7 +299,27 @@ function AgregarItem(){
 
 }
 
-/*-----------------------------------------------------------------------*/
+function shareItemCreate(short_description, description, nameUser){
+	var text = nameUser + " acaba de crear un item!"
+	
+    FB.ui(
+            {
+              method: 'feed',
+              name: text,
+              link: 'http://t4t-tacs.appspot.com/',
+              caption: 'Tit4Tat - Intercambia items con tus amigos!',
+              description: 'Ingresa a nuestra app y conoce un nuevo concepto en intercambio de items online!'
+            },
+            function(response) {
+              if (response && response.post_id) {
+            	  console.log('Post was published.');
+              } else {
+            	  console.log('Post was not published.');
+              }
+            }
+          );
+}
+
 
 /*-------------------MOSTRAR ITEMS DE MIS AMIGOS-------------------------*/
 function showAmigos(){
@@ -308,7 +337,7 @@ function showAmigos(){
 		    url : "/friends/items",   
 		    async: false,
 		     data : { 
-		    	 idFriends: JSON.stringify(friends)
+		    	 idFriends: friends
 		     	}, 
 		    success : function(response) {  	    	
 		    
@@ -401,7 +430,6 @@ function createSolicitud(link, item_id, owner_id){
 		    	
 		    	/*Enviamos solicitud facebook*/
 		    	sendNotification(owner_id);
-		    	alert("Se ha enviado una solicitud a tu amigo!Seguramente pronto te constestara!!");
 		   	 },
 		    error : function(e,h,j) {  
 		     alert('Error: ' + j);   
@@ -419,7 +447,9 @@ function sendNotification(userIds){
         message: "Tit4Tat! - Social App: Te han enviado una solicitud de trueque!",
         to: ids,
         new_style_message: true
-    }, function (response) {debugger;});
+    }, function (response) {
+    	alert("Se ha enviado una solicitud a tu amigo!Seguramente pronto te constestara!!");
+    });
 }
 
 /*-------------------Mis items-------------------------*/
