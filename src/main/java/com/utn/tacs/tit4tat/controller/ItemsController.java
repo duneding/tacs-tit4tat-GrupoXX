@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.appengine.api.datastore.Blob;
 import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.ItemMeli;
@@ -160,52 +158,6 @@ public class ItemsController {
 		model.addObject("category", session.getAttribute("category").toString());
 		model.addObject("image", session.getAttribute("image").toString());
 		// model.addObject("category", session.getAttribute("category"));
-		return model;
-	}
-
-	@Consumes(value = "application/json")
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	// public ModelAndView createGet(String new_item) {
-	public ModelAndView createFormItem(@RequestBody String new_item,
-			HttpSession session) {
-
-		Item item = new Item();
-		ModelAndView model = new ModelAndView("items/create");
-		try {
-
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonRequest = (JSONObject) jsonParser.parse(new_item);
-			long id = Long.valueOf(jsonRequest.get("id").toString());
-			String category = jsonRequest.get("category").toString();
-			String description = jsonRequest.get("description").toString();
-			String permalink = jsonRequest.get("permalink").toString();
-			// Blob image = Utils.getImageAsBlob(
-			// jsonRequest.get("image").toString());
-			Blob image = new Blob(jsonRequest.get("image").toString()
-					.getBytes());
-			String imageStr = jsonRequest.get("image").toString();
-			String[] categoria = { category };
-			item = new Item();
-			item.setId(id);
-			item.setDescription(description);
-			item.setImage(image);
-			item.setPermalink(permalink);
-			item.setCategory(categoria);
-
-			Usuario user1 = new Usuario("Martin Dagostino");
-			user1.setId(1l);
-			this.usuarioService.saveUsuario(user1);
-			item.setOwner(user1);
-
-			session.setAttribute("item", item);
-			session.setAttribute("category", category);
-			session.setAttribute("image", imageStr);
-			model.addObject("item", item);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		return model;
 	}
 
