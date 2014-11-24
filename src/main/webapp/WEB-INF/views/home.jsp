@@ -171,7 +171,7 @@ function showAmigos(){
 		    url : "/friends/items",   
 		    async: false,
 		     data : { 
-		    	 idFriends: friends
+		    	 idFriends: JSON.stringify(friends)
 		     	}, 
 		    success : function(response) {  	    	
 		    
