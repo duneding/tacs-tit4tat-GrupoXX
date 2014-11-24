@@ -12,7 +12,7 @@
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 					<li id="friends/items"><a onclick="showAmigos();">Amigos</a></li>
-					<li id="items"><a href="../../items">Items</a></li>
+					<li id="items"><a onclick="showMyItems();">Items</a></li>
 					<li id="notifications"><a href="../../notifications">Solicitudes<span class="badge">3</span></a></li>
 			</ul>
 			<!-- <form action="http://facebook.com" class="navbar-form navbar-right" role="form">
