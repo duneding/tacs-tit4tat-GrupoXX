@@ -482,4 +482,91 @@ function deleteItem(link){
  	});
 	
 }
+/*-------------------Notificacioness-------------------------*/
+function showMyNotifications(){
+	 $('#solicitudesBody').empty();
+  	 $('#solicitudesBody').append("<table class='table table-striped table-hover' id='tbsolicitudes'>" +
+  			 "<thead>" + 
+  			 "<th>Id</th>"+ 
+  			  "<th>Item Solicitado</th>" +  
+  			  "<th>Dueño (Solicitado)</th>" +
+  			  "<th>Item Ofrecido</th>" +
+  			  "<th>Dueño (Ofrecido)</th>" +
+  			  "</thead><tbody></tbody></table>"); 
+  	 
+	 var currentUser = $("#currentUser").val();
+	$.ajax({  
+	    type : "GET",   
+	    url: "/notifications",
+	    data: {userId : currentUser},
+	    success : function(response) {  	    	
+	    	 for (var i = 0; i < response.length; i ++){
+  				 $('#tbsolicitudes tbody').after( "<tr>" +
+				"<td>" + response[i].id + "</td>" + 
+				"<td >" + response[i].requestItem.description +"</td>" +
+				"<td >" + response[i].requestItem.owner.name +"</td>" +
+				"<td >" + response[i].offeredItem.description +"</td>" +
+				"<td >" + response[i].offeredItem.owner.name +"</td>" +
+				 "<td>" +
+				 "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
+				 "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>" +
+				 		"</td>" +
+					"</tr>");   				 
+  	 }
+	    	
+	    	$("#_NotificactionPopUp").modal('show');
+	   	 },
+	    error : function(e,h,j) {  
+	     alert('Error: ' + j);   
+	    }
+});
+}
+
+function acceptNotification(link) {
+	var id = $(link).closest("tr").children(":first").text(); 
+	var state = "acepted";
+
+	$.ajax({  
+	     type : "PUT",   
+	     url : "notifications",
+	     cache: false,
+	     async: true,   
+	     //async: false,
+	     data : { 
+		     		id: id ,
+		     		state: state
+		     	},  
+	 	success : function(response) {
+	 		$(link).closest("tr").remove();  
+	      	alert(response);   
+     	},  
+	    error : function(jqXHR, textStatus, errorThrown) {
+	    	alert(jqXHR.responseText);
+	    }  
+    });
+}
+
+function refuseNotification(link) {
+	var id = $(link).closest("tr").children(":first").text(); 
+	var state = "refused";
+
+	$.ajax({  
+	     type : "PUT",   
+	     url : "notifications",
+	     cache: false,
+	     async: true,    
+	     //async: false,
+	     data : { 
+		     		id: id ,
+		     		state: state
+		     	},  
+	 	success : function(response) {
+	 		$(link).closest("tr").remove();  
+	      	alert(response);   
+     	},  
+	    error : function(jqXHR, textStatus, errorThrown) {
+	    	alert(jqXHR.responseText);;   
+	    }  
+    });
+}
 
