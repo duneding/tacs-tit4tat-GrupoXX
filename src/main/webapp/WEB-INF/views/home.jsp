@@ -92,7 +92,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Items de tus amigos!</h4>
       </div>
-      <div class="modal-body" id="myItemCreate">
+      <div class="modal-body" id="friendsItemBody">
 
 <table class="table table-striped table-hover" id="itemFriendGrid">
 <thead>
@@ -118,15 +118,15 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Mis items!</h4>
       </div>
-      <div class="modal-body" >
+      <div class="modal-body" id="myItemsBody">
 
-<table class="table table-striped table-hover" id="myItemsGrid">
+<!-- <table class="table table-striped table-hover" id="myItemsGrid">
 <thead>
 <th>Nombre</th>
 <th>Descripcion</th>
 <th>Acciones</th>
 </thead>
-</tbody>
+</tbody> -->
 </table>	
       </div>
     </div>

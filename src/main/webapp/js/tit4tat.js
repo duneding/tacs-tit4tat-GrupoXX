@@ -294,7 +294,15 @@ function AgregarItem(){
 
 /*-------------------MOSTRAR ITEMS DE MIS AMIGOS-------------------------*/
 function showAmigos(){
-	$('#itemFriendGrid tbody').empty();
+	$('#friendsItemBody').empty();
+  	 $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
+   			 "<thead>" + 
+   			 "<th>Nombre</th>"+ 
+   			  "<th>Descripcion</th>" +  
+   			  "<th>Propietario</th>" + 
+   			  "<th>Acciones</th>" +
+   			  "</thead><tbody></tbody></table>"); 
+	
 		$.ajax({  
 		    type : "GET",   
 		    url : "/friends/items",   
@@ -416,14 +424,21 @@ function sendNotification(userIds){
 
 /*-------------------Mis items-------------------------*/
 function showMyItems(){
-	$('#myItemsGrid tbody').empty();
+	 //$("#myItemsGrid tbody").find("tr").remove();
+	 $('#myItemsBody').empty();
+   	 $('#myItemsBody').append("<table class='table table-striped table-hover' id='myItemsGrid'>" +
+   			 "<thead>" + 
+   			 "<th>Nombre</th>"+ 
+   			  "<th>Descripcion</th>" +  
+   			  "<th>Acciones</th>" +
+   			  "</thead><tbody></tbody></table>"); 
+   	 
 	 var currentUser = $("#currentUser").val();
 	$.ajax({  
 	    type : "GET",   
 	    url: "/items",
 	    data: {userId : currentUser},
 	    success : function(response) {  	    	
-	    
 	    	 for (var i = 0; i < response.length; i ++){
    				 $('#myItemsGrid tbody').after( "<tr>" +
 				"<td style = 'display:none'>" + response[i].id + "</td>" + 
