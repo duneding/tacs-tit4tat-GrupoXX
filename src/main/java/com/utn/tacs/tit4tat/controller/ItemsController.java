@@ -266,6 +266,8 @@ public class ItemsController {
 		Usuario owner = this.usuarioService.getUsuariosById(Long.parseLong(ownerId));
 		
 		newItem.setOwner(owner);
+		
+		this.itemService.saveItem(newItem);
 
 		return "Item creado correctamente. Id = " + id;
 	}
