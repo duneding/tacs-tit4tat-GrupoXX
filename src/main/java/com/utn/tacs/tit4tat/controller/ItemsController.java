@@ -57,23 +57,19 @@ public class ItemsController {
 		return "El Item fue eliminado correctamente";
 	}
 
-	/**
-	 * Obtiene los items de un usuario
-	 * 
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@RequestParam(value = "userId") String userId) {
-		ModelAndView model = new ModelAndView("items/list");
-		List<Item> items = new ArrayList<Item>();
-
-		for (Item item : this.itemService.getItemsByUser(Long.parseLong(userId))) {
-			items.add(item);
-		}
-
-		model.addObject("items", items);
-		return model;
-	}
+	
+//	@RequestMapping(method = RequestMethod.GET)
+//	public ModelAndView get(@RequestParam(value = "userId") String userId) {
+//		ModelAndView model = new ModelAndView("items/list");
+//		List<Item> items = new ArrayList<Item>();
+//
+//		for (Item item : this.itemService.getItemsByUser(Long.parseLong(userId))) {
+//			items.add(item);
+//		}
+//
+//		model.addObject("items", items);
+//		return model;
+//	}
 
 	/*
 	 * @SuppressWarnings("unchecked")
@@ -272,6 +268,24 @@ public class ItemsController {
 		return "Item creado correctamente. Id = " + id;
 	}
 	
+	/**
+	 * Obtiene los items de un usuario
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody
+	List<Item> listItems(@RequestParam(value = "userId") String userId) {
+		List<Item> items = new ArrayList<Item>();
+
+		//TODO traer solo mis items
+		for (Item item : this.itemService.getItems()) {
+			items.add(item);
+		}
+
+		return items;
+	}
+	
 //	@SuppressWarnings("unchecked")
 //	@Consumes(value = "application/json")
 //	@RequestMapping(method = RequestMethod.POST)
@@ -342,17 +356,4 @@ public class ItemsController {
 	// public String SaveItem(ModelMap model) {
 	// return "item";
 	// }
-
-	@RequestMapping(value = "/listItems", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Item> listItems() {
-		List<Item> items = new ArrayList<Item>();
-
-		for (Item item : this.itemService.getItems()) {
-			items.add(item);
-		}
-
-		return items;
-	}
-
 }
