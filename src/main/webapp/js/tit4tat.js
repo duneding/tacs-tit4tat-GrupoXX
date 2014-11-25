@@ -1,4 +1,4 @@
-var friends = [];
+var friends = '';
 
 /*----------------AUTENTICACION FACEBOOK--------------------------*/
 
@@ -124,7 +124,7 @@ function testAPI() {
 			 		$.each(response.data,function(index,friend) {
 			 	 		console.log(friend.name + ' has id:' + friend.id); 
 			 	 		names += friend.name + ', ';
-			 	 		friends.push(friend.id);
+			 	 		friends+= friend.id + ',';
 			 		});
 
 			  		console.log('These are some of your friends:' + names);
@@ -142,11 +142,19 @@ function testAPI() {
 function share(){
     var share = {
         method: 'stream.share',
-        u: 'http://t4t-tacs.appspot.com/'
+        u: 'http://t4t-tacs.appspot.com/',
+        description: 'Dialogs provide a simple, consistent interface for applications to interface with users.',
+        caption: 'Reference Documentation',
+        name: 'Facebook Dialogs'
     };
+    
+    
     FB.ui(share, function(response) {
   	  console.log("Proceso terminado");
     });
+    
+    
+
 }
 
 function sendNotification(userIds){
@@ -279,7 +287,8 @@ function AgregarItem(){
 		    data : jsonRequest,		    
 		    success : function(response) {  
 		    	alert(response);
-		    	document.location.href="/items";  		    	
+		    	$('#_MyItemCreate').modal('toggle');
+		    	shareItemCreate(short_description, description, $('span.faceUser').text());
 		   	 },
 		    error : function(e,h,j) {  
 		     alert('Error:' + j);   
@@ -290,47 +299,68 @@ function AgregarItem(){
 
 }
 
-/*-----------------------------------------------------------------------*/
+function shareItemCreate(short_description, description, nameUser){
+	var text = nameUser + " acaba de crear un item!"
+	
+    FB.ui(
+            {
+              method: 'feed',
+              name: text,
+              link: 'http://t4t-tacs.appspot.com/',
+              caption: 'Tit4Tat - Intercambia items con tus amigos!',
+              description: 'Ingresa a nuestra app y conoce un nuevo concepto en intercambio de items online!'
+            },
+            function(response) {
+              if (response && response.post_id) {
+            	  console.log('Post was published.');
+              } else {
+            	  console.log('Post was not published.');
+              }
+            }
+          );
+}
+
 
 /*-------------------MOSTRAR ITEMS DE MIS AMIGOS-------------------------*/
 function showAmigos(){
-	$('#friendsItemBody').empty();
-  	 $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
-   			 "<thead>" + 
-   			 "<th>Nombre</th>"+ 
-   			  "<th>Descripcion</th>" +  
-   			  "<th>Propietario</th>" + 
-   			  "<th>Acciones</th>" +
-   			  "</thead><tbody></tbody></table>"); 
-	
-		$.ajax({  
-		    type : "GET",   
-		    url : "/friends/items",   
-		    async: false,
-		     data : { 
-		    	 idFriends: JSON.stringify(friends)
-		     	}, 
-		    success : function(response) {  	    	
-		    
-		    	 for (var i = 0; i < response.length; i ++){
-	   				 $('#itemFriendGrid tbody').after( "<tr>" +
-					"<td style = 'display:none'>" + response[i].id + "</td>" + 
-					"<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
-					"<td >" + response[i].shortDescription +"</td>" +
-					"<td >" + response[i].description +"</td>" +
-					"<td >" + response[i].owner.name +"</td>" + 
-					 "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
-						"</tr>");   				 
-	   	 }
-		    	
-		    	$("#_FriendPopUp").modal('show');
-		   	 },
-		    error : function(e,h,j) {  
-		     alert('Error: ' + j);   
-		    }
-	});
-		
-	
+  $('#friendsItemBody').empty();
+     $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
+         "<thead>" + 
+         "<th>Nombre</th>"+ 
+          "<th>Descripcion</th>" +  
+          "<th>Propietario</th>" + 
+          "<th>Acciones</th>" +
+          "</thead><tbody></tbody></table>"); 
+
+     
+    $.ajax({  
+        type : "GET",   
+        url : "/friends/items",   
+        dataType: 'json',
+        data : {"idFriends":friends}, 
+        contentType: 'application/json',
+        mimeType: 'application/json',
+        success : function(response) {          
+        
+           for (var i = 0; i < response.length; i ++){
+             $('#itemFriendGrid tbody').after( "<tr>" +
+          "<td style = 'display:none'>" + response[i].id + "</td>" + 
+          "<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
+          "<td >" + response[i].shortDescription +"</td>" +
+          "<td >" + response[i].description +"</td>" +
+          "<td >" + response[i].owner.name +"</td>" + 
+           "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
+            "</tr>");            
+       }
+          
+          $("#_FriendPopUp").modal('show');
+         },
+        error : function(e,h,j) {  
+         alert('Error: ' + j);   
+        }
+  });
+    
+  
 }
 
 /*-------------------CREAR TRUEQUES-------------------------*/
@@ -401,7 +431,6 @@ function createSolicitud(link, item_id, owner_id){
 		    	
 		    	/*Enviamos solicitud facebook*/
 		    	sendNotification(owner_id);
-		    	alert("Se ha enviado una solicitud a tu amigo!Seguramente pronto te constestara!!");
 		   	 },
 		    error : function(e,h,j) {  
 		     alert('Error: ' + j);   
@@ -419,7 +448,9 @@ function sendNotification(userIds){
         message: "Tit4Tat! - Social App: Te han enviado una solicitud de trueque!",
         to: ids,
         new_style_message: true
-    }, function (response) {debugger;});
+    }, function (response) {
+    	alert("Se ha enviado una solicitud a tu amigo!Seguramente pronto te constestara!!");
+    });
 }
 
 /*-------------------Mis items-------------------------*/
@@ -525,7 +556,7 @@ function showMyNotifications(){
 function acceptNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
 	var state = "acepted";
-
+	var oldOwner = $(link).closest("tr").children(":first").text(); 
 	$.ajax({  
 	     type : "PUT",   
 	     url : "notifications",
@@ -539,6 +570,9 @@ function acceptNotification(link) {
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
+	      	shareAcceptNotification();
+	      	sendNotificationToOwner();
+	      	
      	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);
@@ -570,3 +604,20 @@ function refuseNotification(link) {
     });
 }
 
+
+function shareAcceptNotification(){
+	var text = "Tit4Tat! - Social App!"  + $('span.faceUser').text() + " acaba de realizar un trueque!"
+	
+	//TODO : Se debe capturar el id de la persona dueña de la solicitud
+	//"10203938494275881"
+  	var idOldOwner = [];
+    FB.ui({method: 'apprequests',
+    	title:"Avisale a tu amigo que has aceptado el intercambio!",
+        message: text,
+        to: idOldOwner,
+        new_style_message: true
+    }, function (response) {
+    	console.log(response);
+    	alert("Se ha notificado a tu amigo que has aceptado el trueque!");
+    });
+}

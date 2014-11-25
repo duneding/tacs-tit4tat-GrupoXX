@@ -3,7 +3,6 @@ package com.utn.tacs.tit4tat.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
@@ -55,37 +54,6 @@ public class ItemsController {
 		return "El Item fue eliminado correctamente";
 	}
 
-	
-//	@RequestMapping(method = RequestMethod.GET)
-//	public ModelAndView get(@RequestParam(value = "userId") String userId) {
-//		ModelAndView model = new ModelAndView("items/list");
-//		List<Item> items = new ArrayList<Item>();
-//
-//		for (Item item : this.itemService.getItemsByUser(Long.parseLong(userId))) {
-//			items.add(item);
-//		}
-//
-//		model.addObject("items", items);
-//		return model;
-//	}
-
-	/*
-	 * @SuppressWarnings("unchecked")
-	 * 
-	 * @Produces(value ="application/json")
-	 * 
-	 * @RequestMapping(method = RequestMethod.GET) public @ResponseBody
-	 * ModelAndView getJson() { ModelAndView model = new
-	 * ModelAndView("items/list"); JSONObject jsonResponse = new JSONObject();
-	 * /SONArray jsItems = new JSONArray(); jsItems.add(item1.getId());
-	 * jsItems.add(item1.getDescription()); jsItems.add(item1.getCategory());
-	 * jsItems.add(item1.getPermalink()); jsonResponse.put("items",jsItems);
-	 * jsonResponse.put("items",getItems()); model.addObject("response",
-	 * jsonResponse);
-	 * 
-	 * return model; }
-	 */
-
 	/**
 	 * Busca en ML todos los items "name"
 	 * 
@@ -115,51 +83,28 @@ public class ItemsController {
 		return items;
 	}
 
-	/**
-	 * Recibe el Id de ML, llena un modelo Item y lo devuelve cargado para el
-	 * formulario de crear item
-	 * 
-	 * @param idItemMeli
-	 * @param model
-	 * @return
-	 */
-	/*
-	 * @Consumes(value ="application/json")
-	 * 
-	 * @RequestMapping(value = "/create", method = RequestMethod.POST) public
-	 * ModelAndView createPost(@RequestBody String jsonRequest) { //public
-	 * ModelAndView createFormItem(String jsonRequest) { Item item = new Item();
-	 * try { String[] categoria = {"electronic"}; item = new Item();
-	 * item.setId(1L); item.setDescription("IPod 32GB"); item.setPermalink(new
-	 * URL("http://mercadolibre.com.ar/item/ml12312"));
-	 * item.setCategory(categoria); } catch (MalformedURLException e) {
-	 * e.printStackTrace(); } ModelAndView model = new
-	 * ModelAndView("items/create/"+jsonRequest); model.addObject("item", item);
-	 * return model; }
-	 */
-
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView getCreate(HttpSession session) {
-
-		ModelAndView model = new ModelAndView("items/create");
-		/*
-		 * Item item = new Item();
-		 * item.setId(Long.valueOf(session.getAttribute("id").toString()));
-		 * item.setDescription(session.getAttribute("description").toString());
-		 * item
-		 * .setShortDescription(session.getAttribute("shortDescription").toString
-		 * ()); item.setCategory((String[])session.getAttribute("category"));
-		 * item.setImage((Blob)session.getAttribute("image"));
-		 * item.setPermalink(session.getAttribute("permalink").toString());;
-		 * item.setOwner((Usuario) session.getAttribute("user").toString());
-		 */
-
-		model.addObject("item", session.getAttribute("item"));
-		model.addObject("category", session.getAttribute("category").toString());
-		model.addObject("image", session.getAttribute("image").toString());
-		// model.addObject("category", session.getAttribute("category"));
-		return model;
-	}
+//	@RequestMapping(value = "/create", method = RequestMethod.GET)
+//	public ModelAndView getCreate(HttpSession session) {
+//
+//		ModelAndView model = new ModelAndView("items/create");
+//		/*
+//		 * Item item = new Item();
+//		 * item.setId(Long.valueOf(session.getAttribute("id").toString()));
+//		 * item.setDescription(session.getAttribute("description").toString());
+//		 * item
+//		 * .setShortDescription(session.getAttribute("shortDescription").toString
+//		 * ()); item.setCategory((String[])session.getAttribute("category"));
+//		 * item.setImage((Blob)session.getAttribute("image"));
+//		 * item.setPermalink(session.getAttribute("permalink").toString());;
+//		 * item.setOwner((Usuario) session.getAttribute("user").toString());
+//		 */
+//
+//		model.addObject("item", session.getAttribute("item"));
+//		model.addObject("category", session.getAttribute("category").toString());
+//		model.addObject("image", session.getAttribute("image").toString());
+//		// model.addObject("category", session.getAttribute("category"));
+//		return model;
+//	}
 
 	@SuppressWarnings("unchecked")
 	@Consumes(value = "application/json")

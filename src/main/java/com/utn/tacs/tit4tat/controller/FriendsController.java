@@ -43,7 +43,8 @@ public class FriendsController {
 	public @ResponseBody
 	List<Item> getItemsFriends(@RequestParam(value = "idFriends") String idFriends) {
 		List<Item> items = new ArrayList<Item>();
-		String[] friends = { idFriends };
+//		String[] friends = { idFriends.toString() };
+		String[] friends = idFriends.split(",");
 
 		for (String friendId : friends) {
 			Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(friendId));
@@ -54,15 +55,4 @@ public class FriendsController {
 
 		return items;
 	}
-	
-	
-//	@RequestMapping(value = "/ItemsJson/{idFriends}", method = RequestMethod.GET)
-//	public @ResponseBody
-//	List<Item>  getItemsJsonFriends(@PathVariable("idFriends") String idFriends) {
-//
-//		List<Item> items = this.itemService.getItems();
-//		
-//		
-//		return items;
-//	}
 }
