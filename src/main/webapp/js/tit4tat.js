@@ -218,7 +218,7 @@ function searchItem(){
    				 $('#gridSearch tbody').after( "<tr>" +
 				"<td style = 'display:none' id='id'>" + response[i].id + "</td>" + 
 				"<td style = 'display:none' id='image" + i + "'>" + response[i].image.bytes + "</td>" +
-				"<td>" + "<img src= '" + src "'></td>" +
+				"<td>" + "<img src= '" + src + "'></td>" +
 				"<td style = 'display:none' id='permalink'>" + response[i].permalink + "</td>" +
 				"<td id='category'>" + response[i].category[0] +"</td>" +
 				"<td id='description'>" + response[i].description + "</td>" + 
@@ -349,7 +349,7 @@ function showAmigos(){
              $('#itemFriendGrid tbody').after( "<tr>" +
           "<td style = 'display:none'>" + response[i].id + "</td>" + 
           "<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
-          "<td>" + "<img src= '" + src "'></td>" +
+          "<td>" + "<img src= '" + src +"'></td>" +
           "<td >" + response[i].shortDescription +"</td>" +
           "<td >" + response[i].description +"</td>" +
           "<td >" + response[i].owner.name +"</td>" + 
