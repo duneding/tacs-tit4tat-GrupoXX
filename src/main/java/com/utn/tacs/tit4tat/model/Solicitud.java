@@ -13,10 +13,10 @@ public class Solicitud implements Identifiable {
 	private Long id;
 	private String detail;
 	
-	private Ref<Usuario> offeredUser;	
+	@Index private Ref<Usuario> offeredUser;	
 	private Ref<Item> offeredItem;
 	
-	private Ref<Usuario> requestUser;
+	@Index private Ref<Usuario> requestUser;
 	private Ref<Item> requestItem;
 
 	@Index

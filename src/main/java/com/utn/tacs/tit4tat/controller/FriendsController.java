@@ -47,7 +47,9 @@ public class FriendsController {
 		String[] friends = idFriends.split(",");
 
 		for (String friendId : friends) {
-			Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(friendId));
+			Usuario usuario = null;
+			if (friendId != null && !friendId.isEmpty())
+				usuario = this.usuarioService.getUsuariosById(Long.parseLong(friendId));
 			
 			if (usuario != null)
 				items.addAll(this.itemService.getItemsByUser(usuario));

@@ -86,10 +86,10 @@ public class NotificationsController {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
 			Long owner_id = Long
-					.valueOf(jsonRequest.get("owner_id").toString());
-			Long item_id = Long.parseLong((jsonRequest.get("item_id").toString()));
-			Long user_id = Long.parseLong((jsonRequest.get("user_id").toString()));
-			Long user_item_id = Long.parseLong((jsonRequest.get("user_item_id").toString()));
+					.parseLong(jsonRequest.get("owner_id").toString());
+			Long item_id = Long.parseLong(jsonRequest.get("item_id").toString());
+			Long user_id = Long.parseLong(jsonRequest.get("user_id").toString());
+			Long user_item_id = Long.parseLong(jsonRequest.get("user_item_id").toString());
 
 			Item offeredItem = this.itemService.getItemsById(user_item_id);
 			Item requestedItem = this.itemService.getItemsById(item_id);
@@ -110,7 +110,7 @@ public class NotificationsController {
 			this.solicitudService.saveSolicitud(sol);
 
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			throw new RuntimeException(e);
 		}
 
 		return "Solicitud de trueque creado correctamente";
