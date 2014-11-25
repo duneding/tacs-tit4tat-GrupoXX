@@ -63,11 +63,11 @@ public class ItemsController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get() {
+	public ModelAndView get(@RequestParam(value = "userId") String userId) {
 		ModelAndView model = new ModelAndView("items/list");
 		List<Item> items = new ArrayList<Item>();
 
-		for (Item item : this.itemService.getItems()) {
+		for (Item item : this.itemService.getItemsByUser(Long.parseLong(userId))) {
 			items.add(item);
 		}
 
