@@ -10,6 +10,8 @@
 <h1 id="fb-welcome"></h1>
 
 <script type="text/javascript">
+var friends = [];
+
 $(document).ready(function(){
     $('.alert .close').on('click', function(e) {
    	    $(this).parent().hide();
@@ -132,9 +134,7 @@ function AgregarItem(){
 	var owner =  $("#currentUser").val();
 	var description = $('#descriptionNewItem').val();
 	var short_description = $('#short_description').val();
-	
 
-	
 	var jsonRequest = {
             id: id,
             short_description: short_description,
@@ -144,15 +144,16 @@ function AgregarItem(){
             owner: owner,
             category: category
     }
-			
+
 	$.ajax({  
 		    type : "POST",   
-		    url : "items",   
+		    url : "/items",   
 		    async: false,
 		    //dataType: 'json',
 		    //contentType: "application/json",
-		    data : JSON.stringify(jsonRequest),		    
+		    data : jsonRequest,		    
 		    success : function(response) {  
+		    	alert(response);
 		    	document.location.href="/items";  		    	
 		   	 },
 		    error : function(e,h,j) {  
@@ -161,10 +162,130 @@ function AgregarItem(){
 		    	
 	});
 
-} 
-</script>
 
-<script type="text/javascript">
+}
+
+function showAmigos(){
+		$.ajax({  
+		    type : "GET",   
+		    url : "/friends/items",   
+		    async: false,
+		     data : { 
+		    	 idFriends: friends
+		     	}, 
+		    success : function(response) {  	    	
+		    
+		    	 for (var i = 0; i < response.length; i ++){
+	   				 $('#itemFriendGrid tbody').after( "<tr>" +
+					"<td style = 'display:none'>" + response[i].id + "</td>" + 
+					"<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
+					"<td >" + response[i].shortDescription +"</td>" +
+					"<td >" + response[i].description +"</td>" +
+					"<td >" + response[i].owner.name +"</td>" + 
+					 "<td><a onclick='createTrueque(this)' title='Envia una solicitud de trueque a tu amigo!!'><span class='glyphicon glyphicon-cloud-upload'></span></a></td>" +
+						"</tr>");   				 
+	   	 }
+		    	
+		    	$("#_FriendPopUp").modal('show');
+		   	 },
+		    error : function(e,h,j) {  
+		     alert('Error: ' + j);   
+		    }
+	});
+		
+	
+}
+
+function createTrueque(link){
+	  var  item_id = $(link).closest("tr").find("td:eq(0)").text();  
+	  var  owner_id = $(link).closest("tr").find("td:eq(1)").text();  
+	  var jsonRequest = { "owner" : owner_id, "item" : item_id};
+	  var currentUser = $("#currentUser").val();
+	   $.ajax({
+	      type: "GET",
+	      url: "/items",
+	      data: {userId : currentUser},
+	      async: true,
+	      success :function(response) {    	  
+
+	    	  $('#myItems').empty();
+	    	   	 $('#myItems').append("<table class='table table-striped table-hover' id='myItemsTable'>" +
+	    	   			 "<thead>" + 
+	    	   			 "<th>Nombre</th>"+ 
+	    	   			  "<th>Descripcion</th>" +    	   			
+	    	   			  "</thead><tbody></tbody></table></div>"); 
+	    	   	 
+	    	   	 for (var i = 0; i < response.length; i ++){
+	    	   				 $('#myItems tbody').after( "<tr>" +
+	    	   		  		"<td style = 'display:none' id='user_item_id'>" + response[i].id + "</td>" + 
+	    	   		  		"<td style = 'display:none' id='user_id'>" + response[i].owner.id + "</td>" +
+	    	  				"<td>" + response[i].shortDescription + "</td>" +
+	    	  				"<td>" + response[i].description + "</td>" +
+	    	  				"<td><a onclick='createSolicitud(this, " + item_id + "," + owner_id + ")' title='Envie la solicitud de trueque a su amigo!'><span class='glyphicon glyphicon-ok-sign'></span></a></td>" +
+	    	  				 "</tr>");  
+	    	  
+	    	  
+	    	  $("#_MyItemList").modal("show");
+	     } 
+	  }});
+	  
+	}
+function createSolicitud(link, item_id, owner_id){
+
+	var user_item_id = $(link).closest("tr").find("td:eq(0)").text();
+	var user_id = $(link).closest("tr").find("td:eq(1)").text();
+	var jsonRequest = { 
+			"owner_id" : owner_id, 
+			"item_id" : item_id,
+			"user_id" : user_id,
+			"user_item_id" : user_item_id 
+	};
+	
+	
+	var r = confirm("Esta a punto de enviar una solicitud de trueque, desea continuar?");
+    if (!(r == true)) {
+    	return;
+    }
+	
+    /*-----AJAX POST A NOTIFICATION POST!--------*/
+debugger;
+    	$.ajax({  
+		    type : "POST",   
+		    url : "/notifications",   
+		    async: false,
+		    //dataType: 'json',
+		    //contentType: "application/json",
+		    //contentType: "application/json",
+		    data : JSON.stringify(jsonRequest),
+		    success : function(response) {  
+		    	//alert(response);  
+		    	//document.location.href="items/create";
+		    	//document.location.href=response;
+		    	//document.write(response);
+		    	
+		    	/*Enviamos solicitud facebook*/
+		    	sendNotification(owner_id);
+		    	alert("Se ha enviado una solicitud a tu amigo!Seguramente pronto te constestara!!");
+		   	 },
+		    error : function(e,h,j) {  
+		     alert('Error: ' + j);   
+		    }
+	})
+    
+	$("#_MyItemList").modal("toggle");
+}
+
+function sendNotification(userIds){
+	debugger;
+	var ids = [];
+	ids.push(userIds);
+    FB.ui({method: 'apprequests',
+        message: "Tit4Tat! - Social App: Te han enviado una solicitud de trueque!",
+        to: ids,
+        new_style_message: true
+    }, function (response) {debugger;});
+}
+
 //Cargamos SDK en forma asincronica
 (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -282,11 +403,14 @@ function AgregarItem(){
 			if (response && !response.error) {
 		  		if(response.data) { 
 	        		var names = '';
+	        		
 		 			console.log('Response without error');
 			 		$.each(response.data,function(index,friend) {
 			 	 		console.log(friend.name + ' has id:' + friend.id); 
 			 	 		names += friend.name + ', ';
+			 	 		friends.push(friend.id);
 			 		});
+
 			  		console.log('These are some of your friends:' + names);
 			  		if( document.getElementById('status') != null)
 			  			document.getElementById('status').innerHTML += ' These are some of your friends: ' + names; 
@@ -368,6 +492,8 @@ function AgregarItem(){
 		
 		<div id="gridItems">		
 		</div>
+		
+		<!------------------------------- PopUp Create Item -------------------------------- -->
 		<div class="modal fade" id="_MyItemCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -395,6 +521,59 @@ function AgregarItem(){
     </div>
   </div>
 </div>
+<!-- ----------------------------------------------------------------------------------- -->
+<!-------------------------------Solapaaa Friends-------------------------------- -->
+		<div class="modal fade" id="_FriendPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Items de tus amigos!</h4>
+      </div>
+      <div class="modal-body" id="myItemCreate">
+
+<table class="table table-striped table-hover" id="itemFriendGrid">
+<thead>
+<th>Nombre</th>
+<th>Descripcion</th>
+<th>Propietario</th>
+<th>Acciones</th>
+</thead>
+<tbody>
+      </tbody>
+</table> 
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="_MyItemList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Seleccione un Item para Intercambiar!</h4>
+      </div>
+      <!--<div class="modal-body">
+                    <table class="table table-striped table-hover" id="myItemsTable">
+<thead>
+<th></th>
+<th>Nombre</th>
+<th>Descripcion</th>
+</thead>
+<tbody>
+      </tbody>
+</table>
+      </div>-->
+      <div class="modal-body" id="myItems"></div>
+    </div>
+  </div>
+</div>
+<!-- ----------------------------------------------------------------------------------- -->
+
+
 		</div>
 			
 	</div>
