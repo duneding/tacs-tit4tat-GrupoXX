@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,25 +39,30 @@ public class NotificationsController {
 	List<Solicitud> notifications = new ArrayList<Solicitud>();
 
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody List<Solicitud> getNotifications(@RequestParam(value = "userId") String userId) {
+	public @ResponseBody
+	List<Solicitud> getNotifications(
+			@RequestParam(value = "userId") String userId) {
 
-		//TODO Falta filtrar por usuario 
-		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
-//		List<Solicitud> notifications = this.solicitudService.getSolicitudesByUsuario(userId);
+		// TODO Falta filtrar por usuario
+		List<Solicitud> notifications = this.solicitudService
+				.getSolicitudesPendientes();
+		// List<Solicitud> notifications =
+		// this.solicitudService.getSolicitudesByUsuario(userId);
 
 		return notifications;
 	}
-	
-//	@RequestMapping(method = RequestMethod.GET)
-//	public ModelAndView getNotifications() {
-//		ModelAndView model = new ModelAndView("notifications");
-//		
-//		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
-//		
-//		model.addObject("notifications", notifications);
-//		
-//		return model;
-//	}
+
+	// @RequestMapping(method = RequestMethod.GET)
+	// public ModelAndView getNotifications() {
+	// ModelAndView model = new ModelAndView("notifications");
+	//
+	// List<Solicitud> notifications =
+	// this.solicitudService.getSolicitudesPendientes();
+	//
+	// model.addObject("notifications", notifications);
+	//
+	// return model;
+	// }
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
@@ -74,92 +78,32 @@ public class NotificationsController {
 		return "Notificacion ID: " + id + " resuelta.";
 	}
 
-	@SuppressWarnings("unchecked")
-	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView create(@RequestBody String request) {
+	public @ResponseBody
+	String create(@RequestParam(value = "owner_id") String owner_id,
+			@RequestParam(value = "item_id") String item_id,
+			@RequestParam(value = "user_id") String user_id,
+			@RequestParam(value = "user_item_id") String user_item_id) {
 
-		ModelAndView model = new ModelAndView("notifications");
-		JSONObject obj = new JSONObject();
-		obj.put("create", "OK");
-		model.addObject("response", obj);
+		Item offeredItem = this.itemService.getItemsById(Long.parseLong(user_item_id));
+		Item requestedItem = this.itemService.getItemsById(Long.parseLong(item_id));
 
-		try {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
-			Long owner_id = Long
-					.valueOf(jsonRequest.get("owner_id").toString());
-			Long item_id = Long.valueOf(jsonRequest.get("item_id").toString());
-			Long user_id = Long.valueOf(jsonRequest.get("user_id").toString());
-			Long user_item_id = Long.valueOf(jsonRequest.get("user_item_id")
-					.toString());
+		Usuario offeredUser = this.usuarioService.getUsuariosById(Long.parseLong(user_id));
+		Usuario requestedUser = this.usuarioService.getUsuariosById(Long.parseLong(owner_id));
 
-			Item offeredItem = this.itemService.getItemsById(user_item_id);
-			Item requestedItem = this.itemService.getItemsById(item_id);
+		Solicitud sol = new Solicitud();
+		sol.setOfferedItem(offeredItem);
+		sol.setOfferedUser(offeredUser);
 
-			Usuario offeredUser = this.usuarioService.getUsuariosById(user_id);
-			Usuario requestedUser = this.usuarioService
-					.getUsuariosById(owner_id);
+		sol.setRequestItem(requestedItem);
+		sol.setRequestUser(requestedUser);
 
-			Solicitud sol = new Solicitud();
-			sol.setOfferedItem(offeredItem);
-			sol.setOfferedUser(offeredUser);
+		sol.setState(Solicitud.PENDING);
 
-			sol.setRequestItem(requestedItem);
-			sol.setRequestUser(requestedUser);
+		this.solicitudService.saveSolicitud(sol);
 
-			sol.setState(Solicitud.PENDING);
-
-			this.solicitudService.saveSolicitud(sol);
-
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-
-		return model;
+		return "Solicitud de trueque creado correctamente.";
 	}
-
-	// @RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
-	// public ModelAndView createGet() {
-	// Item item = new Item();
-	// Solicitud solicitud = new Solicitud();
-	// ModelAndView model = new ModelAndView("notifications/create");
-	// try {
-	// solicitud.setId(1L);
-	// solicitud.setState(1);
-	//
-	// // model.addObject("solicitud", solicitud);
-	//
-	// Solicitud notification = new Solicitud();
-	// notification.setId(1L);
-	// notification.setDetail("mydetails");
-	//
-	// Item itemOfrecido = new Item();
-	// itemOfrecido.setId(1L);
-	// itemOfrecido.setDescription("IPod 32GB");
-	// itemOfrecido
-	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
-	// String[] category = { "Electronica" };
-	// itemOfrecido.setCategory(category);
-	// notification.setOfferedItem(itemOfrecido);
-	//
-	// Item itemSolicitado = new Item();
-	// itemSolicitado.setId(1L);
-	// itemSolicitado.setDescription("Bike");
-	// itemSolicitado
-	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
-	// String[] category2 = { "NO SE" };
-	// item.setCategory(category2);
-	//
-	// notification.setRequestItem(itemSolicitado);
-	// model.addObject("notification", notification);
-	//
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return model;
-	// }
 
 	@SuppressWarnings("unchecked")
 	@Consumes(value = "application/json")
