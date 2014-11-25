@@ -24,6 +24,6 @@ public class SolicitudDaoImpl extends GenericDaoImpl<Solicitud, Long> implements
 	
 	@Override
 	public List<Solicitud> getSolicitudByUser(Usuario usuario) {
-		return null;
+		return (List<Solicitud>) ofy().load().type(Solicitud.class).filter("requestUser", usuario).list();
 	}
 }

@@ -3,6 +3,7 @@ package com.utn.tacs.tit4tat.service;
 import java.util.List;
 
 import com.utn.tacs.tit4tat.model.Solicitud;
+import com.utn.tacs.tit4tat.model.Usuario;
 
 public interface SolicitudService {
 
@@ -19,4 +20,6 @@ public interface SolicitudService {
 	public void updateSolicitud(Solicitud solicitud);
 
 	public void changeStateOfSolicitud(String permuteId, String state);
+
+	public List<Solicitud> getSolicitudesByUser(Usuario usuario);
 }

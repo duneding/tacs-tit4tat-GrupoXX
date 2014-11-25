@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.utn.tacs.tit4tat.dao.SolicitudDao;
 import com.utn.tacs.tit4tat.model.Solicitud;
+import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 
 @Service(value="solicitudService")
@@ -61,5 +62,10 @@ public class SolicitudServiceImpl implements SolicitudService {
 	@Override
 	public List<Solicitud> getSolicitudesPendientes() {
 		return this.solicitudDao.getSolicitudesPendientes();
+	}
+
+	@Override
+	public List<Solicitud> getSolicitudesByUser(Usuario usuario) {
+		return this.solicitudDao.getSolicitudByUser(usuario);
 	}
 }

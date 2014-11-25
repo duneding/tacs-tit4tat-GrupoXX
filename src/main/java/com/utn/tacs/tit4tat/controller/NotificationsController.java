@@ -42,23 +42,11 @@ public class NotificationsController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody List<Solicitud> getNotifications(@RequestParam(value = "userId") String userId) {
 
-		//TODO Falta filtrar por usuario 
-		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
-//		List<Solicitud> notifications = this.solicitudService.getSolicitudesByUsuario(userId);
+		Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(userId));
+		List<Solicitud> notifications = this.solicitudService.getSolicitudesByUser(usuario);
 
 		return notifications;
 	}
-	
-//	@RequestMapping(method = RequestMethod.GET)
-//	public ModelAndView getNotifications() {
-//		ModelAndView model = new ModelAndView("notifications");
-//		
-//		List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientes();
-//		
-//		model.addObject("notifications", notifications);
-//		
-//		return model;
-//	}
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
@@ -77,10 +65,6 @@ public class NotificationsController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody String create(@RequestBody String request) {
-
-//		JSONObject obj = new JSONObject();
-//		obj.put("create", "OK");
-//		model.addObject("response", obj);
 
 		try {
 			JSONParser jsonParser = new JSONParser();
@@ -114,62 +98,5 @@ public class NotificationsController {
 		}
 
 		return "Solicitud de trueque creado correctamente";
-	}
-
-	// @RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
-	// public ModelAndView createGet() {
-	// Item item = new Item();
-	// Solicitud solicitud = new Solicitud();
-	// ModelAndView model = new ModelAndView("notifications/create");
-	// try {
-	// solicitud.setId(1L);
-	// solicitud.setState(1);
-	//
-	// // model.addObject("solicitud", solicitud);
-	//
-	// Solicitud notification = new Solicitud();
-	// notification.setId(1L);
-	// notification.setDetail("mydetails");
-	//
-	// Item itemOfrecido = new Item();
-	// itemOfrecido.setId(1L);
-	// itemOfrecido.setDescription("IPod 32GB");
-	// itemOfrecido
-	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
-	// String[] category = { "Electronica" };
-	// itemOfrecido.setCategory(category);
-	// notification.setOfferedItem(itemOfrecido);
-	//
-	// Item itemSolicitado = new Item();
-	// itemSolicitado.setId(1L);
-	// itemSolicitado.setDescription("Bike");
-	// itemSolicitado
-	// .setPermalink("http://mercadolibre.com.ar/item/ml12312");
-	// String[] category2 = { "NO SE" };
-	// item.setCategory(category2);
-	//
-	// notification.setRequestItem(itemSolicitado);
-	// model.addObject("notification", notification);
-	//
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return model;
-	// }
-
-	@SuppressWarnings("unchecked")
-	@Consumes(value = "application/json")
-	@RequestMapping(value = "/{notId}/share", method = RequestMethod.POST)
-	public @ResponseBody
-	ModelAndView share(@PathVariable("notId") String itemId,
-			@RequestBody String jsonRequest) {
-
-		ModelAndView model = new ModelAndView("notifications/share");
-		JSONObject obj = new JSONObject();
-		obj.put("share", "OK");
-		model.addObject("response", obj);
-
-		return model;
 	}
 }
