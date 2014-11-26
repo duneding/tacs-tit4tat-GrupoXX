@@ -323,6 +323,7 @@ function showAmigos(){
   $('#friendsItemBody').empty();
      $('#friendsItemBody').append("<table class='table table-striped table-hover' id='itemFriendGrid'>" +
          "<thead>" + 
+         "<th>Imagen</th>"+
          "<th>Nombre</th>"+ 
           "<th>Descripcion</th>" +  
           "<th>Propietario</th>" + 
@@ -404,8 +405,8 @@ function createSolicitud(link, item_id, owner_id){
 
 	var user_item_id = $(link).closest("tr").find("td:eq(0)").text();
 	var user_id = $(link).closest("tr").find("td:eq(1)").text();
-	if(user_id = "10203938494275880")
-		user_id = "10203938494275881";
+/*	if(user_id = "10203938494275880")
+		user_id = "10203938494275881";*/
 	var jsonRequest = { 
 			"owner_id" : owner_id, 
 			"item_id" : item_id,
@@ -536,6 +537,10 @@ function showMyNotifications(){
 	    data: {userId : currentUserId},
 	    success : function(response) {  	    	
 	    	 for (var i = 0; i < response.length; i ++){
+	    		 
+	    		 if(response[i].offeredItem == null || response[i].requestItem == null)
+	    			 continue;
+	    		 
   				 $('#tbsolicitudes tbody').after( "<tr>" +
 				"<td>" + response[i].id + "</td>" + 
 				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
@@ -618,8 +623,8 @@ function shareAcceptNotification(oldOwner){
 	
 	//TODO : Se debe capturar el id de la persona dueña de la solicitud
 	//"10203938494275881"
-	if(oldOwner == "10203938494275880")
-		oldOwner= "10203938494275881";
+/*	if(oldOwner == "10203938494275880")
+		oldOwner= "10203938494275881";*/
 	
   	var owners = [];
   	owners.push(oldOwner);
@@ -637,9 +642,9 @@ function shareAcceptNotification(oldOwner){
 function sendNotification(newOwner){
   	//var ids = ["10152511164937672","10204394795602905", "900069580003957", "10203938494275881"];
     var ids = [];
-    if(newOwner == "10203938494275880")
+/*    if(newOwner == "10203938494275880")
     	newOwner= "10203938494275881";
-    
+    */
     ids.push(newOwner);
 	
 	FB.ui({method: 'apprequests',
