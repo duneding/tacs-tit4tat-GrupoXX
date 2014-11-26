@@ -157,14 +157,6 @@ function share(){
 
 }
 
-function sendNotification(userIds){
-	  	var ids = ["10152511164937672","10204394795602905", "900069580003957", "10203938494275881"];
-	    FB.ui({method: 'apprequests',
-	        message: "Tit4Tat! - Social App",
-	        to: ids,
-	        new_style_message: true
-	    }, function (response) {debugger;});
-}
 
 /*---------------HOME-----------------------*/
 $(document).ready(function(){
@@ -412,6 +404,8 @@ function createSolicitud(link, item_id, owner_id){
 
 	var user_item_id = $(link).closest("tr").find("td:eq(0)").text();
 	var user_id = $(link).closest("tr").find("td:eq(1)").text();
+	if(user_id = "10203938494275880")
+		user_id = "10203938494275881";
 	var jsonRequest = { 
 			"owner_id" : owner_id, 
 			"item_id" : item_id,
@@ -535,15 +529,17 @@ function showMyNotifications(){
   			  "<th>Dueño (Ofrecido)</th>" +
   			  "</thead><tbody></tbody></table>"); 
   	 
-	 var currentUser = $("#currentUser").val();
+	 var currentUserId = $("#currentUser").val();
 	$.ajax({  
 	    type : "GET",   
 	    url: "/notifications",
-	    data: {userId : currentUser},
+	    data: {userId : currentUserId},
 	    success : function(response) {  	    	
 	    	 for (var i = 0; i < response.length; i ++){
   				 $('#tbsolicitudes tbody').after( "<tr>" +
 				"<td>" + response[i].id + "</td>" + 
+				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
+				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
 				"<td >" + response[i].requestItem.description +"</td>" +
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td >" + response[i].offeredItem.description +"</td>" +
@@ -566,7 +562,8 @@ function showMyNotifications(){
 function acceptNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
 	var state = "acepted";
-	var oldOwner = $(link).closest("tr").children(":first").text(); 
+	var newOwner = $(link).closest("tr").find("td:eq(1)").text(); 
+	var oldOwner = $(link).closest("tr").find("td:eq(2)").text(); 
 	$.ajax({  
 	     type : "PUT",   
 	     url : "notifications",
@@ -580,8 +577,8 @@ function acceptNotification(link) {
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
-	      	shareAcceptNotification();
-	      	sendNotificationToOwner();
+	      	shareAcceptNotification(oldOwner);
+	      	sendNotificationToOwner(newOwner);
 	      	
      	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
@@ -615,19 +612,40 @@ function refuseNotification(link) {
 }
 
 
-function shareAcceptNotification(){
-	var text = "Tit4Tat! - Social App!"  + $('span.faceUser').text() + " acaba de realizar un trueque!"
+function shareAcceptNotification(oldOwner){
+	// + $('span.faceUser').text() +
+	var text = "Tit4Tat!  Social App! acaba de realizar un trueque!"
 	
 	//TODO : Se debe capturar el id de la persona dueña de la solicitud
 	//"10203938494275881"
-  	var idOldOwner = [];
+	if(oldOwner == "10203938494275880")
+		oldOwner= "10203938494275881";
+	
+  	var owners = [];
+  	owners.push(oldOwner);
     FB.ui({method: 'apprequests',
-    	title:"Avisale a tu amigo que has aceptado el intercambio!",
+    	title:"Enviar notificacion",
         message: text,
-        to: idOldOwner,
+        to: oldOwner,
         new_style_message: true
     }, function (response) {
     	console.log(response);
     	alert("Se ha notificado a tu amigo que has aceptado el trueque!");
     });
 }
+
+function sendNotification(newOwner){
+  	//var ids = ["10152511164937672","10204394795602905", "900069580003957", "10203938494275881"];
+    var ids = [];
+    if(newOwner == "10203938494275880")
+    	newOwner= "10203938494275881";
+    
+    ids.push(newOwner);
+	
+	FB.ui({method: 'apprequests',
+        message: "Tit4Tat Social App",
+        to: ids,
+        new_style_message: true
+    }, function (response) {debugger;});
+}
+
