@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.utn.tacs.tit4tat.dao.ItemDao;
 import com.utn.tacs.tit4tat.dao.SolicitudDao;
 import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.model.Usuario;
@@ -17,6 +18,9 @@ public class SolicitudServiceImpl implements SolicitudService {
 
 	@Autowired
 	private SolicitudDao solicitudDao;
+	
+	@Autowired
+	private ItemDao itemDao;
 
 	@Override
 	public Solicitud saveSolicitud(Solicitud solicitud) {
@@ -49,14 +53,17 @@ public class SolicitudServiceImpl implements SolicitudService {
 		Solicitud solicitud = this.getSolicitudesById(Long.parseLong(permuteId));
 		
 		if (state.equalsIgnoreCase("acepted")) {
-			solicitud.setAcepted();
+			this.itemDao.delete(solicitud.getRequestItem());
+			this.itemDao.delete(solicitud.getOfferedItem());
+			
+			this.solicitudDao.delete(solicitud);
+//			solicitud.setAcepted();
 		} else if(state.equalsIgnoreCase("refused")) {
 			solicitud.setRefused();
+			this.updateSolicitud(solicitud);
 		} else {
 			throw new RuntimeException("Invalid state"); 
 		}
-		
-		this.updateSolicitud(solicitud);
 	}
 	
 	@Override

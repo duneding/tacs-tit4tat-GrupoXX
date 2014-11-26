@@ -65,10 +65,15 @@ public class NotificationsController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody String create(@RequestBody String request) {
-
+		JSONParser jsonParser;
+		JSONObject jsonRequest;
+		
 		try {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
+			jsonParser = new JSONParser();
+			jsonRequest = (JSONObject) jsonParser.parse(request);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 			Long owner_id = Long
 					.parseLong(jsonRequest.get("owner_id").toString());
 			Long item_id = Long.parseLong(jsonRequest.get("item_id").toString());
@@ -93,9 +98,6 @@ public class NotificationsController {
 
 			this.solicitudService.saveSolicitud(sol);
 
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 
 		return "Solicitud de trueque creado correctamente";
 	}
