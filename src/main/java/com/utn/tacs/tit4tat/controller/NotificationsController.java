@@ -62,7 +62,6 @@ public class NotificationsController {
 		return "Notificacion ID: " + id + " resuelta.";
 	}
 
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody String create(@RequestBody String request) {
 		JSONParser jsonParser;

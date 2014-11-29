@@ -53,17 +53,28 @@ public class SolicitudServiceImpl implements SolicitudService {
 		Solicitud solicitud = this.getSolicitudesById(Long.parseLong(permuteId));
 		
 		if (state.equalsIgnoreCase("acepted")) {
-			this.itemDao.delete(solicitud.getRequestItem());
-			this.itemDao.delete(solicitud.getOfferedItem());
-			
-			this.solicitudDao.delete(solicitud);
-//			solicitud.setAcepted();
+			this.updateSolicitudAceptada(solicitud);			
 		} else if(state.equalsIgnoreCase("refused")) {
-			solicitud.setRefused();
-			this.updateSolicitud(solicitud);
+			this.updateSolicitudRechazada(solicitud);
 		} else {
 			throw new RuntimeException("Invalid state"); 
 		}
+	}
+
+	private void updateSolicitudRechazada(Solicitud solicitud) {
+		solicitud.setRefused();
+		this.updateSolicitud(solicitud);
+	}
+
+	private void updateSolicitudAceptada(Solicitud solicitud) {
+		Usuario requestUser = solicitud.getRequestItem().getOwner();
+		Usuario offeredUser = solicitud.getOfferedItem().getOwner();
+		
+		solicitud.getRequestItem().setOwner(offeredUser);
+		solicitud.getOfferedItem().setOwner(requestUser);
+		
+		solicitud.setAcepted();
+		this.updateSolicitud(solicitud);
 	}
 	
 	@Override
