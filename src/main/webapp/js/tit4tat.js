@@ -46,16 +46,28 @@ function statusChangeCallback(response) {
 	    if (response.status === 'connected') {
 	    	if( document.getElementById('fbLoginButton') != null)
 	    		document.getElementById('fbLoginButton').style.display = 'none';
+	    	$('#toolbarPrincipal').show();
+	    	$("#searchBar").show();
+	    	$('#go').prop( "disabled", false );
+	    	$('#alertLogin').hide();
 	      testAPI();
 	    } else if (response.status === 'not_authorized') {
 	      // The person is logged into Facebook, but not your app.
 	    	if( document.getElementById('status') != null)
 	    		document.getElementById('status').innerHTML = 'Please log into this app.';
+	    	$('#toolbarPrincipal').hide();
+	    	$("#searchBar").hide();
+	    	$('#go').prop( "disabled", true );
+	    	$('#alertLogin').show();
 	    } else {
 	      // The person is not logged into Facebook, so we're not sure if
 	      // they are logged into this app or not.
 	    	if( document.getElementById('status') != null)
 	    		document.getElementById('status').innerHTML = 'Please log into Facebook.';
+	    	$('#toolbarPrincipal').hide();
+	    	$("#searchBar").hide();
+	    	$('#go').prop( "disabled", true );
+	    	$('#alertLogin').show();
 	    }
 	  }
 
@@ -163,23 +175,12 @@ $(document).ready(function(){
     $('.alert .close').on('click', function(e) {
    	    $(this).parent().hide();
    	});
-    $('#aa').on('click', function(e,t) {
-   	 var id ="id";
-   	 $.ajax({  
-   	     type : "GET",   
-   	     url : "create",   	
-   	     async: false,
-   	     data : "id=" + id ,  
-   	     success : function(response) {  
-   	      alert(response); 
-   	      window.location = "/create";
-   	     },  
-   	     error : function(e) {  
-   	      alert('Error:');   
-   	     }  
-   	    });
-	});
     
+    $( "#itemForSearch" ).keypress(function(e) {
+    	if(e.keyCode == 32){
+    		return false;
+    	}
+    	});
 });
 
 function searchItem(){
@@ -193,7 +194,7 @@ function searchItem(){
  	$("#divloader").show();	
 	$.ajax({  
     type : "GET",   
-    url : "items/getItemsSearch",   
+    url : "/items/getItemsSearch",   
     async: true,
     data : "name=" + name,
     success : function(response) {  
@@ -500,7 +501,7 @@ function deleteItem(link){
 
 	$.ajax({  
 	     type : "DELETE",   
-	     url : "items/" + id,  
+	     url : "/items/" + id,  
 	     contentType: 'application/json; charset=utf-8',
 	     dataType: 'json',
 	     cache: false,

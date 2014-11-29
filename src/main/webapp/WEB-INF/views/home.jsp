@@ -15,6 +15,11 @@
  			<p>Aplicacion social que te permite crear e intercambiar items
 				con tus amigos</p> 
 		</div>
+		<div class="alert alert-warning" id="alertLogin" style="display:none" align="center">
+        <a href="#" class="close">&times;</a>
+        <strong>Alerta!</strong>Se ha detectado que no esta logeado en facebook por favor 
+        ingrese para poder disfrutar todas funcionalidades de nuestra app!
+    </div>
 		<div class="alert alert-danger" id="descriptionEmpty" style="display:none" align="center">
         <a href="#" class="close">&times;</a>
         <strong>Error!</strong>Debe ingresar una descripcion
@@ -22,7 +27,7 @@
 			<div class="row row-offcanvas row-offcanvas-left">
 
 		<!-- main area -->
-		<div class="col-xs-12 col-sm-9">
+		<div class="col-xs-12 col-sm-9" id="searchBar" style="display:none">
 			<!-- Page Heading -->
 		<div class="row" align="center">
 			<div class="col-lg-6 col-lg-offset-4">
