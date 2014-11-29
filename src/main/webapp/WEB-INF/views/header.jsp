@@ -13,7 +13,7 @@
 			<ul class="nav navbar-nav">
 					<li id="friends/items"><a onclick="showAmigos();">Amigos</a></li>
 					<li id="items"><a onclick="showMyItems();">Items</a></li>
-					<li id="notifications"><a onclick="showMyNotifications();">Solicitudes<span class="badge">3</span></a></li>
+					<li id="notifications"><a onclick="showMyNotifications();">Solicitudes<span class="badge" id="solicitudesCount" style="display:none"></span></a></li>
 			</ul>
 			<!-- <form action="http://facebook.com" class="navbar-form navbar-right" role="form">
 				<button type="submit" class="btn btn-sm btn-primary">Entrar con Facebook</button>				
