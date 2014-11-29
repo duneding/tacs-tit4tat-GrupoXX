@@ -108,7 +108,28 @@ function testAPI() {
   }
  });
     
-    
+    /*Verificamos las solicitudes pendientes del usuario*/
+    $.ajax({  
+    	  type : "GET",   
+    	  url : "/notifications/count", 
+    	  async: true,
+    	  data : { 
+    	  	userId: userId 
+    		},
+    	  success : function(response) {
+    		  console.log('Cantidad de solicitudes Pendientes: ' + response);
+    		  if(response > 0){
+    			  $('#solicitudesCount').text(response);
+    			  $('#solicitudesCount').css("background-color","orange");
+    			  $('#solicitudesCount').show();
+    		  }
+    		},
+    	  error : function(e,h,j) {  
+    	  	console.log('Error al obtener la cantidad de solicitudes pendientes del user');
+    	  }
+    	 });
+    	    
+
     /*-----------------------------*/
     $('.faceUser').text(response.name);
     $('#userPhoto').attr('src','http://graph.facebook.com/' + response.id + '/picture?type=large');
@@ -588,6 +609,10 @@ function acceptNotification(link) {
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
+			var countSolicitud = $('#solicitudesCount').text();
+			if(countSolicitud != "0"){
+				$('#solicitudesCount').text(parseInt(countSolicitud) - parseInt("1"))
+			}
 	      	shareAcceptNotification(oldOwner);
 	      	sendNotificationToOwner(newOwner);
 	      	
@@ -615,6 +640,10 @@ function refuseNotification(link) {
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
+	      	var countSolicitud = $('#solicitudesCount').text();
+			if(countSolicitud != "0"){
+				$('#solicitudesCount').text(parseInt(countSolicitud) - parseInt("1"))
+			}
      	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);;   
