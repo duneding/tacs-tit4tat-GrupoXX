@@ -542,6 +542,14 @@ function showMyNotifications(){
 	    		 if(response[i].offeredItem == null || response[i].requestItem == null)
 	    			 continue;
 	    		 
+	    		 var options = "";
+	    		 if(response[i].state == "0" ){
+	    			 	options = "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
+				 				  "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>";
+	    		 }else{
+	    			 options = "<a data-toggle='tooltip' data-placement='top' title='Ya han finalizado las operaciones sobre esta solicitud' ><span class='glyphicon glyphicon-star-empty'></span></a>";
+	    		 }
+	    		 
   				 $('#tbsolicitudes tbody').after( "<tr>" +
 				"<td>" + response[i].id + "</td>" + 
 				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
@@ -550,10 +558,7 @@ function showMyNotifications(){
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td >" + response[i].offeredItem.description +"</td>" +
 				"<td >" + response[i].offeredItem.owner.name +"</td>" +
-				 "<td>" +
-				 "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
-				 "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>" +
-				 		"</td>" +
+				 "<td>" + options + "</td>" +
 					"</tr>");   				 
   	 }
 	    	
