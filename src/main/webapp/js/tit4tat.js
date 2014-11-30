@@ -598,7 +598,7 @@ function acceptNotification(link) {
 	var oldOwner = $(link).closest("tr").find("td:eq(2)").text(); 
 	$.ajax({  
 	     type : "PUT",   
-	     url : "notifications",
+	     url : "/notifications",
 	     cache: false,
 	     async: true,   
 	     //async: false,
@@ -629,7 +629,7 @@ function refuseNotification(link) {
 
 	$.ajax({  
 	     type : "PUT",   
-	     url : "notifications",
+	     url : "/notifications",
 	     cache: false,
 	     async: true,    
 	     //async: false,
