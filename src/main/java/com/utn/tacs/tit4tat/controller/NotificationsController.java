@@ -3,19 +3,15 @@ package com.utn.tacs.tit4tat.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Solicitud;
@@ -23,6 +19,7 @@ import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
+
 
 @Controller
 @RequestMapping("/notifications")
@@ -38,7 +35,7 @@ public class NotificationsController {
 	private ItemService itemService;
 
 	List<Solicitud> notifications = new ArrayList<Solicitud>();
-
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody List<Solicitud> getNotifications(@RequestParam(value = "userId") String userId) {
 
@@ -99,5 +96,20 @@ public class NotificationsController {
 
 
 		return "Solicitud de trueque creado correctamente";
+	}
+	
+	@RequestMapping(value="/count", method = RequestMethod.GET)
+	public @ResponseBody int getNotificationsCount(@RequestParam(value = "userId") String userId) {
+		int size = 0;
+		
+		try {
+			Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(userId));
+			List<Solicitud> notifications = this.solicitudService.getSolicitudesPendientesByUser(usuario);
+			size = notifications.size();
+		} catch (Exception e) {
+			size = 0;
+		}
+		
+		return size;
 	}
 }

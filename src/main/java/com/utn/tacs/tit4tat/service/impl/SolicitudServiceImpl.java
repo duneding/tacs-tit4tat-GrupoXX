@@ -1,5 +1,6 @@
 package com.utn.tacs.tit4tat.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,8 +79,19 @@ public class SolicitudServiceImpl implements SolicitudService {
 	}
 	
 	@Override
-	public List<Solicitud> getSolicitudesPendientes() {
-		return this.solicitudDao.getSolicitudesPendientes();
+	public List<Solicitud> getSolicitudesPendientesByUser(Usuario usuario) {
+		List<Solicitud> solicitudes = this.solicitudDao.getSolicitudByUser(usuario);
+		List<Solicitud> solicitudesPendientes = new ArrayList<Solicitud>();
+		
+		
+		if (solicitudes != null) {
+			for (Solicitud solicitud : solicitudes) {
+				if (solicitud.isPending())
+					solicitudesPendientes.add(solicitud);
+			}
+		}
+		
+		return solicitudesPendientes;
 	}
 
 	@Override

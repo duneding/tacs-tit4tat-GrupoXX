@@ -100,6 +100,10 @@ public class Solicitud implements Identifiable {
 		this.setState(Solicitud.REFUSED);
 	}
 	
+	public boolean isPending() {
+		return this.state == Solicitud.PENDING;
+	}
+	
 	public Solicitud() {
 	}
 

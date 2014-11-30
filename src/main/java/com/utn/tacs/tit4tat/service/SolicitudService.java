@@ -13,7 +13,7 @@ public interface SolicitudService {
 
 	public List<Solicitud> getSolicitudes();
 	
-	public List<Solicitud> getSolicitudesPendientes();
+	public List<Solicitud> getSolicitudesPendientesByUser(Usuario usuario);
 
 	public Solicitud getSolicitudesById(Long id);
 
