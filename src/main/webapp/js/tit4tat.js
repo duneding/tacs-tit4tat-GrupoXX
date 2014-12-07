@@ -423,52 +423,70 @@ function createTrueque(link){
 	  }});
 	  
 	}
+var jsonRequestToSolicitud =  {};
 function createSolicitud(link, item_id, owner_id){
-
 	var user_item_id = $(link).closest("tr").find("td:eq(0)").text();
 	var user_id = $(link).closest("tr").find("td:eq(1)").text();
-/*	if(user_id = "10203938494275880")
+	/*if(user_id = "10203938494275880")
 		user_id = "10203938494275881";*/
-	var jsonRequest = { 
+	jsonRequestToSolicitud = { 
 			"owner_id" : owner_id, 
 			"item_id" : item_id,
 			"user_id" : user_id,
-			"user_item_id" : user_item_id 
+			"user_item_id" : user_item_id ,
+			"message" : ""
 	};
 	
 	
 	var r = confirm("Esta a punto de enviar una solicitud de trueque, desea continuar?");
     if (!(r == true)) {
+    	jsonRequestToSolicitud =  {};
     	return;
     }
-	
-    	$.ajax({  
-		    type : "POST",   
-		    url : "/notifications",   
-		    async: false,
-		    //dataType: 'json',
-		    //contentType: "application/json",
-		    //contentType: "application/json",
-		    data : JSON.stringify(jsonRequest),
-		    success : function(response) {  
-		    	//alert(response);  
-		    	//document.location.href="items/create";
-		    	//document.location.href=response;
-		    	//document.write(response);
-		    	
-		    	/*Enviamos solicitud facebook*/
-		    	sendNotification(owner_id);
-		   	 },
-		    error : function(e,h,j) {  
-		     alert('Error: ' + j);   
-		    }
-	})
-    
-	$("#_MyItemList").modal("toggle");
+    	$("#_MyItemList").modal("toggle");
+    	$("#_solicitudCreate").modal("show");
+    	
 }
 
+function SetMensjBeforeNotification(){
+	var msj = $('#msjSolicitud').val();
+	var owner_id = jsonRequestToSolicitud.owner_id;
+	if(msj.length == 0){
+		alert("Por favor ingrese un mensaje para su amigo!");
+		return false;
+	}
+	
+	
+	jsonRequestToSolicitud.message = msj;
+	$.ajax({  
+	    type : "POST",   
+	    url : "/notifications",   
+	    async: false,
+	    //dataType: 'json',
+	    //contentType: "application/json",
+	    //contentType: "application/json",
+	    data : JSON.stringify(jsonRequestToSolicitud),
+	    success : function(response) {  
+	    	//alert(response);  
+	    	//document.location.href="items/create";
+	    	//document.location.href=response;
+	    	//document.write(response);
+	    	
+	    	/*Enviamos solicitud facebook*/
+	    	sendNotification(owner_id);
+	   	 },
+	    error : function(e,h,j) {  
+	     alert('Error: ' + j);   
+	    }
+})
+	$('#msjSolicitud').val('');
+	jsonRequestToSolicitud =  {};
+	$("#_solicitudCreate").modal("toggle");
+
+}
+
+
 function sendNotification(userIds){
-	debugger;
 	var ids = [];
 	ids.push(userIds);
     FB.ui({method: 'apprequests',
@@ -547,9 +565,10 @@ function showMyNotifications(){
   			 "<thead>" + 
   			 "<th>Id</th>"+ 
   			  "<th>Item Solicitado</th>" +  
-  			  "<th>Dueño (Solicitado)</th>" +
+  			  "<th>Due\u00f1o (Solicitado)</th>" +
   			  "<th>Item Ofrecido</th>" +
-  			  "<th>Dueño (Ofrecido)</th>" +
+  			  "<th>Due\u00f1o (Ofrecido)</th>" +
+  			  "<th>Mensaje</th>" +
   			  "</thead><tbody></tbody></table>"); 
   	 
 	 var currentUserId = $("#currentUser").val();
@@ -571,6 +590,13 @@ function showMyNotifications(){
 	    			 options = "<a data-toggle='tooltip' data-placement='top' title='Ya han finalizado las operaciones sobre esta solicitud' ><span class='glyphicon glyphicon-star-empty'></span></a>";
 	    		 }
 	    		 
+	    		 var mensaje = "";
+	    		 //if(response[i].mensaje.length == 0){ ESTO VA CUANDO SE RECIBA LOS DATOS DEL CONTROLLER
+	    		 if(mensaje.length == 0){
+	    			 mensaje = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
+	    		 }
+	    		 
+
   				 $('#tbsolicitudes tbody').after( "<tr>" +
 				"<td>" + response[i].id + "</td>" + 
 				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
@@ -579,10 +605,12 @@ function showMyNotifications(){
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td >" + response[i].offeredItem.description +"</td>" +
 				"<td >" + response[i].offeredItem.owner.name +"</td>" +
+				"<td > <a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + mensaje +  "'data-original-title='Mensaje'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
 				 "<td>" + options + "</td>" +
 					"</tr>");   				 
   	 }
 	    	
+	    	$('.mensajePopOver').popover();
 	    	$("#_NotificactionPopUp").modal('show');
 	   	 },
 	    error : function(e,h,j) {  
