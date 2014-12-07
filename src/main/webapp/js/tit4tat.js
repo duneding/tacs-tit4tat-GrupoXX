@@ -287,6 +287,11 @@ function AgregarItem(){
 	var description = $('#descriptionNewItem').val();
 	var short_description = $('#short_description').val();
 
+	if(short_description.length == 0  || description.length == 0 ){
+		alert("Los campos de descripcion son obligatorios por favor completelos")
+		return false;
+	}
+	
 	var jsonRequest = {
             id: id,
             short_description: short_description,
@@ -564,9 +569,11 @@ function showMyNotifications(){
   	 $('#solicitudesBody').append("<table class='table table-striped table-hover' id='tbsolicitudes'>" +
   			 "<thead>" + 
   			 "<th>Id</th>"+ 
-  			  "<th>Item Solicitado</th>" +  
+  			  "<th>Item Solicitado</th>" +
+  			  "<th></th>" +
   			  "<th>Due\u00f1o (Solicitado)</th>" +
   			  "<th>Item Ofrecido</th>" +
+  			  "<th></th>" +
   			  "<th>Due\u00f1o (Ofrecido)</th>" +
   			  "<th>Mensaje</th>" +
   			  "</thead><tbody></tbody></table>"); 
@@ -601,11 +608,13 @@ function showMyNotifications(){
 				"<td>" + response[i].id + "</td>" + 
 				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
 				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
-				"<td >" + response[i].requestItem.description +"</td>" +
+				"<td >" + response[i].requestItem.shortDescription +"</td>" +
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
-				"<td >" + response[i].offeredItem.description +"</td>" +
+				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].offeredItem.description +  "'data-original-title='Descripcion larga-Item Ofrecido'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].offeredItem.owner.name +"</td>" +
-				"<td > <a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + mensaje +  "'data-original-title='Mensaje'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + mensaje +  "'data-original-title='Mensaje'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
 				 "<td>" + options + "</td>" +
 					"</tr>");   				 
   	 }
