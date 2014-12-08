@@ -23,6 +23,8 @@ public class ItemMeli implements Identifiable {
 	
 	private URL permalink;	
 	
+	private String thumbnail;
+	
 	public ItemMeli() {
 	}
 
@@ -66,6 +68,14 @@ public class ItemMeli implements Identifiable {
 
 	public void setPermalink(URL permalink) {
 		this.permalink = permalink;
+	}
+	
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	
 	@Override

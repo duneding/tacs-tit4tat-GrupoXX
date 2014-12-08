@@ -83,6 +83,7 @@
   		<input type="hidden" id="permalinkNewItem"/>
   		<input type="hidden" id="categoryNewItem"/>
   		<input type="hidden" id="currentUser"/>
+  		<input type="hidden" id="thumbnailNewItem"/>
   		<button type="button" onclick="AgregarItem()" class="btn btn-default">Agregar</button>
       </div>
     </div>

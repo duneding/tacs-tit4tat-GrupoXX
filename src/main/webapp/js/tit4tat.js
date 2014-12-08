@@ -229,9 +229,11 @@ function searchItem(){
    	 
    	 for (var i = 0; i < response.length; i ++){
    		 var src = "";
-   		 if(response[i].image != null)
-   			src = 'data:image/png;base64,'+ response[i].image.bytes;
-
+   		 //if(response[i].image != null)
+   			//src = 'data:image/png;base64,'+ response[i].image.bytes;
+   		
+   		 src = response[i].thumbnail;
+   		 
    				 $('#gridSearch tbody').after( "<tr>" +
 				"<td style = 'display:none' id='id'>" + response[i].id + "</td>" + 
 				"<td style = 'display:none' id='image" + i + "'>" + response[i].image.bytes + "</td>" +
@@ -239,6 +241,7 @@ function searchItem(){
 				"<td style = 'display:none' id='permalink'>" + response[i].permalink + "</td>" +
 				"<td id='category'>" + response[i].category[0] +"</td>" +
 				"<td id='description'>" + response[i].description + "</td>" + 
+				"<td style = 'display:none' id='thumbnail'>" + response[i].thumbnail + "</td>" +
 				 //"<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
 				 "<td><a onclick='createItem("+ i + ")'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +
 					"</tr>");   				 
@@ -262,17 +265,19 @@ function createItem(row) {
 	var name = $('#itemForSearch').val();
 	var id = document.getElementById('gridSearch').rows[row].children[0].innerText;
 	var image = document.getElementById('gridSearch').rows[row].children[1].innerText;
-	var permalink = document.getElementById('gridSearch').rows[row].children[2].innerText;
-	var category = document.getElementById('gridSearch').rows[row].children[3].innerText;
-	var description = document.getElementById('gridSearch').rows[row].children[4].innerText;
+	var permalink = document.getElementById('gridSearch').rows[row].children[3].innerText;
+	var category = document.getElementById('gridSearch').rows[row].children[4].innerText;
+	var description = document.getElementById('gridSearch').rows[row].children[5].innerText;
+	var thumbnail = document.getElementById('gridSearch').rows[row].children[6].innerText;
 	
 	$('#nameNewItem').val(name);
 	$('#idNewItem').val(id);
 	$('#imageNewItem').val(image);
-	$('#permalinkNewItem').val(permalink);
+	$('#permalinkNewItem').val(permalink);	
 	$('#categoryNewItem').val(category);
-	$('#descriptionNewItem').val(description);
+	$('#descriptionNewItem').val(description);	
 	$('#short_description').val("");
+	$('#thumbnailNewItem').val(thumbnail);
 	$('#_MyItemCreate').modal('show');
 	 
  }	
@@ -286,7 +291,8 @@ function AgregarItem(){
 	var owner =  $("#currentUser").val();
 	var description = $('#descriptionNewItem').val();
 	var short_description = $('#short_description').val();
-
+	var thumbnail = $('#thumbnailNewItem').val();
+	
 	if(short_description.length == 0  || description.length == 0 ){
 		alert("Los campos de descripcion son obligatorios por favor completelos")
 		return false;
@@ -297,9 +303,10 @@ function AgregarItem(){
             short_description: short_description,
             description: description,
             image: image,
-            permalink: permalink,
+            permalink: permalink,            
             owner: owner,
-            category: category
+            category: category,
+            thumbnail: thumbnail
     }
 
 	$.ajax({  
@@ -602,15 +609,27 @@ function showMyNotifications(){
 	    		 if(mensaje.length == 0){
 	    			 mensaje = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
 	    		 }
-	    		 
+	    		
+	       		 var imageRequested = "";
+	       		 var imageOffered = "";
+	       		 
+	       		 if(response[i].offeredItem.image != null)
+	       			 //imageOffered = 'data:image/png;base64,'+ response[i].offeredItem.image.bytes;
+	       			imageOffered = response[i].offeredItem.thumbnail;
 
-  				 $('#tbsolicitudes tbody').after( "<tr>" +
-				"<td>" + response[i].id + "</td>" + 
+	       		 if(response[i].requestItem.image != null)	 
+	       			 //imageRequested = 'data:image/png;base64,'+ response[i].requestItem.image.bytes;
+	       			imageRequested = response[i].requestItem.thumbnail;
+	    			      
+	    		$('#tbsolicitudes tbody').after( "<tr>" +
+				"<td style = 'display:none'>" + response[i].id + "</td>" +				
 				"<td style='display:none'>" + response[i].requestItem.owner.id +"</td>" +
 				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
+				"<td>" + "<img src= '" + imageRequested + "'></td>" +				
 				"<td >" + response[i].requestItem.shortDescription +"</td>" +
 				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
+				"<td>" + "<img src= '" + imageOffered + "'></td>" +
 				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
 				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].offeredItem.description +  "'data-original-title='Descripcion larga-Item Ofrecido'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].offeredItem.owner.name +"</td>" +

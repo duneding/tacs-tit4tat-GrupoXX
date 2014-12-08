@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.appengine.api.datastore.Blob;
 import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.ItemMeli;
 import com.utn.tacs.tit4tat.model.Usuario;
-import com.utn.tacs.tit4tat.objectify.Utils;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
@@ -145,14 +145,20 @@ public class ItemsController {
 						@RequestParam(value = "image") String image,
 						@RequestParam(value = "permalink") String permalink,
 						@RequestParam(value = "owner") String ownerId,
-						@RequestParam(value = "category") String category) {
+						@RequestParam(value = "category") String category,
+						@RequestParam(value = "thumbnail") String thumbnail) {
 
 		Item newItem = new Item();
 		newItem.setId(Long.parseLong(id));
 		newItem.setShortDescription(shortDescription);
 		newItem.setDescription(description);
-		newItem.setImage(Utils.getImageAsBlob(image));
+		//newItem.setImage(Utils.getImageAsBlob(image));
+		Blob imageToBlob = new Blob(image.getBytes());
+		newItem.setImage(imageToBlob);
+		
 		newItem.setPermalink(permalink);
+		newItem.setThumbnail(thumbnail);
+		
 		String[] arrCategory = {category};
 		newItem.setCategory(arrCategory);
 		

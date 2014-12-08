@@ -395,11 +395,14 @@ public class MercadoLibre {
 				
 				JSONObject element = (JSONObject) it.next();			
 				URL permalink = new URL(element.get("permalink").toString());
+				String thumbnail = element.get("thumbnail").toString();
+				
 				item.setId(normalizeId((String) element.get("id")));
 				item.setDescription((String) element.get("title"));
 				item.setImage(Utils.getImageAsBlob((String) element.get("thumbnail")));				
 				item.setCategory(getCategory((String) element.get("category_id")));
 				item.setPermalink(permalink);
+				item.setThumbnail(thumbnail);
 				
 				items.add(item);
 				

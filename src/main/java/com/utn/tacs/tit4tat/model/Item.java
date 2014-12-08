@@ -26,6 +26,8 @@ public class Item implements Identifiable, Serializable {
 	private Blob image;
 	
 	private String permalink;
+	
+	private String thumbnail;
 
 	@Index
 	private Ref<Usuario> owner;
@@ -108,5 +110,14 @@ public class Item implements Identifiable, Serializable {
 		return builder.toString();
 
 	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+	
 	
 }
