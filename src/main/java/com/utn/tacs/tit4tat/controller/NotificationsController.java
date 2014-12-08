@@ -75,6 +75,7 @@ public class NotificationsController {
 			Long item_id = Long.parseLong(jsonRequest.get("item_id").toString());
 			Long user_id = Long.parseLong(jsonRequest.get("user_id").toString());
 			Long user_item_id = Long.parseLong(jsonRequest.get("user_item_id").toString());
+			String message = jsonRequest.get("message").toString();
 
 			Item offeredItem = this.itemService.getItemsById(user_item_id);
 			Item requestedItem = this.itemService.getItemsById(item_id);
@@ -89,6 +90,7 @@ public class NotificationsController {
 
 			sol.setRequestItem(requestedItem);
 			sol.setRequestUser(requestedUser);
+			sol.setMessage(message);
 
 			sol.setState(Solicitud.PENDING);
 

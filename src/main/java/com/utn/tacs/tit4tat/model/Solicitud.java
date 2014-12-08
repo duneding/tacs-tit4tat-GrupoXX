@@ -22,6 +22,8 @@ public class Solicitud implements Identifiable {
 	@Index
 	private int state;
 	
+	private String message;
+	
 	public Item getOfferedItem() {
 		return offeredItem.get();
 	}
@@ -85,6 +87,14 @@ public class Solicitud implements Identifiable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	@Override
