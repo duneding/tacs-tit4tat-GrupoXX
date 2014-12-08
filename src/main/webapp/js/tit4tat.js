@@ -470,12 +470,10 @@ function SetMensjBeforeNotification(){
 	var msj = $('#msjSolicitud').val();
 	var owner_id = jsonRequestToSolicitud.owner_id;
 	if(msj.length == 0){
-		alert("Por favor ingrese un mensaje para su amigo!");
-		return false;
+		msj = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
 	}
-	
-	
 	jsonRequestToSolicitud.message = msj;
+	
 	$.ajax({  
 	    type : "POST",   
 	    url : "/notifications",   
@@ -614,9 +612,10 @@ function showMyNotifications(){
 	    		 }
 	    		 
 	    		 var mensaje = "";
-	    		 //if(response[i].mensaje.length == 0){ ESTO VA CUANDO SE RECIBA LOS DATOS DEL CONTROLLER
-	    		 if(mensaje.length == 0){
+	    		 if(response[i].message== null){ 
 	    			 mensaje = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
+	    		 }else{
+	    			 mensaje = response[i].message;
 	    		 }
 	    		
 	       		 var imageRequested = "";

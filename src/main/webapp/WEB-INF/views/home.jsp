@@ -184,7 +184,7 @@
         <h4 class="modal-title">Dejale un mensaje a tu amigo!</h4>
       </div>
       <div class="modal-body">
-      	<textarea id="msjSolicitud" class="form-control" rows="10" cols="30" placeholder="Convece a tu amigo para que acepte el trueque..."></textarea>  
+      	<textarea id="msjSolicitud" class="form-control" rows="10" cols="30" placeholder="Convece a tu amigo para que acepte el trueque...">Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items</textarea>  
       </div>
       <div class="modal-footer">
         <button type="button" onclick="SetMensjBeforeNotification()" class="btn btn-primary">Enviar!</button>
