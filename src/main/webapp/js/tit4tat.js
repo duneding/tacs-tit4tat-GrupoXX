@@ -243,7 +243,7 @@ function searchItem(){
 				"<td id='description'>" + response[i].description + "</td>" + 
 				"<td style = 'display:none' id='thumbnail'>" + response[i].thumbnail + "</td>" +
 				 //"<td><a href='items/create/"+ response[i].id + "'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +  
-				 "<td><a onclick='createItem("+ i + ")'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +
+				 "<td><a onclick='createItem(this)'><span class='glyphicon glyphicon-zoom-in'></span></a></td>" +
 					"</tr>");   				 
    	 }
    	 
@@ -260,15 +260,21 @@ function searchItem(){
 
 
 /*-----------------------AGREGAR ITEMS -------------------------------------------*/
-function createItem(row) {
+function createItem(link) {
   	
 	var name = $('#itemForSearch').val();
-	var id = document.getElementById('gridSearch').rows[row].children[0].innerText;
+	/*var id = document.getElementById('gridSearch').rows[row].children[0].innerText;
 	var image = document.getElementById('gridSearch').rows[row].children[1].innerText;
 	var permalink = document.getElementById('gridSearch').rows[row].children[3].innerText;
 	var category = document.getElementById('gridSearch').rows[row].children[4].innerText;
 	var description = document.getElementById('gridSearch').rows[row].children[5].innerText;
-	var thumbnail = document.getElementById('gridSearch').rows[row].children[6].innerText;
+	var thumbnail = document.getElementById('gridSearch').rows[row].children[6].innerText;*/
+	var id = $(link).closest("tr").find("td:eq(0)").text();
+	var image = $(link).closest("tr").find("td:eq(1)").text(); 
+	var permalink = $(link).closest("tr").find("td:eq(3)").text(); 
+	var category = $(link).closest("tr").find("td:eq(4)").text(); 
+	var description = $(link).closest("tr").find("td:eq(5)").text(); 
+	var thumbnail = $(link).closest("tr").find("td:eq(6)").text(); 
 	
 	$('#nameNewItem').val(name);
 	$('#idNewItem').val(id);
@@ -375,14 +381,14 @@ function showAmigos(){
         success : function(response) {          
         
            for (var i = 0; i < response.length; i ++){
-        	   var src = "";
-         		 if(response[i].image != null)
-         			src = 'data:image/png;base64,'+ response[i].image.bytes;
+        	   var imageItem = "";
+        	   if(response[i].thumbnail != null)	 
+        		   imageItem = response[i].thumbnail;
 
              $('#itemFriendGrid tbody').after( "<tr>" +
           "<td style = 'display:none'>" + response[i].id + "</td>" + 
           "<td style = 'display:none'>" + response[i].owner.id + "</td>" + 
-          "<td>" + "<img src= '" + src +"'></td>" +
+          "<td>" + "<img src= '" + imageItem +"'></td>" +
           "<td >" + response[i].shortDescription +"</td>" +
           "<td >" + response[i].description +"</td>" +
           "<td >" + response[i].owner.name +"</td>" + 
@@ -575,14 +581,17 @@ function showMyNotifications(){
 	 $('#solicitudesBody').empty();
   	 $('#solicitudesBody').append("<table class='table table-striped table-hover' id='tbsolicitudes'>" +
   			 "<thead>" + 
-  			 "<th>Id</th>"+ 
+  			// "<th>Id</th>"+ 
   			  "<th>Item Solicitado</th>" +
+  			  "<th></th>" +
   			  "<th></th>" +
   			  "<th>Due\u00f1o (Solicitado)</th>" +
   			  "<th>Item Ofrecido</th>" +
   			  "<th></th>" +
+  			  "<th></th>" +
   			  "<th>Due\u00f1o (Ofrecido)</th>" +
   			  "<th>Mensaje</th>" +
+  			  "<th></th>" +
   			  "</thead><tbody></tbody></table>"); 
   	 
 	 var currentUserId = $("#currentUser").val();
@@ -627,7 +636,7 @@ function showMyNotifications(){
 				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
 				"<td>" + "<img src= '" + imageRequested + "'></td>" +				
 				"<td >" + response[i].requestItem.shortDescription +"</td>" +
-				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='right' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td>" + "<img src= '" + imageOffered + "'></td>" +
 				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
