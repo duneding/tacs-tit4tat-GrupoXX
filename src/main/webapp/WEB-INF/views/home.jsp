@@ -159,7 +159,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Mensajeria!Negociá con tu amigo!</h4>
+        <h4 class="modal-title">Mensajeria!Convence a tu amigo!</h4>
       </div>
       <div class="modal-body" id="_NotificactionMessagePopUpBody">
       	<div class="row">
@@ -167,7 +167,7 @@
        		 	<textarea id="mensajeriaNotification" class="form-control" rows="15"  readonly></textarea>  
         	</div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: 15px;">
       		<div class="col-md-12">
        		 	<input id="newMessageNotification" class="form-control">
         	</div>
@@ -216,7 +216,7 @@
         <h4 class="modal-title">Dejale un mensaje a tu amigo!</h4>
       </div>
       <div class="modal-body">
-      	<textarea id="msjSolicitud" class="form-control" rows="10" cols="30" placeholder="Convece a tu amigo para que acepte el trueque...">Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items</textarea>  
+      	<textarea id="msjSolicitud" class="form-control" rows="10" cols="30" placeholder="Convece a tu amigo para que acepte el trueque..."></textarea>  
       </div>
       <div class="modal-footer">
         <button type="button" onclick="SetMensjBeforeNotification()" class="btn btn-primary">Enviar!</button>

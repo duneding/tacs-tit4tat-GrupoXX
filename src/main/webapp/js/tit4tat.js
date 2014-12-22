@@ -473,7 +473,7 @@ function SetMensjBeforeNotification(){
 	if(msj.length == 0){
 		msj = "Me interesa tu producto!";
 	}
-	msj = "Interesado: " + msj + ""\n";
+	msj = "Interesado: " + msj + "\n";
 	jsonRequestToSolicitud.message = msj;
 	
 	$.ajax({  
@@ -615,7 +615,7 @@ function showMyNotifications(){
 	    		 
 	    		 var mensaje = "";
 	    		 if(response[i].message== null){ 
-	    			 mensaje = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
+	    			 mensaje = "Me interesa tu item!";
 	    		 }else{
 	    			 mensaje = response[i].message;
 	    		 }
