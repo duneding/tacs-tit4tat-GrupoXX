@@ -469,9 +469,11 @@ function createSolicitud(link, item_id, owner_id){
 function SetMensjBeforeNotification(){
 	var msj = $('#msjSolicitud').val();
 	var owner_id = jsonRequestToSolicitud.owner_id;
+	
 	if(msj.length == 0){
-		msj = "Propuesta de trueque de item - Tit4Tacs app - Otra manera de intercambiar items";
+		msj = "Me interesa tu producto!";
 	}
+	msj = "Interesado: " + msj + ""\n";
 	jsonRequestToSolicitud.message = msj;
 	
 	$.ajax({  
@@ -641,12 +643,14 @@ function showMyNotifications(){
 				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
 				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + response[i].offeredItem.description +  "'data-original-title='Descripcion larga-Item Ofrecido'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].offeredItem.owner.name +"</td>" +
-				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + mensaje +  "'data-original-title='Mensaje'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
+				//"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='left' data-trigger='focus' title='' data-content='" + mensaje +  "'data-original-title='Mensaje'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
+				"<td style='display:none'>" + mensaje  +"</td>" +
+				"<td ><a href='#' onclick='showNotificactionMessagePopUp(this)'><i class='glyphicon glyphicon-envelope'></i></a></td>" +
 				 "<td>" + options + "</td>" +
 					"</tr>");   				 
   	 }
 	    	
-	    	$('.mensajePopOver').popover();
+	    	//$('.mensajePopOver').popover();
 	    	$("#_NotificactionPopUp").modal('show');
 	   	 },
 	    error : function(e,h,j) {  
@@ -753,3 +757,56 @@ function sendNotification(newOwner){
     }, function (response) {debugger;});
 }
 
+function showNotificactionMessagePopUp(link){
+	/*$.ajax({  
+	    type : "GET",   
+	    url: "/notifications/GetMessages",
+	    data: {notificationId : currentUser},
+	    success : function(response) {  	    	
+	    	 for (var i = 0; i < response.length; i ++){
+   				 $('#myItemsGrid tbody').after( "<tr>" +
+				"<td style = 'display:none'>" + response[i].id + "</td>" + 
+				"<td >" + response[i].shortDescription +"</td>" +
+				"<td >" + response[i].description +"</td>" +
+				 "<td><a onclick='deleteItem(this)'><span class='glyphicon glyphicon-remove'></span></a></td>" +
+					"</tr>");   				 
+   	 }
+	    	
+	    	$("#_MyItemsPopUp").modal('show');
+	   	 },
+	    error : function(e,h,j) {  
+	     alert('Error: ' + j);   
+	    }
+});*/
+	
+	var mensaje = $(link).closest("tr").find("td:eq(11)").text(); 
+	$('#mensajeriaNotification').text(mensaje);
+	$("#_NotificactionMessagePopUp").modal('show');
+	
+}
+
+function sendNewMessageNotification(){
+	//se agrega funcion para intercambio de mensajes 
+	/*$.ajax({  
+	     type : "PUT",   
+	     url : "/notifications/Message",
+	     cache: false,
+	     async: true,    
+	     //async: false,
+	     data : { 
+		     		id: id ,
+		     		state: state
+		     	},  
+	 	success : function(response) {
+	 		$(link).closest("tr").remove();  
+	      	alert(response);   
+	      	var countSolicitud = $('#solicitudesCount').text();
+			if(countSolicitud != "0"){
+				$('#solicitudesCount').text(parseInt(countSolicitud) - parseInt("1"))
+			}
+    	},  
+	    error : function(jqXHR, textStatus, errorThrown) {
+	    	alert(jqXHR.responseText);;   
+	    }  
+   });*/
+}

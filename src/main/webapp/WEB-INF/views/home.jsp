@@ -151,7 +151,39 @@
       </div>
     </div>
   </div>
+  
+  
+  <!------------------------------------ Notificaction Messages Section-------------------------------------------- -->
+		<div class="modal fade" id="_NotificactionMessagePopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 750px; !important">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Mensajeria!Negociá con tu amigo!</h4>
+      </div>
+      <div class="modal-body" id="_NotificactionMessagePopUpBody">
+      	<div class="row">
+      		<div class="col-md-12">
+       		 	<textarea id="mensajeriaNotification" class="form-control" rows="15"  readonly></textarea>  
+        	</div>
+        </div>
+        <div class="row">
+      		<div class="col-md-12">
+       		 	<input id="newMessageNotification" class="form-control">
+        	</div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" onclick="sendNewMessageNotification()" class="btn btn-primary">Enviar!</button>
+      </div>
+      </div>
+    </div>
+  </div>
 </div>
+  
+  
+</div>
+
+
 
 <!------------------------------------ Item de intercambio Section-------------------------------------------- -->
 <div class="modal fade" id="_MyItemList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
