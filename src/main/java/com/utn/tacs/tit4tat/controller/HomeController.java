@@ -1,6 +1,5 @@
 package com.utn.tacs.tit4tat.controller;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.ItemService;
-import com.utn.tacs.tit4tat.service.Result;
 import com.utn.tacs.tit4tat.service.UsuarioService;
-
 
 @Controller
 public class HomeController {
@@ -92,18 +88,5 @@ public class HomeController {
 		
 		this.usuarioService.saveUsuario(usuario);
 	}
-	
-    @RequestMapping(value = "/login", method = RequestMethod.POST)//, produces = "application/json")
-    @ResponseBody
-    public Result login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestHeader("Accept") String acceptHeader, HttpSession session) {
-
-        Result r = new Result();
-        r.setStatus(true);
-        r.setMessage("Valid user " + username + " and " + password);
-        
-        session.setAttribute("user", username);
-        
-        return r;
-    }
 
 }
