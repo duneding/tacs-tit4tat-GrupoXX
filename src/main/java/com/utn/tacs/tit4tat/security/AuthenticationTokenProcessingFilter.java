@@ -26,30 +26,28 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         @SuppressWarnings("unchecked")
         Map<String, String[]> parms = request.getParameterMap();
         
-        //String uri = ((HttpServletRequest)request).getRequestURI();
-        
-        //if (!uri.equals("/home/login")){
-	        if (parms.containsKey("token")) {
-	            String strToken = parms.get("token")[0]; // grab the first "token" parameter
-	            System.out.println("Token: " + strToken);
-	
-	            if (strToken.equals("test")) {
-	                System.out.println("valid token found");
-	                
-	                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-	                authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
-	
-	                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("test", "test");
-	                token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
-	                Authentication authentication = new UsernamePasswordAuthenticationToken("test", "test", authorities); //this.authenticationProvider.authenticate(token);
-	                
-	                SecurityContextHolder.getContext().setAuthentication(authentication);
-	            }else{
-	                System.out.println("invalid token");
-	            }
-	        } else {
-	            System.out.println("no token found");
-	        }      
+        //String uri = ((HttpServletRequest)request).getRequestURI();       
+        if (parms.containsKey("token")) {
+            String strToken = parms.get("token")[0]; // grab the first "token" parameter
+            System.out.println("Token: " + strToken);
+
+            if (strToken.equals("test")) {
+                System.out.println("valid token found");
+                
+                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+                authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("test", "test");
+                token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
+                Authentication authentication = new UsernamePasswordAuthenticationToken("test", "test", authorities); //this.authenticationProvider.authenticate(token);
+                
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                System.out.println("invalid token");
+            }
+        } else {
+            System.out.println("no token found");
+        }      
 	        // continue thru the filter chain
 	        chain.doFilter(request, response);
     	}
