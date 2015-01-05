@@ -2,7 +2,6 @@ package com.utn.tacs.tit4tat.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,33 +26,32 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         @SuppressWarnings("unchecked")
         Map<String, String[]> parms = request.getParameterMap();
         
-        /*Map<String, String[]> parms = new HashMap();
-        String[] ttoken = new String[1];
-        ttoken[0] = "test";
-        parms.put("token", ttoken);*/ 
+        //String uri = ((HttpServletRequest)request).getRequestURI();
         
-        if (parms.containsKey("token")) {
-            String strToken = parms.get("token")[0]; // grab the first "token" parameter
-            System.out.println("Token: " + strToken);
-
-            if (strToken.equals("test")) {
-                System.out.println("valid token found");
-                
-                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-                authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
-
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("test", "test");
-                token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
-                Authentication authentication = new UsernamePasswordAuthenticationToken("test", "test", authorities); //this.authenticationProvider.authenticate(token);
-                
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else{
-                System.out.println("invalid token");
-            }
-        } else {
-            System.out.println("no token found");
-        }
-        // continue thru the filter chain
-        chain.doFilter(request, response);
-    }
+        //if (!uri.equals("/home/login")){
+	        if (parms.containsKey("token")) {
+	            String strToken = parms.get("token")[0]; // grab the first "token" parameter
+	            System.out.println("Token: " + strToken);
+	
+	            if (strToken.equals("test")) {
+	                System.out.println("valid token found");
+	                
+	                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	                authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+	
+	                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("test", "test");
+	                token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
+	                Authentication authentication = new UsernamePasswordAuthenticationToken("test", "test", authorities); //this.authenticationProvider.authenticate(token);
+	                
+	                SecurityContextHolder.getContext().setAuthentication(authentication);
+	            }else{
+	                System.out.println("invalid token");
+	            }
+	        } else {
+	            System.out.println("no token found");
+	        }      
+	        // continue thru the filter chain
+	        chain.doFilter(request, response);
+    	}
+    //}
 }

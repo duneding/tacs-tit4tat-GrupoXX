@@ -1,8 +1,10 @@
 package com.utn.tacs.tit4tat.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,23 +42,34 @@ public class HomeController {
 	
 	@SuppressWarnings("unchecked")
 	@Consumes(value ="application/json")
-	@RequestMapping(value = "/login", method=RequestMethod.POST)
-	public @ResponseBody ModelAndView login(@RequestBody String jsonRequest) {
+	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ModelAndView login(String request, HttpSession session) {
 		
 		//TODO loggear con datos de usuario, si no existe crear uno
 		ModelAndView model = new ModelAndView("home");		
-		
-		JSONObject obj=new JSONObject();
-		obj.put("login","OK");
-		/*StringWriter out = new StringWriter();
-		obj.writeJSONString(out);
-		String jsonText = out.toString();*/
-		  
-		model.addObject("response", obj);
+
+		JSONParser jsonParser = new JSONParser();
+		try{
+			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
+			String username = jsonRequest.get("username").toString();
+			String password = jsonRequest.get("password").toString();
+			
+			JSONObject obj=new JSONObject();		
+			obj.put("login","OK");
+			obj.put("username",username);
+			obj.put("password",password);
+			obj.put("token","test");
+			
+			session.setAttribute("user", username);			  
+			model.addObject("response", obj);
+			
+		}catch(Exception e){
+			//TODO
+		}
 		
 		return model;
 	}
-	
+		
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest() {
 
