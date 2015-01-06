@@ -1,5 +1,7 @@
 package com.utn.tacs.tit4tat.controller;
 
+import java.util.Iterator;
+
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Usuario;
+import com.utn.tacs.tit4tat.security.CustomAuthenticationProvider;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
@@ -40,27 +43,42 @@ public class HomeController {
 		return "home";
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@Consumes(value ="application/json")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ModelAndView login(String request, HttpSession session) {
+	//public @ResponseBody ModelAndView login(String request, HttpSession session) {
+	public @ResponseBody ModelAndView login(@RequestBody String request, HttpSession session) {
+			
+		CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
+		long id_user = -1;
 		
 		//TODO loggear con datos de usuario, si no existe crear uno
 		ModelAndView model = new ModelAndView("home");		
-
+		
 		JSONParser jsonParser = new JSONParser();
 		try{
 			JSONObject jsonRequest = (JSONObject) jsonParser.parse(request);
 			String username = jsonRequest.get("username").toString();
-			String password = jsonRequest.get("password").toString();
+			String password = jsonRequest.get("password").toString();			
+			String token = "";
+						
+			Iterator iterator = this.usuarioService.getUsuarios().iterator();
+			while(iterator.hasNext()){
+				  Usuario user = (Usuario) iterator.next();
+				  if (user.getName().equals(username)){
+					  id_user = user.getId();
+					  token = authProvider.calculateNonce();
+					  break;
+				  }
+			}
 			
 			JSONObject obj=new JSONObject();		
 			obj.put("login","OK");
 			obj.put("username",username);
 			obj.put("password",password);
-			obj.put("token","test");
-			
-			session.setAttribute("user", username);			  
+			obj.put("token",token);
+						
+			session.setAttribute("userSession", obj);			  
 			model.addObject("response", obj);
 			
 		}catch(Exception e){
@@ -88,7 +106,7 @@ public class HomeController {
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
 			@RequestParam(value = "userName") String userName) {
-		
+				
 		Usuario usuario = new Usuario();
 		usuario.setId(Long.parseLong(userId));
 		usuario.setName(userName);

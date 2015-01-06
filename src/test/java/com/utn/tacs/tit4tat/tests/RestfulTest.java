@@ -4,13 +4,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+
 public class RestfulTest {
-	
+	    
 	/*
 	 1.   	Como usuario quiero poder registrarme con mi cuenta de Facebook.
 			POST /login

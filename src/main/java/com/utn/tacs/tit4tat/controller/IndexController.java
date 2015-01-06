@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping(value = "/")
 public class IndexController {
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(ModelMap model) {
 		return "home";
@@ -17,7 +17,6 @@ public class IndexController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest() {
-
 		return new ModelAndView("home");
 	}	
 }
