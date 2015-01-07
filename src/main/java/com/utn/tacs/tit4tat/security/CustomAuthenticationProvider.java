@@ -130,12 +130,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 authenticationToken.getCredentials(), authorities);
     }
      
-    public String calculateNonce() {
-        final long expiryTime = System.currentTimeMillis()
+    public String calculateNonce(String user) {
+        /*final long expiryTime = System.currentTimeMillis()
                 + (nonceValiditySeconds * 1000);
-        final String signatureValue = md5Hex(new StringBuilder().append(expiryTime).append(NONCE_FIELD_SEPARATOR).append(key).toString());
+        final String signatureValue = md5Hex(new StringBuilder().append(expiryTime).append(NONCE_FIELD_SEPARATOR).append(key).toString());        
         final String nonceValue = new StringBuilder().append(expiryTime).append(NONCE_FIELD_SEPARATOR).append(signatureValue).toString();
-        return new String(Base64.encode(nonceValue.getBytes()));
+        return new String(Base64.encode(nonceValue.getBytes()));*/
+    	final String signatureValue = md5Hex(new StringBuilder().append(user).append(NONCE_FIELD_SEPARATOR).append(key).toString());
+        return new String(Base64.encode(signatureValue.getBytes()));
     }
  
     public static String md5Hex(String data) {

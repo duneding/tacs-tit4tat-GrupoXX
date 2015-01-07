@@ -15,7 +15,7 @@ public class Startup extends HttpServlet{
 		Usuario testUser;	
 		testUser = new Usuario();    	
     	testUser.setId(99l);
-    	testUser.setName("Test User");    	
+    	testUser.setName("test");    	
     		    
     	ObjectifyService.begin();
 	    ofy().save().entities(testUser).now();

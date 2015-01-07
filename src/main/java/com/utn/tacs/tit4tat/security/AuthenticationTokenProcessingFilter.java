@@ -25,13 +25,28 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             FilterChain chain) throws IOException, ServletException {
         @SuppressWarnings("unchecked")
         Map<String, String[]> parms = request.getParameterMap();
-        
+        //((HttpServletRequest)request).getSession().getAttribute("userSession")
         //String uri = ((HttpServletRequest)request).getRequestURI();       
+        Session currentSession = new Session();
+        CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
+        
+        currentSession = (Session)((HttpServletRequest)request).getSession().getAttribute("userSession");        
+        String tokenParam = "";
+        String tokenCalculated = "";
+        
+        if (currentSession!=null){
+        	long userid = currentSession.getUserid();
+	        String username = currentSession.getUsername();
+	        tokenParam = currentSession.getToken();
+	        tokenCalculated = authProvider.calculateNonce(userid+username);
+        }
+        
         if (parms.containsKey("token")) {
             String strToken = parms.get("token")[0]; // grab the first "token" parameter
             System.out.println("Token: " + strToken);
 
-            if (strToken.equals("test")) {
+            //if (strToken.equals("test")) {
+            if (tokenCalculated.equals(tokenParam)) {
                 System.out.println("valid token found");
                 
                 List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.security.CustomAuthenticationProvider;
+import com.utn.tacs.tit4tat.security.Session;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
@@ -47,10 +48,10 @@ public class HomeController {
 	@Consumes(value ="application/json")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
 	//public @ResponseBody ModelAndView login(String request, HttpSession session) {
-	public @ResponseBody ModelAndView login(@RequestBody String request, HttpSession session) {
+	public @ResponseBody ModelAndView login(@RequestBody String request, HttpSession httpSession) {
 			
 		CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
-		long id_user = -1;
+		long userid = -1;
 		
 		//TODO loggear con datos de usuario, si no existe crear uno
 		ModelAndView model = new ModelAndView("home");		
@@ -66,8 +67,8 @@ public class HomeController {
 			while(iterator.hasNext()){
 				  Usuario user = (Usuario) iterator.next();
 				  if (user.getName().equals(username)){
-					  id_user = user.getId();
-					  token = authProvider.calculateNonce();
+					  userid = user.getId();
+					  token = authProvider.calculateNonce(userid+username);
 					  break;
 				  }
 			}
@@ -77,12 +78,18 @@ public class HomeController {
 			obj.put("username",username);
 			obj.put("password",password);
 			obj.put("token",token);
-						
-			session.setAttribute("userSession", obj);			  
+			
+			Session session = new Session();
+			session.setToken(token);
+			session.setUserid(userid);
+			session.setUsername(username);
+			
+			httpSession.setAttribute("userSession", session);			  
 			model.addObject("response", obj);
 			
 		}catch(Exception e){
 			//TODO
+			System.out.println(e.toString());
 		}
 		
 		return model;
