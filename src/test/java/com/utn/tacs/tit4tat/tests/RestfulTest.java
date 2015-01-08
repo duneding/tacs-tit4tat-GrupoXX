@@ -3,28 +3,32 @@ package com.utn.tacs.tit4tat.tests;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-
+import com.utn.tacs.tit4tat.security.Token;
 
 public class RestfulTest {
 	    
+    private Token token;
+    private final String appLocal = "http://localhost:8888/";
+    private final String appGae = "http://t4t-tacs.appspot.com/";
+    
 	/*
 	 1.   	Como usuario quiero poder registrarme con mi cuenta de Facebook.
 			POST /login
 	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testPostLogin() {
-
+    @Before
+    public void login() {
 		try{							
 			Client client = Client.create();	
 			JSONObject jsonLogin=new JSONObject();
-			jsonLogin.put("user","martin");			
-			jsonLogin.put("password","1234");			
-			WebResource webResource = client.resource("http://localhost:8888/login");
+			jsonLogin.put("userid","99");			
+			jsonLogin.put("password","testrest");			
+			WebResource webResource = client.resource(appGae+"login");
 			ClientResponse response = webResource.
 													accept("application/json").
 													header("Content-Length", jsonLogin.toJSONString().length()).
@@ -35,8 +39,13 @@ public class RestfulTest {
 			
 			try{
 				jsResponse = (JSONObject) jsonParser.parse(response.getEntity(String.class));
-				String result = ((JSONObject) ((JSONObject) jsResponse.get("model")).get("response")).get("login").toString();
-				Assert.assertEquals(result, "OK");
+				JSONObject jsonResponse = ((JSONObject) ((JSONObject) jsResponse.get("model")).get("response"));
+				token = new Token();
+				JSONObject jsonToken = (JSONObject) jsonResponse.get("token");				
+				token.setCode( jsonToken.get("code").toString());
+				token.setExpiryTime( Long.valueOf(jsonToken.get("expiryTime").toString()));
+				
+				Assert.assertEquals( jsonResponse.get("login").toString(), "OK");
 				
 			}catch (Exception e){
 				System.out.println(e.toString());
@@ -47,8 +56,8 @@ public class RestfulTest {
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
-	}
-	
+    }
+    
 	/*
 	 2.1.  Como usuario quiero poder publicar un item, buscando y seleccionando un artículo publicado en Mercado Libre a modo de referencia.
 			 Obtener ítems: GET /items
@@ -58,7 +67,7 @@ public class RestfulTest {
 
 		try{							
 			Client client = Client.create();		 
-			WebResource webResource = client.resource("http://localhost:8888/items");			
+			WebResource webResource = client.resource(appGae+"items");			
 			ClientResponse response = webResource.get(ClientResponse.class);
 			
 			Assert.assertEquals(200, response.getStatus());
