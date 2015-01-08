@@ -13,7 +13,12 @@
     <security:http realm="Protected API" use-expressions="true" auto-config="false" create-session="always" entry-point-ref="CustomAuthenticationEntryPoint">
         <security:custom-filter ref="authenticationTokenProcessingFilter" position="PRE_AUTH_FILTER" />
         <!--  <security:intercept-url pattern="/api/login" access="permitAll" />-->
+        <security:intercept-url pattern="/home" access="permitAll" />
+        <security:intercept-url pattern="/home/" access="permitAll" />
+        <security:intercept-url pattern="/" access="permitAll" />
+        <security:intercept-url pattern="/index" access="permitAll" />
         <security:intercept-url pattern="/login" access="permitAll" />
+        <security:intercept-url pattern="/user/**" access="permitAll" />
         <security:intercept-url pattern="/" access="permitAll" />
         <security:intercept-url pattern="/**" access="isAuthenticated()" />
     </security:http>

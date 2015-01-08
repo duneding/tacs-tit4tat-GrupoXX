@@ -178,7 +178,7 @@ public class ItemsController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
-	List<Item> listItems(@RequestParam(value = "token") String token, @RequestParam(value = "userId") String userId) {
+	List<Item> listItems(@RequestParam(value = "userId") String userId) {
 		List<Item> items = new ArrayList<Item>();
 		Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(userId));
 

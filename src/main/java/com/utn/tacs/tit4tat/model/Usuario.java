@@ -16,6 +16,10 @@ public class Usuario implements Identifiable, Serializable {
 
 	private String name;
 
+	//Cuando el scope es facebook no tiene contraseña. Se utiliza la autenticacion misma de FB
+	//Cuando tiene contraseña son usuarios externos para el uso de la API de Tit4Tat
+	private String password; 
+	
 	@Override
 	public Long getId() {
 		return id;
@@ -43,7 +47,7 @@ public class Usuario implements Identifiable, Serializable {
 
 	 @Override
 	 public String toString() {
-	 return "Usuario [id=" + id + ", name=" + name + "]";
+	 return "Usuario [id=" + id + ", name=" + name + ",password=" + password + "]";
 	 }
 
 	@Override
@@ -70,4 +74,13 @@ public class Usuario implements Identifiable, Serializable {
 			return false;
 		return true;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 }

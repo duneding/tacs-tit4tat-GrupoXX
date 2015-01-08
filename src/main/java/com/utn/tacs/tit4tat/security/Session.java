@@ -2,9 +2,24 @@ package com.utn.tacs.tit4tat.security;
 
 public class Session implements java.io.Serializable {
 	
+	private static Session instance = null;
+	
 	private long userid;
 	private String username;
-	private String token;
+	private Token token;
+	private String scope;
+	
+    protected Session() {
+	      // Exists only to defeat instantiation.
+	}
+	   
+    public static Session getInstance() {
+        if(instance == null) {
+           instance = new Session();
+        }
+        return instance;
+    }
+    
 	public long getUserid() {
 		return userid;
 	}
@@ -17,10 +32,16 @@ public class Session implements java.io.Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getToken() {
+	public Token getToken() {
 		return token;
 	}
-	public void setToken(String token) {
+	public void setToken(Token token) {
 		this.token = token;
-	}	
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
+	}			
 }

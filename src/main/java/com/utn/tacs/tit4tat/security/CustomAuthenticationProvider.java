@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
  
 @Service
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-     
+    
+	private static CustomAuthenticationProvider instance = null;
+	
     private static final Logger Log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
  
     private static final String NONCE_FIELD_SEPARATOR = ":";
@@ -30,10 +32,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private String key = "KEY";
      
     private long nonceValiditySeconds=10;
- 
      
     protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
- 
+
+    protected CustomAuthenticationProvider() {
+	      // Exists only to defeat instantiation.
+	}
+	   
+    public static CustomAuthenticationProvider getInstance() {
+      if(instance == null) {
+         instance = new CustomAuthenticationProvider();
+      }
+      return instance;
+    }
+  
     @Override
     public final Authentication authenticate(Authentication authentication) {
         final UsernamePasswordWithTimeoutAuthenticationToken authenticationToken = (UsernamePasswordWithTimeoutAuthenticationToken)authentication;
@@ -130,16 +142,36 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 authenticationToken.getCredentials(), authorities);
     }
      
-    public String calculateNonce(String user) {
-        /*final long expiryTime = System.currentTimeMillis()
+    public Token calculateToken() {
+    	    	
+        final long expiryTime = System.currentTimeMillis()
                 + (nonceValiditySeconds * 1000);
+        
+        return codeToken(expiryTime);
+    }
+     
+    public Token decodeToken(long expiryTime) {
+    	return codeToken(expiryTime);
+    }
+    
+    public Token codeToken(long expiryTime) {
+    	
+    	Token token = new Token();
+    	
         final String signatureValue = md5Hex(new StringBuilder().append(expiryTime).append(NONCE_FIELD_SEPARATOR).append(key).toString());        
         final String nonceValue = new StringBuilder().append(expiryTime).append(NONCE_FIELD_SEPARATOR).append(signatureValue).toString();
-        return new String(Base64.encode(nonceValue.getBytes()));*/
-    	final String signatureValue = md5Hex(new StringBuilder().append(user).append(NONCE_FIELD_SEPARATOR).append(key).toString());
+        
+        token.setCode(new String(Base64.encode(nonceValue.getBytes())));
+        token.setExpiryTime(expiryTime);
+        
+        return token;
+    }
+    
+    public String encodePassword(String value) {
+    	final String signatureValue = md5Hex(new StringBuilder().append(value).append(NONCE_FIELD_SEPARATOR).append(key).toString());
         return new String(Base64.encode(signatureValue.getBytes()));
     }
- 
+    
     public static String md5Hex(String data) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");

@@ -94,6 +94,7 @@ function testAPI() {
     
     var userId =  response.id;
     var userName = response.first_name + " " + response.last_name;
+    
     $("#currentUser").val(userId);
     $.ajax({  
   type : "POST",   
