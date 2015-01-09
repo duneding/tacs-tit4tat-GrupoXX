@@ -8,6 +8,8 @@ import javax.ws.rs.Consumes;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -82,12 +84,14 @@ public class HomeController {
 				obj.put("token",token);
 	
 				httpSession.setAttribute("userSession", registrySession(userid, username, token, "rest"));
-			}else
-				obj.put("login","no autorizado!");
-						
-			  
-			model.addObject("response", obj);
-			
+				
+				model.addObject("response", obj);
+			}else{
+				//obj.put("login","no autorizado!");
+				model.addObject("response", new ResponseEntity<String>(HttpStatus.UNAUTHORIZED));
+			}
+									  
+					
 		}catch(Exception e){
 			//TODO
 			System.out.println(e.toString());

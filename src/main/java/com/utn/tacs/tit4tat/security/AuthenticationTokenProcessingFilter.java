@@ -1,5 +1,6 @@
 package com.utn.tacs.tit4tat.security;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,55 +24,68 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.utn.tacs.tit4tat.service.UsuarioService;
+
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
+	
+	private final String API = "api";
+	private final String FACEBOOK = "facebook";
+	private final String uAPI = "/login";
+	private final String uFACEBOOK = "/user";
 
     @SuppressWarnings("unchecked")
 	public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-
-    	String uri = ((HttpServletRequest)request).getRequestURI();       
+        
     	String scope = "";
-    	        	
-        Map<String, String[]> parms = request.getParameterMap();
-        //((HttpServletRequest)request).getSession().getAttribute("userSession")
-        
-        Session currentSession = new Session();
-        CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
-        
-        currentSession = (Session)((HttpServletRequest)request).getSession().getAttribute("userSession");        
-        String tokenParam = "";
-        String tokenCalculated = "";
-        String username = "";
+    	Authenticator authenticator = Authenticator.getInstance();
+    	String uri = getURIRequest(request);           	
+    	JSONObject jsonRequest = getJSONRequest(request);        
+    	String tokenRequest = getTokenRequest(jsonRequest);
+    	
+    	//Current Session    	
+    	Session currentSession = getCurrentSession(request);   
+        String currentUsername = "";
+        String currentToken = "";
         
         if (currentSession!=null){
         	
         	scope = currentSession.getScope();
         	if (currentSession.getToken()!=null){
-    	        username = currentSession.getUsername();
-    	        long expiryTime = currentSession.getToken().getExpiryTime();
-    	        tokenParam = currentSession.getToken().getCode();    	        
-    	        tokenCalculated = authProvider.decodeToken(expiryTime).getCode();
+    	        currentUsername = currentSession.getUsername();
+    	        long currentExpiryTime = currentSession.getToken().getExpiryTime();
+    	        //currentToken = currentSession.getToken().getCode();    	        
+    	        currentToken = authenticator.decodeToken(currentExpiryTime).getCode();
         	}
         }
+    	
+    	if (uri.equals(uAPI)){
+    		
+    		scope = API;
+    		Login login = getLoginRequest(jsonRequest);
+    		//Verify authentication and get token
+    		if (authenticator.auth(login))
+    			authorize(request, login.getId(), login.getPassword());
+    		
+    	}else if (uri.equals(uFACEBOOK)){
+    		scope = FACEBOOK;
+    	}
+    		
+    	if (scope.equals(FACEBOOK))
+    		authorize(request, currentUsername, tokenRequest);
+    	else{
+    		
+    	}
         
-        if (parms.containsKey("token") || scope.equals("facebook")) {
-        	
-        	if (!scope.equals("facebook")){
-                String strToken = parms.get("token")[0]; // grab the first "token" parameter
-                System.out.println("Token: " + strToken);
-                
-                if (tokenCalculated.equals(tokenParam)) {
-                	System.out.println("valid token found");
-                	authorize(request, username, tokenParam);
-                	
-                }else{
-                    System.out.println("invalid token");
-                }                
-        	}else
-        		authorize(request, username, tokenParam);
-        	            
-        } else if (!uri.equals("/login") && !uri.equals("/") && !uri.equals("/user")){
-        	
+    	if (tokenRequest!= null) {        	
+    		System.out.println("Token: " + tokenRequest);                
+    		if (currentToken.equals(tokenRequest)) {
+    			System.out.println("valid token found");
+    			authorize(request, currentUsername, tokenRequest);                
+    		}else{
+    			System.out.println("invalid token");
+            }                        	           
+        } else {        	
             System.out.println("no token found");
         }
 
@@ -85,5 +103,62 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+    
+
+    
+    private String getURIRequest(ServletRequest request) {
+    	return ((HttpServletRequest)request).getRequestURI();
+    }
+    
+	private JSONObject getJSONRequest(ServletRequest request) throws IOException{
+		JSONObject jsonRequest = new  JSONObject(); 
+		StringBuffer jb = new StringBuffer();
+	    String line = null;
+	    /*try {
+	      BufferedReader reader = request.getReader();
+	      while ((line = reader.readLine()) != null)
+	        jb.append(line);
+	    } catch (Exception e) { //TODO }
+	*/
+	
+	    if (jb.length()>0){
+		    try {
+			      JSONParser jsonParser = new JSONParser();
+			      jsonRequest = (JSONObject) jsonParser.parse(jb.toString());	    
+			} catch (ParseException e) {
+			      // crash and burn
+			      throw new IOException("Error parsing JSON request string");
+			}
+	    }
+	    
+	    return jsonRequest;
+	}
+	
+	private Login getLoginRequest(JSONObject request) {
+		Login login = new Login();
+	    
+		String id = request.get("userid").toString();
+		String password = request.get("password").toString();			
+		login.setId(id);
+		login.setPassword(password);
+		
+		return login;
+	}
+	
+	private String getTokenRequest(JSONObject request) {
+		
+		if (request.size()>0 && request.containsKey("token"))			
+			return request.get("token").toString();
+		else
+			return null;
+								
+	}
+	
+	private Session getCurrentSession(ServletRequest request){
+		Session session = new Session();
+		session = (Session)((HttpServletRequest)request).getSession().getAttribute("userSession");
+		
+		return session;
+	}	
 
 }

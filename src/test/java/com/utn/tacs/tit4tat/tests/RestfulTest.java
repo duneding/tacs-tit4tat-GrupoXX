@@ -13,49 +13,62 @@ import com.utn.tacs.tit4tat.security.Token;
 
 public class RestfulTest {
 	    
-    private Token token;
+    private Token token = new Token();
     private final String appLocal = "http://localhost:8888/";
     private final String appGae = "http://t4t-tacs.appspot.com/";
+    //private final long userid = 99;
+    //private final String password = "testrest";
     
 	/*
 	 1.   	Como usuario quiero poder registrarme con mi cuenta de Facebook.
 			POST /login
 	 */
-    @Before
-    public void login() {
-		try{							
-			Client client = Client.create();	
-			JSONObject jsonLogin=new JSONObject();
-			jsonLogin.put("userid","99");			
-			jsonLogin.put("password","testrest");			
-			WebResource webResource = client.resource(appGae+"login");
-			ClientResponse response = webResource.
-													accept("application/json").
-													header("Content-Length", jsonLogin.toJSONString().length()).
-													post(ClientResponse.class, jsonLogin.toJSONString());
-			
-			JSONObject jsResponse;		
-			JSONParser jsonParser = new JSONParser();
-			
-			try{
-				jsResponse = (JSONObject) jsonParser.parse(response.getEntity(String.class));
-				JSONObject jsonResponse = ((JSONObject) ((JSONObject) jsResponse.get("model")).get("response"));
-				token = new Token();
-				JSONObject jsonToken = (JSONObject) jsonResponse.get("token");				
-				token.setCode( jsonToken.get("code").toString());
-				token.setExpiryTime( Long.valueOf(jsonToken.get("expiryTime").toString()));
+    @SuppressWarnings("unchecked")
+	private JSONObject login(String userid, String password){
+		Client client = Client.create();
+		JSONObject response = new JSONObject();		
+		JSONObject request=new JSONObject();
+		JSONParser jsonParser = new JSONParser();
+		
+		request.put("userid",userid);			
+		request.put("password",password);			
+		WebResource webResource = client.resource(appLocal+"login");
+		ClientResponse clientResponse = webResource.
+												accept("application/json").
+												header("Content-Length", request.toJSONString().length()).
+												post(ClientResponse.class, request.toJSONString());
 				
-				Assert.assertEquals( jsonResponse.get("login").toString(), "OK");
-				
-			}catch (Exception e){
-				System.out.println(e.toString());
-			}
-			
-			Assert.assertEquals(200, response.getStatus());
-			
+		try{
+			response = (JSONObject) jsonParser.parse(clientResponse.getEntity(String.class));
+			response = ((JSONObject) ((JSONObject) response.get("model")).get("response"));
+			response.put("status", clientResponse.getStatus());
 		}catch(Exception e){
-			System.out.println(e.toString());
+			System.out.println(e.toString());			
 		}
+		
+		return response;
+    }
+    
+    @Test
+    public void testLoginOK() {
+    	JSONObject jsonLogin = login("99","testrest");
+    	JSONObject jsonToken = getToken(jsonLogin);			
+    	token.setCode(getCode(jsonToken));
+    	token.setExpiryTime(getExpiryTime(jsonToken));			
+    	
+    	Assert.assertEquals( jsonLogin.get("status").toString(), "200");							
+    }
+    
+    @Test
+    public void testLoginFailed() {
+    	JSONObject jsonLogin = login("98","testrest");
+    	JSONObject jsonToken = getToken(jsonLogin);				
+    	token.setCode(getCode(jsonToken));
+    	token.setExpiryTime(getExpiryTime(jsonToken));			
+    	
+    	Assert.assertEquals( jsonLogin.get("status").toString(), "200");				
+		//Assert.assertEquals(200, jsonLogin.getStatus());
+			
     }
     
 	/*
@@ -298,5 +311,19 @@ public class RestfulTest {
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
-	}	
+	}
+	
+	private JSONObject getToken(JSONObject jsonLogin){
+		return (JSONObject) jsonLogin.get("token");
+	}
+	
+	private String getCode(JSONObject jsonToken){
+		return jsonToken.get("code").toString();
+	}
+	
+	private long getExpiryTime(JSONObject jsonToken){
+		return Long.valueOf(jsonToken.get("expiryTime").toString());
+	}
+	
+	
 }
