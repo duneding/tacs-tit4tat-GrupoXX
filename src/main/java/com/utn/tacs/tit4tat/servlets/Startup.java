@@ -27,6 +27,19 @@ public class Startup extends HttpServlet{
     	testUser.setPassword(passwordEncoded);
     	ObjectifyService.begin();
 	    ofy().save().entities(testUser).now();
+	    
+	    
+	    Usuario testUser2 = new Usuario();   
+		id = 98l;
+		name = "test2";
+		password = "testrest2";
+		
+    	testUser2.setId(id);
+    	testUser2.setName(name);    	
+    	passwordEncoded = authProvider.encodePassword(password);
+    	testUser2.setPassword(passwordEncoded);
+    	ObjectifyService.begin();
+	    ofy().save().entities(testUser2).now();
 	      	   	
 	}
 

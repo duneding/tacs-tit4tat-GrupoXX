@@ -1,12 +1,17 @@
 package com.utn.tacs.tit4tat.security;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.crypto.codec.Hex;
 
+import com.utn.tacs.tit4tat.model.Usuario;
 import com.utn.tacs.tit4tat.service.UsuarioService;
 
 public class Authenticator {
@@ -31,19 +36,27 @@ public class Authenticator {
     }
 
 	@SuppressWarnings("rawtypes")
-	public boolean auth(Login login) {
+	public Login auth(Login login) {
 		
 		CustomAuthenticationProvider authProvider = CustomAuthenticationProvider.getInstance();
 		String passwordEncoded = authProvider.encodePassword(login.getPassword());;
-		/*Iterator iterator = this.usuarioService.getUsuarios().iterator();
+		
+		List<Usuario> usuarios = ofy().load().type(Usuario.class).list();
+		Iterator iterator = usuarios.iterator();
 		
 		while(iterator.hasNext()){
 			Usuario user = (Usuario) iterator.next();				  
 			
-			if (user.getId().toString().equals(login.getPassword()) && user.getPassword().equals(passwordEncoded))						 
-				return true;			
-		}*/
-		return true;		
+			if (user.getId().toString().equals(login.getId()) && user.getPassword().equals(passwordEncoded))						 
+			{
+				login.setConnect(true);
+				login.setUsername(user.getName());
+				return login;			
+			}
+		}
+		
+		login.setConnect(false);
+		return login;		
 	}
 	
     public Token calculateToken() {
@@ -85,4 +98,5 @@ public class Authenticator {
         }
  
     }	
+    
 }

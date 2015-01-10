@@ -16,12 +16,19 @@ public class RestfulTest {
     private Token token = new Token();
     private final String appLocal = "http://localhost:8888/";
     private final String appGae = "http://t4t-tacs.appspot.com/";
-    //private final long userid = 99;
-    //private final String password = "testrest";
+    private final String userid = "99";
+    private final String password = "testrest";
     
 	/*
 	 1.   	Como usuario quiero poder registrarme con mi cuenta de Facebook.
 			POST /login
+			
+			Request:
+			{
+				"userid": "99",
+				"password": "testrest"
+			}
+			
 	 */
     @SuppressWarnings("unchecked")
 	private JSONObject login(String userid, String password){
@@ -39,9 +46,15 @@ public class RestfulTest {
 												post(ClientResponse.class, request.toJSONString());
 				
 		try{
-			response = (JSONObject) jsonParser.parse(clientResponse.getEntity(String.class));
-			response = ((JSONObject) ((JSONObject) response.get("model")).get("response"));
-			response.put("status", clientResponse.getStatus());
+			
+			if (clientResponse.getStatus()==401)
+				response.put("status", 401);
+			else{
+				response = (JSONObject) jsonParser.parse(clientResponse.getEntity(String.class));
+				response = ((JSONObject) ((JSONObject) response.get("model")).get("response"));
+				response.put("status", clientResponse.getStatus());
+			}
+							
 		}catch(Exception e){
 			System.out.println(e.toString());			
 		}
@@ -51,7 +64,7 @@ public class RestfulTest {
     
     @Test
     public void testLoginOK() {
-    	JSONObject jsonLogin = login("99","testrest");
+    	JSONObject jsonLogin = login(userid,password);
     	JSONObject jsonToken = getToken(jsonLogin);			
     	token.setCode(getCode(jsonToken));
     	token.setExpiryTime(getExpiryTime(jsonToken));			
@@ -62,13 +75,9 @@ public class RestfulTest {
     @Test
     public void testLoginFailed() {
     	JSONObject jsonLogin = login("98","testrest");
-    	JSONObject jsonToken = getToken(jsonLogin);				
-    	token.setCode(getCode(jsonToken));
-    	token.setExpiryTime(getExpiryTime(jsonToken));			
     	
-    	Assert.assertEquals( jsonLogin.get("status").toString(), "200");				
-		//Assert.assertEquals(200, jsonLogin.getStatus());
-			
+    	Assert.assertEquals( jsonLogin.get("status").toString(), "401");				
+		
     }
     
 	/*
@@ -78,9 +87,10 @@ public class RestfulTest {
 	@Test
 	public void testGetItems() {
 
-		try{							
+		try{					
+	    	JSONObject jsonLogin = login(userid,password);
 			Client client = Client.create();		 
-			WebResource webResource = client.resource(appGae+"items");			
+			WebResource webResource = client.resource(appLocal+"items");			
 			ClientResponse response = webResource.get(ClientResponse.class);
 			
 			Assert.assertEquals(200, response.getStatus());

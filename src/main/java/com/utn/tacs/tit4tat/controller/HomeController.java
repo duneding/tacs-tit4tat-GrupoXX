@@ -1,7 +1,12 @@
 package com.utn.tacs.tit4tat.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 
@@ -10,6 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -48,9 +54,8 @@ public class HomeController {
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@Consumes(value ="application/json")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
-	//public @ResponseBody ModelAndView login(String request, HttpSession session) {
 	public @ResponseBody ModelAndView login(@RequestBody String request, HttpSession httpSession) {
-			
+		
 		CustomAuthenticationProvider authProvider = CustomAuthenticationProvider.getInstance();
 		long userid = -1;
 		
@@ -63,26 +68,19 @@ public class HomeController {
 			String id = jsonRequest.get("userid").toString();
 			String password = jsonRequest.get("password").toString();			
 			Token token = new Token();
-			String username = "";
+			token.setCode(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
 			
-			String passwordEncoded = authProvider.encodePassword(password);;
-			Iterator iterator = this.usuarioService.getUsuarios().iterator();
-			while(iterator.hasNext()){
-				  Usuario user = (Usuario) iterator.next();				  
-				  
-				  if (user.getId().toString().equals(id) && user.getPassword().equals(passwordEncoded)){
-					  userid = user.getId();
-					  token = authProvider.calculateToken();
-					  break;
-				  }
-			}
+			String username = httpSession.getAttribute("username").toString();
 			
+			//Prepare response json
 			JSONObject obj=new JSONObject();
 			if (token.getCode()!=null){						
+				obj.put("statusCode", "AUTHORIZED");
+				obj.put("status", "200");
 				obj.put("login","OK");
 				obj.put("username",username);
 				obj.put("token",token);
-	
+
 				httpSession.setAttribute("userSession", registrySession(userid, username, token, "rest"));
 				
 				model.addObject("response", obj);
