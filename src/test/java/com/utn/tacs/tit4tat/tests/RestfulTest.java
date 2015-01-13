@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.WebResource.Builder;
 import com.utn.tacs.tit4tat.security.Token;
 
 public class RestfulTest {
@@ -31,22 +32,57 @@ public class RestfulTest {
 			}
 			
 	 */
-    @SuppressWarnings("unchecked")
-	private JSONObject login(String userid, String password){
-		Client client = Client.create();
+
+    private Builder getBuilderRest(WebResource webResource, Cookie cookie, JSONObject request){
+    	
+    	Builder builder = webResource.
+								   accept("application/json").
+								   header("Content-Length", request.toJSONString().length()); 
+    	if (cookie!=null)
+    		return builder.cookie(cookie);
+    	else
+    		return builder;
+		
+    }
+    
+    private Builder getBuilderRest(WebResource webResource, JSONObject request){    	
+    	return getBuilderRest(webResource, null, request);
+    }
+    
+    private ClientResponse POST(WebResource webResource, JSONObject request){
+    	
+		return POST(webResource, null, request);
+    }
+    
+    private ClientResponse POST(WebResource webResource, Cookie cookie, JSONObject request){
+    	
+    	if (cookie!=null)
+    		return getBuilderRest(webResource, cookie, request).
+    				   post(ClientResponse.class, request.toJSONString());
+    	else    		
+    		return getBuilderRest(webResource, request).
+    				post(ClientResponse.class, request.toJSONString());
+    }
+    
+    private ClientResponse PUT(WebResource webResource, Cookie cookie, JSONObject request){
+       	
+    	return getBuilderRest(webResource, cookie, request).
+    				   put(ClientResponse.class, request.toJSONString());    	
+    }
+    
+    private ClientResponse GET(WebResource webResource, Cookie cookie){
+    	return webResource.cookie(cookie).
+				get(ClientResponse.class);
+    }
+    
+    private void DELETE(){
+    	
+    }
+    
+    private JSONObject getLoginResponse(ClientResponse clientResponse){
 		JSONObject response = new JSONObject();		
-		JSONObject request=new JSONObject();
 		JSONParser jsonParser = new JSONParser();
-		
-		request.put("userid",userid);			
-		request.put("password",password);			
-		WebResource webResource = client.resource(appLocal+"login");
-		ClientResponse clientResponse = webResource.
-												accept("application/json").
-												header("Content-Length", request.toJSONString().length()).
-												post(ClientResponse.class, request.toJSONString());
-		
-		try{
+    	try{
 			
 			if (clientResponse.getStatus()==401)
 				response.put("status", 401);
@@ -63,22 +99,45 @@ public class RestfulTest {
 		return response;
     }
     
+    private String getEnv(){
+    	return appLocal;
+    }
+    
+    private WebResource getResourceRest(String path){
+    	Client client = Client.create();
+    	return client.resource(getEnv()+path);
+    }
+
+    private WebResource getResourceRest(Client client, String path){    	
+    	return client.resource(getEnv()+path);
+    }
+    
+    private Cookie getCookieLogin(ClientResponse clientResponse){
+    	return clientResponse.getCookies().get(0);
+    }
+    
+    @SuppressWarnings("unchecked")
+	private ClientResponse login(String userid, String password){	
+		JSONObject request=new JSONObject();
+
+		request.put("userid",userid);			
+		request.put("password",password);			
+		WebResource webResource = getResourceRest("login");
+		ClientResponse clientResponse = POST(webResource,request);
+		return clientResponse;
+
+    }
+    
     @Test
-    public void testLoginOK() {
-    	JSONObject jsonLogin = login(userid,password);
-    	JSONObject jsonToken = getToken(jsonLogin);			
-    	token.setCode(getCode(jsonToken));
-    	token.setExpiryTime(getExpiryTime(jsonToken));			
-    	
+    public void testLoginOK() {    	
+    	JSONObject jsonLogin = getLoginResponse(login(userid,password));
     	Assert.assertEquals( jsonLogin.get("status").toString(), "200");							
     }
     
     @Test
     public void testLoginFailed() {
-    	JSONObject jsonLogin = login("98","testrest");
-    	
-    	Assert.assertEquals( jsonLogin.get("status").toString(), "401");				
-		
+    	JSONObject jsonLogin = getLoginResponse(login("97","testrdsest"));    	
+    	Assert.assertEquals( jsonLogin.get("status").toString(), "401");						
     }
     
 	/*
@@ -87,53 +146,18 @@ public class RestfulTest {
 	 */
 	@Test
 	public void testGetItems() {
-
-		
-		Client client = Client.create();
-		JSONObject response = new JSONObject();		
-		JSONObject request=new JSONObject();
-		JSONParser jsonParser = new JSONParser();
-		
-		request.put("userid",userid);			
-		request.put("password",password);			
-		WebResource webResource = client.resource(appLocal+"login");
-		ClientResponse clientResponse = webResource.
-												accept("application/json").
-												header("Content-Length", request.toJSONString().length()).
-												post(ClientResponse.class, request.toJSONString());
 		
 		try{
-			
-			if (clientResponse.getStatus()==401)
-				response.put("status", 401);
-			else{
-				response = (JSONObject) jsonParser.parse(clientResponse.getEntity(String.class));
-				response = ((JSONObject) ((JSONObject) response.get("model")).get("response"));
-				response.put("status", clientResponse.getStatus());
-			}
-							
-		}catch(Exception e){
-			System.out.println(e.toString());			
-		}
-		
-		
-		
-		
-		
-		
-		
-		try{					
-	    	JSONObject jsonLogin = response;//login(userid,password);
+			ClientResponse loginResponse = login(userid,password);
+	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
 	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	String token_param = "token=" + token;
 	    	String user_param = "userId=" + userid;
 	    	String params = "?" + user_param + "&" + token_param;
 	    	
-			//Client client = Client.create();
-	    	Cookie cookie = clientResponse.getCookies().get(0);
-			webResource = clientResponse.getClient().resource(appLocal+"items"+params);			
-			ClientResponse responseGet = webResource.cookie(cookie).
-											get(ClientResponse.class);
+	    	Cookie cookie = getCookieLogin(loginResponse);
+	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items"+params);			
+			ClientResponse responseGet = GET(webResource, cookie);
 			
 			Assert.assertEquals(200, responseGet.getStatus());
 			
@@ -150,21 +174,23 @@ public class RestfulTest {
 	@Test
 	public void testPutItems() {
 
-		try{							
-			JSONObject jsonPut=new JSONObject();
-			jsonPut.put("item","1");			
-			jsonPut.put("description","nueva");	
+		try{						
+			ClientResponse loginResponse = login(userid,password);
+	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
+	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
+	    	
+			JSONObject request=new JSONObject();
+			request.put("token",token);			
+			request.put("id","9999");
+			request.put("item","1");			
+			request.put("description","nueva");
 			
-			Client client = Client.create();		 
-			WebResource webResource = client.resource("http://localhost:8888/items");			
-			ClientResponse response = webResource.
-													accept("application/json").
-													header("Content-Length", jsonPut.toJSONString().length()).
-													put(ClientResponse.class, jsonPut.toJSONString());
-
+	    	Cookie cookie = getCookieLogin(loginResponse);
+	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items");			
+			ClientResponse responseGet = PUT(webResource, cookie, request);
 			
-			Assert.assertEquals(200, response.getStatus());
-			
+			Assert.assertEquals(200, responseGet.getStatus());
+						
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
