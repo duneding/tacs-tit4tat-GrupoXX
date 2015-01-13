@@ -1,9 +1,10 @@
 package com.utn.tacs.tit4tat.tests;
 
+import javax.ws.rs.core.Cookie;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.jersey.api.client.Client;
@@ -44,7 +45,7 @@ public class RestfulTest {
 												accept("application/json").
 												header("Content-Length", request.toJSONString().length()).
 												post(ClientResponse.class, request.toJSONString());
-				
+		
 		try{
 			
 			if (clientResponse.getStatus()==401)
@@ -87,13 +88,54 @@ public class RestfulTest {
 	@Test
 	public void testGetItems() {
 
-		try{					
-	    	JSONObject jsonLogin = login(userid,password);
-			Client client = Client.create();		 
-			WebResource webResource = client.resource(appLocal+"items");			
-			ClientResponse response = webResource.get(ClientResponse.class);
+		
+		Client client = Client.create();
+		JSONObject response = new JSONObject();		
+		JSONObject request=new JSONObject();
+		JSONParser jsonParser = new JSONParser();
+		
+		request.put("userid",userid);			
+		request.put("password",password);			
+		WebResource webResource = client.resource(appLocal+"login");
+		ClientResponse clientResponse = webResource.
+												accept("application/json").
+												header("Content-Length", request.toJSONString().length()).
+												post(ClientResponse.class, request.toJSONString());
+		
+		try{
 			
-			Assert.assertEquals(200, response.getStatus());
+			if (clientResponse.getStatus()==401)
+				response.put("status", 401);
+			else{
+				response = (JSONObject) jsonParser.parse(clientResponse.getEntity(String.class));
+				response = ((JSONObject) ((JSONObject) response.get("model")).get("response"));
+				response.put("status", clientResponse.getStatus());
+			}
+							
+		}catch(Exception e){
+			System.out.println(e.toString());			
+		}
+		
+		
+		
+		
+		
+		
+		
+		try{					
+	    	JSONObject jsonLogin = response;//login(userid,password);
+	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
+	    	String token_param = "token=" + token;
+	    	String user_param = "userId=" + userid;
+	    	String params = "?" + user_param + "&" + token_param;
+	    	
+			//Client client = Client.create();
+	    	Cookie cookie = clientResponse.getCookies().get(0);
+			webResource = clientResponse.getClient().resource(appLocal+"items"+params);			
+			ClientResponse responseGet = webResource.cookie(cookie).
+											get(ClientResponse.class);
+			
+			Assert.assertEquals(200, responseGet.getStatus());
 			
 		}catch(Exception e){
 			System.out.println(e.toString());

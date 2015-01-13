@@ -98,7 +98,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     		scope = API;
     		    		
     		if (tokenRequest!=null)
-    			if(!tokenRequest.equals(currentToken))
+    			if(!tokenRequest.equals(currentToken) && SecurityContextHolder.getContext().getAuthentication()!=null)
     				//No Autorizado
     				//SecurityContextHolder.getContext().setAuthentication(null);
     				SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
@@ -107,23 +107,24 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     		
     		
     	if (scope.equals(FACEBOOK))
+    		
     		authorize(wrapper, currentUserid, tokenRequest);
+    	
     	else{
     		
+        	if (tokenRequest!= null) {        	
+        		System.out.println("Token: " + tokenRequest);                
+        		if (currentToken.equals(tokenRequest)) {
+        			System.out.println("valid token found");
+        			authorize(wrapper, currentUserid, tokenRequest);                
+        		}else{
+        			System.out.println("invalid token");
+                }                        	           
+            } else {        	
+                System.out.println("no token found");
+            }
     	}
         
-    	if (tokenRequest!= null) {        	
-    		System.out.println("Token: " + tokenRequest);                
-    		if (currentToken.equals(tokenRequest)) {
-    			System.out.println("valid token found");
-    			authorize(wrapper, currentUserid, tokenRequest);                
-    		}else{
-    			System.out.println("invalid token");
-            }                        	           
-        } else {        	
-            System.out.println("no token found");
-        }
-
         // continue thru the filter chain
         //chain.doFilter(request, response);
     	chain.doFilter(wrapper, response);
