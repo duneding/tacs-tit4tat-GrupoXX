@@ -31,9 +31,9 @@
 			/WEB-INF/mvc-dispatcher-servlet.xml,
 		</param-value>
 	</context-param>
-	<welcome-file-list>
+	<!-- <welcome-file-list>
 		<welcome-file>WEB-INF/views/index.jsp</welcome-file>
-	</welcome-file-list>
+	</welcome-file-list> -->
 	
 	    <context-param>
             <param-name>contextConfigLocation</param-name>

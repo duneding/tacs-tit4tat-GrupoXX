@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.utn.tacs.tit4tat.meli.MercadoLibre;
 import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.ItemMeli;
 import com.utn.tacs.tit4tat.model.Usuario;
+import com.utn.tacs.tit4tat.objectify.OfyService;
 import com.utn.tacs.tit4tat.service.ItemService;
 import com.utn.tacs.tit4tat.service.SolicitudService;
 import com.utn.tacs.tit4tat.service.UsuarioService;
@@ -127,14 +129,71 @@ public class ItemsController {
 	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
-	ModelAndView edit(@RequestBody String jsonRequest) {
+	ModelAndView edit(@RequestBody String request) {
 
+		//OfyService.ofy().delete().keys(OfyService.ofy().load().type(Item.class).keys());
+		//OfyService.ofy().save();
+
+		//OfyService.ofy().load().type(Item.class).order("-__key__").filter("owner",yo).first().now();
 		ModelAndView model = new ModelAndView("items");
-		JSONObject obj = new JSONObject();
-		obj.put("update", "OK");
-		model.addObject("response", obj);
+		JSONObject response = new JSONObject();
+		
+		JSONObject jsonRequest = new JSONObject();		
+		JSONParser jsonParser = new JSONParser();
+		long userid;		
+		long  id;
+		String shortDescription = "";
+		String description = "";
+		
+		try{
+			jsonRequest = (JSONObject) jsonParser.parse(request);
+			
+			if (jsonRequest.get("userid")!=null)
+				userid = Long.valueOf(jsonRequest.get("userid").toString());			
+			else{
+				response.put("Error", "Falta User ID");
+				return model;
+			}
+			
+			if (jsonRequest.get("id")!=null)
+				id = Long.valueOf(jsonRequest.get("id").toString());
+			else{
+				response.put("Error", "Falta ID del Item");
+				return model;
+			}
+				
+			if (jsonRequest.get("shortDescription")!=null)
+				shortDescription = jsonRequest.get("shortDescription").toString();
+			
+			if (jsonRequest.get("description")!=null)
+				description = jsonRequest.get("description").toString();
+			
+			Usuario owner = this.usuarioService.getUsuariosById(userid);
+			/*Item lastItem = OfyService.ofy().load().type(Item.class).order("-__key__").filter("owner",owner).first().now();			
+			if (lastItem!=null)
+				id = lastItem.getId() + 1;*/
+			
+			Item newItem = new Item();
+			newItem.setId(id);
+			newItem.setShortDescription(shortDescription);
+			newItem.setDescription(description);			
+			newItem.setOwner(owner);			
+			this.itemService.saveItem(newItem);
+
+			if (this.itemService.getItemsById(id)!=null){
+				response.put("PUT", "OK");
+				response.put("id", id);
+			}else
+				response.put("PUT", "ERROR");
+			
+			model.addObject("response", response);
+			
+		}catch (Exception e){
+			System.out.println(e.toString());
+		}
 
 		return model;
+		
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

@@ -13,6 +13,7 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.utn.tacs.tit4tat.security.Token;
 
+@SuppressWarnings({"unused", "unchecked"})
 public class RestfulTest {
 	    
     private Token token = new Token();
@@ -116,7 +117,6 @@ public class RestfulTest {
     	return clientResponse.getCookies().get(0);
     }
     
-    @SuppressWarnings("unchecked")
 	private ClientResponse login(String userid, String password){	
 		JSONObject request=new JSONObject();
 
@@ -170,7 +170,6 @@ public class RestfulTest {
 	 2.2.   Como usuario quiero poder publicar un item, buscando y seleccionando un artículo publicado en Mercado Libre a modo de referencia.
 			 Actualizar ítem: PUT /items  (Datos en el body)
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testPutItems() {
 
@@ -181,15 +180,17 @@ public class RestfulTest {
 	    	
 			JSONObject request=new JSONObject();
 			request.put("token",token);			
-			request.put("id","9999");
-			request.put("item","1");			
-			request.put("description","nueva");
+			request.put("userid","99");
+			request.put("id","1");			
+			request.put("description","kindle con mas de 100 libros");
+			request.put("shortDescription","kindle");
 			
 	    	Cookie cookie = getCookieLogin(loginResponse);
 	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items");			
 			ClientResponse responseGet = PUT(webResource, cookie, request);
 			
 			Assert.assertEquals(200, responseGet.getStatus());
+			
 						
 		}catch(Exception e){
 			System.out.println(e.toString());
@@ -199,8 +200,7 @@ public class RestfulTest {
 	/*
 	 2.3.   Como usuario quiero poder publicar un item, buscando y seleccionando un artículo publicado en Mercado Libre a modo de referencia.
 			 Nuevo ítem: POST /items  (Datos en el body)
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
 	@Test
 	public void testPostItems() {
 
@@ -245,8 +245,7 @@ public class RestfulTest {
 	/*
 	 4.    Como usuario quiero enviar a un amigo una solicitud de trueque indicando un item publicado por él y uno publicado por mi.
 		    POST /notifications (Datos en el body)
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
 	@Test
 	public void testPostNotification() {
 
@@ -275,7 +274,6 @@ public class RestfulTest {
 	 5.    Como usuario quiero poder aceptar o rechazar una solicitud de trueque que me haya sido enviada
 		    PUT /notifications/{idNotifications}/reply (Datos en el body)
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testPutNotifications() {
 
@@ -303,7 +301,6 @@ public class RestfulTest {
 	 6.    Como usuario quiero compartir la creación de un ítem en Facebook
 		    POST /items/{idItem}/share
 	 */
-	@SuppressWarnings("unchecked")
 	@Test	
 	public void testGetItemShare() {
 
@@ -331,7 +328,6 @@ public class RestfulTest {
 	 7.    Como usuario quiero compartir un trueque aceptado en mi muro de Facebook.
 		    POST /notifications/{idNotifications}/share
 	 */
-	@SuppressWarnings("unchecked")
 	@Test	
 	public void testUrlGetNotificationsShare() {
 
