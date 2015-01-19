@@ -198,34 +198,96 @@ public class ItemsController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	String createItem(	@RequestParam(value = "id") String id,
+	/*String createItem(	@RequestParam(value = "id") String id,
 						@RequestParam(value = "short_description") String shortDescription,
 						@RequestParam(value = "description") String description,
 						@RequestParam(value = "image") String image,
 						@RequestParam(value = "permalink") String permalink,
 						@RequestParam(value = "owner") String ownerId,
 						@RequestParam(value = "category") String category,
-						@RequestParam(value = "thumbnail") String thumbnail) {
-
+						@RequestParam(value = "thumbnail") String thumbnail) {*/
+		String createItem(@RequestBody String request) {
+		
+		ModelAndView model = new ModelAndView("items");
+		JSONObject response = new JSONObject();
+		
+		JSONObject jsonRequest = new JSONObject();		
+		JSONParser jsonParser = new JSONParser();
 		Item newItem = new Item();
-		newItem.setId(Long.parseLong(id));
-		newItem.setShortDescription(shortDescription);
-		newItem.setDescription(description);
-		//newItem.setImage(Utils.getImageAsBlob(image));
-		Blob imageToBlob = new Blob(image.getBytes());
-		newItem.setImage(imageToBlob);
+		Usuario owner = new Usuario();
 		
-		newItem.setPermalink(permalink);
-		newItem.setThumbnail(thumbnail);
+		long userid;		
+		long  id = 0;		
+		String shortDescription = "";
+		String description = "";
+		String image = "";
+		String permalink = "";
+		String thumbnail = "";
+		String category = "";
 		
-		String[] arrCategory = {category};
-		newItem.setCategory(arrCategory);
-		
-		Usuario owner = this.usuarioService.getUsuariosById(Long.parseLong(ownerId));
-		
-		newItem.setOwner(owner);
-		
-		this.itemService.saveItem(newItem);
+		try{
+			jsonRequest = (JSONObject) jsonParser.parse(request);
+			
+			if (jsonRequest.get("userid")!=null){
+				userid = Long.valueOf(jsonRequest.get("userid").toString());				
+			}else{				
+				return "Error falta el user ID";
+			}
+			
+			owner = this.usuarioService.getUsuariosById(userid);
+			newItem.setOwner(owner);		
+			
+			if (jsonRequest.get("id")!=null)
+				id = Long.valueOf(jsonRequest.get("id").toString());
+			else{				
+				//Genero ID a partir del ultimo
+				Item lastItem = OfyService.ofy().load().type(Item.class).order("-__key__").first().now();			
+				
+				if (lastItem!=null)
+					id = lastItem.getId() + 1;
+				else
+					return "Error";
+			}
+				
+			newItem.setId(id);
+			
+			if (jsonRequest.get("shortDescription")!=null){
+				shortDescription = jsonRequest.get("shortDescription").toString();
+				newItem.setShortDescription(shortDescription);
+			}
+			
+			if (jsonRequest.get("description")!=null){
+				description = jsonRequest.get("description").toString();
+				newItem.setDescription(description);
+			}
+			
+			if (jsonRequest.get("image")!=null){
+				image = jsonRequest.get("image").toString();
+				Blob imageToBlob = new Blob(image.getBytes());
+				newItem.setImage(imageToBlob);
+			}
+			
+			if (jsonRequest.get("permalink")!=null){
+				permalink = jsonRequest.get("permalink").toString();
+				newItem.setPermalink(permalink);
+			}
+			
+			if (jsonRequest.get("thumbnail")!=null){
+				thumbnail = jsonRequest.get("thumbnail").toString();
+				newItem.setThumbnail(thumbnail);
+			}
+			
+			if (jsonRequest.get("category")!=null){
+				category = jsonRequest.get("category").toString();
+				String[] arrCategory = {category};
+				newItem.setCategory(arrCategory);
+			}
+
+			this.itemService.saveItem(newItem);
+			
+		}catch (Exception e){
+			System.out.println(e.toString());
+		}
 
 		return "Item creado correctamente. Id = " + id;
 	}
@@ -242,6 +304,7 @@ public class ItemsController {
 		Usuario usuario = this.usuarioService.getUsuariosById(Long.parseLong(userId));
 
 		for (Item item : this.itemService.getItemsByUser(usuario)) {
+			item.getOwner().setPassword(""); //por seguridad no se muestra este dato
 			items.add(item);
 		}
 
@@ -290,16 +353,12 @@ public class ItemsController {
 //		return model;
 //	}
 
-	@RequestMapping(value = "/delete/{itemId}", method = RequestMethod.DELETE)
-	public String delete(@PathVariable("itemId") String itemid) {
-
-		return "items/delete";
-	}
-
-	@RequestMapping(value = "share/{itemId}", method = RequestMethod.PUT)
-	public String share(@PathVariable("itemId") String itemid) {
-
-		return "items/share";
+	@RequestMapping(value = "{itemId}/share", method = RequestMethod.POST)
+	//public String share(@PathVariable("itemId") String itemid) {
+	public @ResponseBody String share(@PathVariable("itemId") String itemid) {
+		
+		//return "items/share";
+		return "El Item " + itemid + " debe compartirse en un ambiente dentro de Facebook";
 	}
 
 	/*

@@ -662,7 +662,7 @@ function showMyNotifications(){
 
 function acceptNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
-	var state = "acepted";
+	var state = "accepted";
 	var newOwner = $(link).closest("tr").find("td:eq(1)").text(); 
 	var oldOwner = $(link).closest("tr").find("td:eq(2)").text(); 
 	$.ajax({  

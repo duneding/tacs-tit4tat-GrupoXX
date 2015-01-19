@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,10 +48,29 @@ public class NotificationsController {
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
-	String getItemsSearch(@RequestParam(value = "id") String id,
-			@RequestParam(value = "state") String state) {
-
-		try {
+	String getItemsSearch(@RequestBody String request) {
+	/*String getItemsSearch(@RequestParam(value = "id") String id,
+			@RequestParam(value = "state") String state) {*/
+		JSONObject jsonRequest = new JSONObject();		
+		JSONParser jsonParser = new JSONParser();
+		String id = "";
+		String state = "";
+		
+		try {			
+			jsonRequest = (JSONObject) jsonParser.parse(request);
+			
+			if (jsonRequest.get("id")!=null){
+				id = jsonRequest.get("id").toString();				
+			}else{				
+				return "Error falta ID";
+			}
+			
+			if (jsonRequest.get("state")!=null){
+				state = jsonRequest.get("state").toString();				
+			}else{				
+				return "Error falta STATE";
+			}
+			
 			this.solicitudService.changeStateOfSolicitud(id, state);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -94,10 +114,11 @@ public class NotificationsController {
 
 			sol.setState(Solicitud.PENDING);
 
-			this.solicitudService.saveSolicitud(sol);
+			sol = this.solicitudService.saveSolicitud(sol);
 
 
-		return "Solicitud de trueque creado correctamente";
+		//return "Solicitud de trueque " + sol.getId() + " creado correctamente";
+			return sol.getId().toString();
 	}
 	
 	@RequestMapping(value="/count", method = RequestMethod.GET)
@@ -113,5 +134,13 @@ public class NotificationsController {
 		}
 		
 		return size;
+	}
+	
+	@RequestMapping(value = "{idNotifications}/share", method = RequestMethod.POST)
+	//public String share(@PathVariable("itemId") String itemid) {
+	public @ResponseBody String share(@PathVariable("idNotifications") String idNotifications) {
+		
+		//return "items/share";
+		return "La solicitud " + idNotifications + " debe compartirse en un ambiente dentro de Facebook";
 	}
 }

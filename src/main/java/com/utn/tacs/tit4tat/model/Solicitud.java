@@ -103,7 +103,7 @@ public class Solicitud implements Identifiable {
 	}
 	
 	public void setAcepted() {
-		this.setState(Solicitud.ACEPTED);
+		this.setState(Solicitud.ACCEPTED);
 	}
 	
 	public void setRefused() {
@@ -117,7 +117,7 @@ public class Solicitud implements Identifiable {
 	public Solicitud() {
 	}
 
-	public static final int ACEPTED = 1; 
+	public static final int ACCEPTED = 1; 
 	
 	public static final int REFUSED = -1;
 	
