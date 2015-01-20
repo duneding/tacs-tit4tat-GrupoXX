@@ -5,17 +5,14 @@ import javax.ws.rs.core.Cookie;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import com.googlecode.objectify.ObjectifyService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
-import com.utn.tacs.tit4tat.model.Solicitud;
 import com.utn.tacs.tit4tat.security.Token;
-
-import static com.utn.tacs.tit4tat.objectify.OfyService.ofy;
 
 @SuppressWarnings({"unused", "unchecked"})
 public class RestfulTest {
@@ -28,6 +25,9 @@ public class RestfulTest {
     private final String password = "testrest";
     private final String ACCEPTED = "acepted";
     private String solCreada = "";
+    ClientResponse loginResponse;
+    JSONObject jsonLogin;
+    
     
 	/*
 	 1.   	Como usuario quiero poder registrarme con mi cuenta de Facebook.
@@ -40,21 +40,23 @@ public class RestfulTest {
 			}
 			
 	 */    
-    
-	private ClientResponse login(String userid, String password){	
-		JSONObject request=new JSONObject();
-
-		request.put("userid",userid);			
-		request.put("password",password);			
-		WebResource webResource = getResourceRest("login");
-		ClientResponse clientResponse = POST(webResource,request);
-		return clientResponse;
-
+    @Before
+	public void testPostLogin(){	
+		loginResponse = login(userId,password);
+    	jsonLogin = getLoginResponse(loginResponse);
+    	String code = ((JSONObject)jsonLogin.get("token")).get("code").toString();
+    	//long expiryTime = Long.valueOf(((JSONObject)jsonLogin.get("token")).get("expiryTime").toString());    	
+    	
+    	token.setCode(code);        
+    	//token.setExpiryTime(expiryTime);
+    	
+    	Assert.assertTrue(token.getCode()!="");
+    	//Assert.assertTrue(token.getExpiryTime()>0);
+    	
     }
     
     @Test
-    public void testLoginOK() {    	
-    	JSONObject jsonLogin = getLoginResponse(login(userId,password));
+    public void testLoginOK() {    	    	
     	Assert.assertEquals( jsonLogin.get("status").toString(), "200");							
     }
     
@@ -72,10 +74,7 @@ public class RestfulTest {
 	public void testGetItems() {
 		
 		try{
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
-	    	String token_param = "token=" + token;
+	    	String token_param = "token=" + token.getCode();
 	    	String user_param = "userId=" + userId;
 	    	String params = "?" + user_param + "&" + token_param;
 	    	
@@ -98,12 +97,9 @@ public class RestfulTest {
 	public void testPutItems() {
 
 		try{						
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	
 			JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 			request.put("userid","99");
 			request.put("id","1");			
 			request.put("description","kindle con mas de 100 libros");
@@ -129,13 +125,9 @@ public class RestfulTest {
 	public void testPostItems() {
 
 		try{							
-			
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	
 	    	JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 			request.put("userid",userId);	
 			request.put("description","kindle con mas de 100 libros");
 			request.put("shortDescription","kindle");
@@ -161,12 +153,8 @@ public class RestfulTest {
 	public void testGetAmigosItems() {
 			
 			try{							
-				
-				ClientResponse loginResponse = login(userId,password);
-		    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-		    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 		    	
-		    	String token_param = "token=" + token;
+		    	String token_param = "token=" + token.getCode();
 		    	String user_param = "idFriends=" + userId + "," + friendId;
 		    	String params = "?" + user_param + "&" + token_param;
 		    	
@@ -180,8 +168,7 @@ public class RestfulTest {
 			}catch(Exception e){
 				System.out.println(e.toString());
 			}
-			
-			
+						
 	}	
 	
 	/*
@@ -193,12 +180,8 @@ public class RestfulTest {
 
 		try{
 			
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
-	    	
 	    	JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 			request.put("owner_id",userId);	
 			request.put("item_id","2");
 			request.put("user_id",friendId);
@@ -226,12 +209,10 @@ public class RestfulTest {
 	public void testPutNotifications() {
 
 		try{				
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
+			testPostNotification();			
 	    	
 	    	JSONObject request=new JSONObject();
-	    	request.put("token",token);
+	    	request.put("token",token.getCode());
 	    	request.put("id",solCreada);	
 	    	request.put("state",ACCEPTED);	    	
 	    	
@@ -256,12 +237,9 @@ public class RestfulTest {
 	public void testPostItemShare() {
 
 		try{
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	
 	    	JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 
 	    	Cookie cookie = getCookieLogin(loginResponse);
 	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items/1/share");			
@@ -284,12 +262,9 @@ public class RestfulTest {
 	public void testPostNotificationsShare() {
 
 		try{
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	
 	    	JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 
 	    	Cookie cookie = getCookieLogin(loginResponse);
 	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "notifications/1/share");			
@@ -311,10 +286,8 @@ public class RestfulTest {
 	public void testGetNotifications() {
 
 		try{							
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
-	    	String token_param = "token=" + token;
+
+	    	String token_param = "token=" + token.getCode();
 	    	String user_param = "userId=" + userId;
 	    	String params = "?" + user_param + "&" + token_param;
 	    	
@@ -337,12 +310,9 @@ public class RestfulTest {
 	public void testDeleteItems() {
 
 		try{
-			ClientResponse loginResponse = login(userId,password);
-	    	JSONObject jsonLogin = getLoginResponse(loginResponse);
-	    	String token = ((JSONObject)jsonLogin.get("token")).get("code").toString();
 	    	
 	    	JSONObject request=new JSONObject();
-			request.put("token",token);			
+			request.put("token",token.getCode());			
 
 	    	Cookie cookie = getCookieLogin(loginResponse);
 	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items/1");			
@@ -356,6 +326,17 @@ public class RestfulTest {
 			System.out.println(e.toString());
 		}
 	}
+	
+	private ClientResponse login(String userid, String password){	
+		JSONObject request=new JSONObject();
+
+		request.put("userid",userid);			
+		request.put("password",password);			
+		WebResource webResource = getResourceRest("login");
+		ClientResponse clientResponse = POST(webResource,request);
+		return clientResponse;
+
+    }
 	
 	private JSONObject getToken(JSONObject jsonLogin){
 		return (JSONObject) jsonLogin.get("token");
