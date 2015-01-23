@@ -118,6 +118,7 @@ public class HomeController {
 		return "home";
 	}
 	
+	@Consumes(value = "application/json")
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	/*public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
 									  @RequestParam(value = "userName") String userName,

@@ -3,6 +3,8 @@ package com.utn.tacs.tit4tat.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public class NotificationsController {
 		return notifications;
 	}
 
+	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody
 	String getItemsSearch(@RequestBody String request) {
@@ -79,6 +82,7 @@ public class NotificationsController {
 		return "Notificacion ID: " + id + " resuelta.";
 	}
 
+	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody String create(@RequestBody String request) {
 		JSONParser jsonParser;

@@ -105,10 +105,10 @@ function testAPI() {
   type : "POST",   
   url : "/user",  
   async: true,
-  data : jsonRequest,
+  contentType: "application/json",
+  data : JSON.stringify(jsonRequest),		    
   success : function(response) {  
-  	/*if (response!=null)
-  		alert(response);*/
+
   },
   error : function(e,h,j) {  
   	console.log('Error al querer persistir usuario');
@@ -313,7 +313,7 @@ function AgregarItem(){
 	
 	var jsonRequest = {
             id: id,
-            short_description: short_description,
+            shortDescription: short_description,
             description: description,
             image: image,
             permalink: permalink,            
@@ -326,9 +326,9 @@ function AgregarItem(){
 		    type : "POST",   
 		    url : "/items",   
 		    async: false,
-		    dataType: 'json',
-		    //contentType: "application/json",
-		    data : jsonRequest,		    
+		    //dataType: 'json',
+		    contentType: "application/json",
+		    data : JSON.stringify(jsonRequest),		    
 		    success : function(response) {  
 		    	alert(response);
 		    	$('#_MyItemCreate').modal('toggle');
@@ -455,11 +455,11 @@ function createSolicitud(link, item_id, owner_id){
 	/*if(user_id = "10203938494275880")
 		user_id = "10203938494275881";*/
 	jsonRequestToSolicitud = { 
-			"owner_id" : owner_id, 
-			"item_id" : item_id,
-			"user_id" : user_id,
-			"user_item_id" : user_item_id ,
-			"message" : ""
+			owner_id : owner_id, 
+			item_id : item_id,
+			user_id : user_id,
+			user_item_id : user_item_id ,
+			message : ""
 	};
 	
 	
@@ -488,8 +488,7 @@ function SetMensjBeforeNotification(){
 	    url : "/notifications",   
 	    async: false,
 	    //dataType: 'json',
-	    //contentType: "application/json",
-	    //contentType: "application/json",
+	    contentType: "application/json",
 	    data : JSON.stringify(jsonRequestToSolicitud),
 	    success : function(response) {  
 	    	//alert(response);  
@@ -668,19 +667,23 @@ function showMyNotifications(){
 
 function acceptNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
-	var state = "accepted";
+	var state = "acepted";
 	var newOwner = $(link).closest("tr").find("td:eq(1)").text(); 
-	var oldOwner = $(link).closest("tr").find("td:eq(2)").text(); 
+	var oldOwner = $(link).closest("tr").find("td:eq(2)").text();
+	
+	var jsonRequest = { 
+     		id: id ,
+     		state: state
+     	};
+     	
 	$.ajax({  
 	     type : "PUT",   
 	     url : "/notifications",
 	     cache: false,
 	     async: true,   
 	     //async: false,
-	     data : { 
-		     		id: id ,
-		     		state: state
-		     	},  
+		 contentType: "application/json",
+		 data : JSON.stringify(jsonRequest),	     
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   
@@ -702,16 +705,20 @@ function refuseNotification(link) {
 	var id = $(link).closest("tr").children(":first").text(); 
 	var state = "refused";
 
+	var jsonRequest = { 
+     		id: id ,
+     		state: state
+     	};
+	
 	$.ajax({  
 	     type : "PUT",   
 	     url : "/notifications",
 	     cache: false,
 	     async: true,    
 	     //async: false,
-	     data : { 
-		     		id: id ,
-		     		state: state
-		     	},  
+		 contentType: "application/json",
+		 data : JSON.stringify(jsonRequest),
+		 
 	 	success : function(response) {
 	 		$(link).closest("tr").remove();  
 	      	alert(response);   

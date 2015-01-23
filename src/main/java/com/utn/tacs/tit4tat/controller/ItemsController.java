@@ -196,6 +196,7 @@ public class ItemsController {
 		
 	}
 
+	@Consumes(value = "application/json")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	/*String createItem(	@RequestParam(value = "id") String id,
