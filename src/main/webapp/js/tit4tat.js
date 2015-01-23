@@ -95,15 +95,21 @@ function testAPI() {
     var userId =  response.id;
     var userName = response.first_name + " " + response.last_name;
     
+	var jsonRequest = {
+		  	userId: userId ,
+		  	userName: userName
+    }
+    	
     $("#currentUser").val(userId);
     $.ajax({  
   type : "POST",   
   url : "/user",  
   async: true,
-  data : { 
-  	userId: userId ,
-  	userName: userName
-	},
+  data : jsonRequest,
+  success : function(response) {  
+  	/*if (response!=null)
+  		alert(response);*/
+  },
   error : function(e,h,j) {  
   	console.log('Error al querer persistir usuario');
   }
@@ -320,7 +326,7 @@ function AgregarItem(){
 		    type : "POST",   
 		    url : "/items",   
 		    async: false,
-		    //dataType: 'json',
+		    dataType: 'json',
 		    //contentType: "application/json",
 		    data : jsonRequest,		    
 		    success : function(response) {  

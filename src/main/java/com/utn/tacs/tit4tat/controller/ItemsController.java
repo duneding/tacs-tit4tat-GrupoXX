@@ -228,8 +228,8 @@ public class ItemsController {
 		try{
 			jsonRequest = (JSONObject) jsonParser.parse(request);
 			
-			if (jsonRequest.get("userid")!=null){
-				userid = Long.valueOf(jsonRequest.get("userid").toString());				
+			if (jsonRequest.get("owner")!=null){
+				userid = Long.valueOf(jsonRequest.get("owner").toString());				
 			}else{				
 				return "Error falta el user ID";
 			}
@@ -237,9 +237,10 @@ public class ItemsController {
 			owner = this.usuarioService.getUsuariosById(userid);
 			newItem.setOwner(owner);		
 			
-			if (jsonRequest.get("id")!=null)
+			if (jsonRequest.get("id")!=null){			
+				
 				id = Long.valueOf(jsonRequest.get("id").toString());
-			else{				
+			}else{				
 				//Genero ID a partir del ultimo
 				Item lastItem = OfyService.ofy().load().type(Item.class).order("-__key__").first().now();			
 				
@@ -247,8 +248,9 @@ public class ItemsController {
 					id = lastItem.getId() + 1;
 				else
 					return "Error";
-			}
 				
+			}
+			
 			newItem.setId(id);
 			
 			if (jsonRequest.get("shortDescription")!=null){
@@ -282,13 +284,15 @@ public class ItemsController {
 				String[] arrCategory = {category};
 				newItem.setCategory(arrCategory);
 			}
-
+			
 			this.itemService.saveItem(newItem);
 			
 		}catch (Exception e){
 			System.out.println(e.toString());
+			
+			return e.toString() + id + " " + request;
 		}
-
+		
 		return "Item creado correctamente. Id = " + id;
 	}
 	

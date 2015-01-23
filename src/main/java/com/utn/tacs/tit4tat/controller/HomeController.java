@@ -27,7 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.appengine.api.datastore.Blob;
+import com.utn.tacs.tit4tat.model.Item;
 import com.utn.tacs.tit4tat.model.Usuario;
+import com.utn.tacs.tit4tat.objectify.OfyService;
 import com.utn.tacs.tit4tat.security.CustomAuthenticationProvider;
 import com.utn.tacs.tit4tat.security.Session;
 import com.utn.tacs.tit4tat.security.Token;
@@ -43,6 +46,8 @@ public class HomeController {
 	@Autowired
 	private ItemService itemService;
 
+	private final String FACEBOOK = "facebook";
+	
 	@RequestMapping(value = "/home", method = { RequestMethod.POST, RequestMethod.GET })
 	public String index(ModelMap model, HttpSession httpSession) {
 		
@@ -114,26 +119,55 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
+	/*public @ResponseBody void setUser(@RequestParam(value = "userId") String userId,
 									  @RequestParam(value = "userName") String userName,
-									  HttpSession httpSession) {
-				
-		Usuario usuario = new Usuario();
-		usuario.setId(Long.parseLong(userId));
-		usuario.setName(userName);
+									  HttpSession httpSession) {*/
+	public @ResponseBody String setUser(@RequestBody String request,
+										HttpSession httpSession) {
+	
+		JSONObject jsonRequest = new JSONObject();		
+		JSONParser jsonParser = new JSONParser();
 		
-		Usuario persistUser = this.usuarioService.getUsuariosById(usuario.getId());
-				
-		CustomAuthenticationProvider authProvider = CustomAuthenticationProvider.getInstance();		
-		Token token = authProvider.calculateToken();
-				
-		httpSession.setAttribute("userSession", registrySession(usuario.getId(), userName, token, "facebook"));
-				
-		this.usuarioService.saveUsuario(usuario);
+		long userid;
+		String userName = "";
+		String response = "";
 		
-		if (persistUser != null) {
-			return;
+		try{
+			jsonRequest = (JSONObject) jsonParser.parse(request);
+			
+			if (jsonRequest.get("userId")!=null){
+				userid = Long.valueOf(jsonRequest.get("userId").toString());				
+			}else{				
+				return "Error falta el user ID";
+			}
+			
+			if (jsonRequest.get("userName")!=null)
+				userName = jsonRequest.get("userName").toString();				
+			
+			Usuario usuario = new Usuario();
+			usuario.setId(userid);
+			usuario.setName(userName);
+			
+			Usuario persistUser = this.usuarioService.getUsuariosById(usuario.getId());
+					
+			CustomAuthenticationProvider authProvider = CustomAuthenticationProvider.getInstance();		
+			Token token = authProvider.calculateToken();
+			token.setCode(FACEBOOK);		
+			
+			httpSession.setAttribute("userSession", registrySession(usuario.getId(), userName, token, FACEBOOK));
+					
+			this.usuarioService.saveUsuario(usuario);
+			
+			if (persistUser != null) 
+				response = "Usuario persistido y seteado correctamente";
+			else
+				response = "Usuario seteado correctamente";
+			
+		}catch (Exception e){
+			System.out.println(e.toString());
 		}
+		
+		return response;
 	}
 	
 	private Session registrySession(long userid, String username, Token token, String scope){

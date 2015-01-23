@@ -100,7 +100,7 @@ public class RestfulTest {
 	    	
 			JSONObject request=new JSONObject();
 			request.put("token",token.getCode());			
-			request.put("userid","99");
+			request.put("userid",userId);
 			request.put("id","1");			
 			request.put("description","kindle con mas de 100 libros");
 			request.put("shortDescription","kindle");
@@ -108,6 +108,18 @@ public class RestfulTest {
 	    	Cookie cookie = getCookieLogin(loginResponse);
 	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items");			
 			ClientResponse response = PUT(webResource, cookie, request);
+			
+			Assert.assertEquals(200, response.getStatus());
+			
+			
+			//Friend
+			request.put("token",token.getCode());			
+			request.put("userid",friendId);
+			request.put("id","6");			
+			request.put("description","ipad super de la vida loca");
+			request.put("shortDescription","ipad");
+						
+			response = PUT(webResource, cookie, request);
 			
 			Assert.assertEquals(200, response.getStatus());
 			
@@ -183,7 +195,7 @@ public class RestfulTest {
 	    	JSONObject request=new JSONObject();
 			request.put("token",token.getCode());			
 			request.put("owner_id",userId);	
-			request.put("item_id","2");
+			request.put("item_id","7");
 			request.put("user_id",friendId);
 			request.put("user_item_id","6");
 			request.put("message","dale copate y cambiame el item");

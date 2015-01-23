@@ -70,9 +70,14 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     	//Current Credentials
     	String currentToken = "";
     	String currentUserid = "";
-    	if (SecurityContextHolder.getContext().getAuthentication()!=null){
-    		currentToken = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        	currentUserid = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();    		
+    	Authentication context = null;
+    	
+    	if (SecurityContextHolder.getContext().getAuthentication()!=null)
+    		context = SecurityContextHolder.getContext().getAuthentication();
+    	
+    	if (context!=null && context.getCredentials()!=null){
+    		currentToken = context.getCredentials().toString();
+        	currentUserid = context.getPrincipal().toString();    		
     	}
         
     	if (uri.equals(uAPI)){
@@ -108,7 +113,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     		
     	if (scope.equals(FACEBOOK))
     		
-    		authorize(wrapper, currentUserid, tokenRequest);
+    		authorize(wrapper, FACEBOOK, FACEBOOK);
     	
     	else{
     		
@@ -175,7 +180,8 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	    if (stringBuilder.length()>0){
 	    	try {
 			      JSONParser jsonParser = new JSONParser();
-			      jsonRequest = (JSONObject) jsonParser.parse(stringBuilder.toString());	    
+			      if (!stringBuilder.toString().contains("Content-Disposition"))
+			    	  jsonRequest = (JSONObject) jsonParser.parse(stringBuilder.toString());	    
 			} catch (ParseException e) {
 			      // crash and burn
 			      throw new IOException("Error parsing JSON request string");
