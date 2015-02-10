@@ -98,4 +98,11 @@ public class SolicitudServiceImpl implements SolicitudService {
 	public List<Solicitud> getSolicitudesByUser(Usuario usuario) {
 		return this.solicitudDao.getSolicitudByUser(usuario);
 	}
+
+	@Override
+	public void updateMessage(Long idSolicitud, String message) {
+		Solicitud solicitud = this.solicitudDao.getById(idSolicitud);
+		solicitud.setMessage(message);
+		this.updateSolicitud(solicitud);
+	}
 }

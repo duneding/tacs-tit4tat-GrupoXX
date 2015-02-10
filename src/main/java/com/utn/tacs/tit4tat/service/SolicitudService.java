@@ -22,4 +22,6 @@ public interface SolicitudService {
 	public void changeStateOfSolicitud(String permuteId, String state);
 
 	public List<Solicitud> getSolicitudesByUser(Usuario usuario);
+
+	public void updateMessage(Long idSolicitud, String message);
 }
