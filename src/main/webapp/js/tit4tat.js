@@ -793,34 +793,51 @@ function showNotificactionMessagePopUp(link){
 	    }
 });*/
 	
-	var mensaje = $(link).closest("tr").find("td:eq(11)").text(); 
+	var mensaje = $(link).closest("tr").find("td:eq(11)").text();
+	var idSolicitud = $(link).closest("tr").find("td:eq(0)").text();
+	var duenioSolicitadoID = $(link).closest("tr").find("td:eq(1)").text();
+	var duenioOfrecidoID = $(link).closest("tr").find("td:eq(2)").text();
+	$('#solicitudID').text(idSolicitud);
 	$('#mensajeriaNotification').text(mensaje);
+	$('#duenioSolicitadoID').text(duenioSolicitadoID);
+	$('#duenioOfrecidoID').text(duenioOfrecidoID);
 	$("#_NotificactionMessagePopUp").modal('show');
 	
 }
 
 function sendNewMessageNotification(){
 	//se agrega funcion para intercambio de mensajes 
-	/*$.ajax({  
+	var id = $('#solicitudID').text(idSolicitud);
+	var message = $('#mensajeriaNotification').text(mensaje);
+	var encabezado = ""; 
+	
+	if($("#newMessageNotification").val() == "")
+	{
+		alert("Debe ingresar un mensaje!");
+		return false;
+	}
+	
+	if($("#currentUser").val() == $('#duenioSolicitadoID').val())
+		encabezado = "Dueño: ";
+	else
+		encabezado = "Interesado: ";
+	
+	var nuevoMensaje = message + "\n" + encabezado + $("#newMessageNotification").val();
+	
+	$.ajax({  
 	     type : "PUT",   
-	     url : "/notifications/Message",
+	     url : "/notifications/message",
 	     cache: false,
 	     async: true,    
-	     //async: false,
 	     data : { 
 		     		id: id ,
-		     		state: state
+		     		message: message
 		     	},  
 	 	success : function(response) {
-	 		$(link).closest("tr").remove();  
-	      	alert(response);   
-	      	var countSolicitud = $('#solicitudesCount').text();
-			if(countSolicitud != "0"){
-				$('#solicitudesCount').text(parseInt(countSolicitud) - parseInt("1"))
-			}
+	 		
     	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);;   
 	    }  
-   });*/
+   });
 }

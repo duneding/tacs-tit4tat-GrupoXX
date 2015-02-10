@@ -169,6 +169,9 @@
         </div>
         <div class="row" style="margin-top: 15px;">
       		<div class="col-md-12">
+      			<input id="solicitudID" style="display:none" class="form-control">
+      			<input id="duenioOfrecidoID" style="display:none" class="form-control">
+      			<input id="duenioSolicitadoID" style="display:none" class="form-control">
        		 	<input id="newMessageNotification" class="form-control">
         	</div>
         </div>
