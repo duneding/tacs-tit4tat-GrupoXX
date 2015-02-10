@@ -807,8 +807,8 @@ function showNotificactionMessagePopUp(link){
 
 function sendNewMessageNotification(){
 	//se agrega funcion para intercambio de mensajes 
-	var id = $('#solicitudID').text(idSolicitud);
-	var message = $('#mensajeriaNotification').text(mensaje);
+	var id = $('#solicitudID').text();
+	var message = $('#mensajeriaNotification').text();
 	var encabezado = ""; 
 	
 	if($("#newMessageNotification").val() == "")
@@ -817,7 +817,7 @@ function sendNewMessageNotification(){
 		return false;
 	}
 	
-	if($("#currentUser").val() == $('#duenioSolicitadoID').val())
+	if($("#currentUser").val() == $('#duenioSolicitadoID').text())
 		encabezado = "Dueño: ";
 	else
 		encabezado = "Interesado: ";
