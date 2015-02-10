@@ -823,18 +823,20 @@ function sendNewMessageNotification(){
 		encabezado = "Interesado: ";
 	
 	var nuevoMensaje = message + "\n" + encabezado + $("#newMessageNotification").val();
-	
+	var jsonRequest = { 
+     		id: id ,
+     		message: message
+     	};
+	     
 	$.ajax({  
 	     type : "PUT",   
 	     url : "/notifications/message",
 	     cache: false,
 	     async: true,    
-	     data : { 
-		     		id: id ,
-		     		message: message
-		     	},  
+	     contentType: "application/json",
+		 data : JSON.stringify(jsonRequest),
 	 	success : function(response) {
-	 		
+	 		$("#_NotificactionMessagePopUp").modal("toggle");
     	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);;   
