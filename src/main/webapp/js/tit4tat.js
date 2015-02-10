@@ -818,14 +818,14 @@ function sendNewMessageNotification(){
 	}
 	
 	if($("#currentUser").val() == $('#duenioSolicitadoID').text())
-		encabezado = "Dueño: ";
+		encabezado = "Due&ntilde;o: ";
 	else
 		encabezado = "Interesado: ";
 	
 	var nuevoMensaje = message + "\n" + encabezado + $("#newMessageNotification").val();
 	var jsonRequest = { 
      		id: id ,
-     		message: message
+     		message: nuevoMensaje
      	};
 	     
 	$.ajax({  
@@ -837,6 +837,7 @@ function sendNewMessageNotification(){
 		 data : JSON.stringify(jsonRequest),
 	 	success : function(response) {
 	 		$("#_NotificactionMessagePopUp").modal("toggle");
+	 		$("#newMessageNotification").val("");
     	},  
 	    error : function(jqXHR, textStatus, errorThrown) {
 	    	alert(jqXHR.responseText);;   
