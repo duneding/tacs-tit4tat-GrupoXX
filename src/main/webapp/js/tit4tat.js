@@ -646,7 +646,7 @@ function showMyNotifications(){
 				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
 				"<td>" + "<img src= '" + imageRequested + "'></td>" +				
 				"<td >" + response[i].requestItem.shortDescription +"</td>" +
-				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='right' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +*/
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='right' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td>" + "<img src= '" + imageOffered + "'></td>" +
 				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
