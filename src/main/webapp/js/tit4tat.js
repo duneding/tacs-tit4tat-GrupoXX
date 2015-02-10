@@ -616,7 +616,10 @@ function showMyNotifications(){
 	    			 	options = "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
 				 				  "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>";
 	    		 }else{
-	    			 options = "<a data-toggle='tooltip' data-placement='top' title='Ya han finalizado las operaciones sobre esta solicitud' ><span class='glyphicon glyphicon-star-empty'></span></a>";
+	    			 if(response[i].state == "1" )
+	    				 options = "<a  data-toggle='tooltip' data-placement='top' title='Esta solicitud fue Aceptada' ><span class='glyphicon glyphicon-ok'></span></a>";
+	    		     else
+	    			     options = "<a data-toggle='tooltip' data-placement='top' title='Esta solicitud fue rechazada' ><span class='glyphicon glyphicon-remove'></span></a>";
 	    		 }
 	    		 
 	    		 var mensaje = "";
@@ -643,7 +646,7 @@ function showMyNotifications(){
 				"<td style='display:none'>" + response[i].offeredItem.owner.id +"</td>" +
 				"<td>" + "<img src= '" + imageRequested + "'></td>" +				
 				"<td >" + response[i].requestItem.shortDescription +"</td>" +
-				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='right' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +
+				"<td ><a href='#' class='mensajePopOver' tabindex='0' data-toggle='popover' data-placement='right' data-trigger='focus' title='' data-content='" + response[i].requestItem.description +  "'data-original-title='Descripcion larga-Item Solicitado'><i class='glyphicon glyphicon-eye-open'></i></a></td>" +*/
 				"<td >" + response[i].requestItem.owner.name +"</td>" +
 				"<td>" + "<img src= '" + imageOffered + "'></td>" +
 				"<td >" + response[i].offeredItem.shortDescription +"</td>" +
@@ -656,7 +659,7 @@ function showMyNotifications(){
 					"</tr>");   				 
   	 }
 	    	
-	    	//$('.mensajePopOver').popover();
+	    	$('.mensajePopOver').popover();
 	    	$("#_NotificactionPopUp").modal('show');
 	   	 },
 	    error : function(e,h,j) {  
@@ -818,7 +821,7 @@ function sendNewMessageNotification(){
 	}
 	
 	if($("#currentUser").val() == $('#duenioSolicitadoID').text())
-		encabezado = "Due&ntilde;o: ";
+		encabezado = "Dueno: ";
 	else
 		encabezado = "Interesado: ";
 	
