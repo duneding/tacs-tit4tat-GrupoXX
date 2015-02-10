@@ -613,8 +613,11 @@ function showMyNotifications(){
 	    		 
 	    		 var options = "";
 	    		 if(response[i].state == "0" ){
-	    			 	options = "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
-				 				  "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>";
+	    			 	if(currentUserId == response[i].offeredItem.owner.id)
+	    			 		options = "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>";
+	    			 	else
+	    			 		options = "<a  onclick='acceptNotification(this)'><span class='glyphicon glyphicon-ok'></span></a>" +
+				 				  	  "<a  onclick='refuseNotification(this)'><span class='glyphicon glyphicon-remove'></span></a>";
 	    		 }else{
 	    			 if(response[i].state == "1" )
 	    				 options = "<a  data-toggle='tooltip' data-placement='top' title='Esta solicitud fue Aceptada' ><span class='glyphicon glyphicon-ok'></span></a>";
