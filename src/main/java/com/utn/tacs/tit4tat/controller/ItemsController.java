@@ -8,6 +8,8 @@ import javax.ws.rs.Consumes;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -316,6 +318,22 @@ public class ItemsController {
 		return items;
 	}
 	
+	/**
+	 * Obtiene un item de un usuario
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Object> getItem(@PathVariable(value = "itemId") String itemId) {
+		Item item = new Item();		
+
+		item = this.itemService.getItemsById(Long.valueOf(itemId));
+		
+		if (item!=null)
+			return new ResponseEntity<Object>(item,HttpStatus.OK);
+		else
+			return new ResponseEntity<Object>("error",HttpStatus.BAD_REQUEST);
+	}	
 //	@SuppressWarnings("unchecked")
 //	@Consumes(value = "application/json")
 //	@RequestMapping(method = RequestMethod.POST)

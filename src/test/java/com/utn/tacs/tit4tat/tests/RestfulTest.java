@@ -18,8 +18,8 @@ import com.utn.tacs.tit4tat.security.Token;
 public class RestfulTest {
 	    
     private Token token = new Token();
-    private final String appLocal = "http://localhost:8888/";
-    private final String appGae = "http://t4t-tacs.appspot.com/";
+    private final String appEnv = "http://localhost:8888/";
+    //private final String appEnv = "http://t4t-tacs.appspot.com/";
     private final String userId = "99";
     private final String friendId = "98";
     private final String password = "testrest";
@@ -110,8 +110,7 @@ public class RestfulTest {
 			ClientResponse response = PUT(webResource, cookie, request);
 			
 			Assert.assertEquals(200, response.getStatus());
-			
-			
+						
 			//Friend
 			request.put("token",token.getCode());			
 			request.put("userid",friendId);
@@ -339,6 +338,56 @@ public class RestfulTest {
 		}
 	}
 	
+	//TEST ADICIONALES/COMPLEMENTARIOS a las historias
+	/*
+	 Consultar Item: error 400
+	 Creacion Item: OK 
+	 */
+	@Test
+	public void testCreacionItems() {
+
+		try{						
+	    	
+	    	String token_param = "token=" + token.getCode();	    	
+	    	String params = "?" + token_param;
+	    	String itemId = "1601";
+	    	
+	    	Cookie cookie = getCookieLogin(loginResponse);
+	    	WebResource webResource = getResourceRest(loginResponse.getClient(), "items/"+itemId+params);			
+			ClientResponse response = GET(webResource, cookie);			
+			
+			Assert.assertEquals(400, response.getStatus()); //No esta creado
+			
+			JSONObject request=new JSONObject();
+			request.put("token",token.getCode());			
+			request.put("userid",userId);
+			request.put("id",itemId);			
+			request.put("description","kindle con mas de 100 libros");
+			request.put("shortDescription","kindle");
+			
+	    	cookie = getCookieLogin(loginResponse);
+	    	webResource = getResourceRest(loginResponse.getClient(), "items");			
+			response = PUT(webResource, cookie, request);
+			
+			Assert.assertEquals(200, response.getStatus()); //Esta creado
+			
+			
+	    	request=new JSONObject();
+			request.put("token",token.getCode());			
+
+	    	cookie = getCookieLogin(loginResponse);
+	    	webResource = getResourceRest(loginResponse.getClient(), "items/"+itemId);			
+			response = DELETE(webResource, cookie, request);
+
+			Assert.assertEquals(200, response.getStatus()); //Se borra
+								
+						
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+	}
+	
+	//Metodos adicionales para los test
 	private ClientResponse login(String userid, String password){	
 		JSONObject request=new JSONObject();
 
@@ -432,7 +481,7 @@ public class RestfulTest {
     }
     
     private String getEnv(){
-    	return appLocal;
+    	return appEnv;
     }
     
     private WebResource getResourceRest(String path){

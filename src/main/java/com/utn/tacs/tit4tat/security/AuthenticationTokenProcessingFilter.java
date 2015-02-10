@@ -52,9 +52,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     		if (parms.containsKey("token"))
     			tokenRequest = parms.get("token")[0].toString();
     	
-    	//Current Session    	
-    	/*Session currentSession = getCurrentSession(request);   
-        String currentUsername = "";
+        /*String currentUsername = "";
         String currentToken = "";
         
         if (currentSession!=null){
@@ -78,6 +76,14 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     	if (context!=null && context.getCredentials()!=null){
     		currentToken = context.getCredentials().toString();
         	currentUserid = context.getPrincipal().toString();    		
+    	}else{
+        	//Current Session    	
+        	Session currentSession = getCurrentSession(request);
+    		
+        	if (currentSession!=null){
+        		currentToken = currentSession.getToken().getCode();
+        		currentUserid = String.valueOf(currentSession.getUserid());
+        	}
     	}
         
     	if (uri.equals(uAPI)){
@@ -219,7 +225,11 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	
 	private Session getCurrentSession(ServletRequest request){
 		Session session = new Session();
-		session = (Session)((HttpServletRequest)request).getSession().getAttribute("userSession");
+	
+		if (((HttpServletRequest)request).getSession().getAttribute("userSession")!=null)
+			session = (Session)((HttpServletRequest)request).getSession().getAttribute("userSession");
+		else
+			session = null;
 		
 		return session;
 	}	

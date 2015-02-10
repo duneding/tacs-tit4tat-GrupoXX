@@ -86,7 +86,7 @@ public class HomeController {
 				obj.put("username",username);
 				obj.put("token",token);
 
-				httpSession.setAttribute("userSession", registrySession(userid, username, token, "rest"));
+				httpSession.setAttribute("userSession", registrySession(Long.valueOf(id), username, token, "rest"));
 				
 				model.addObject("response", obj);
 			}else{
