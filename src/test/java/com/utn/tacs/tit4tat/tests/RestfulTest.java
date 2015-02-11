@@ -88,7 +88,7 @@ public class RestfulTest {
 			System.out.println(e.toString());
 		}
 	}
-	
+		
 	/*
 	 2.2.   Como usuario quiero poder publicar un item, buscando y seleccionando un artículo publicado en Mercado Libre a modo de referencia.
 			 Actualizar ítem: PUT /items  (Datos en el body)
@@ -387,7 +387,11 @@ public class RestfulTest {
 		}
 	}
 	
-	//Metodos adicionales para los test
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		Metodos adicionales para los test
+		------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 	private ClientResponse login(String userid, String password){	
 		JSONObject request=new JSONObject();
 

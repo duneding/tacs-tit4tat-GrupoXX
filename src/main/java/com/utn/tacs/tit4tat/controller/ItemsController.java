@@ -319,10 +319,11 @@ public class ItemsController {
 	}
 	
 	/**
-	 * Obtiene un item de un usuario
+	 * Obtiene un item
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Object> getItem(@PathVariable(value = "itemId") String itemId) {
 		Item item = new Item();		
@@ -331,8 +332,12 @@ public class ItemsController {
 		
 		if (item!=null)
 			return new ResponseEntity<Object>(item,HttpStatus.OK);
-		else
-			return new ResponseEntity<Object>("error",HttpStatus.BAD_REQUEST);
+		else{
+			JSONObject error=new JSONObject();
+			error.put("Error","El Item  ID: " + itemId + " no existe");	
+			error.put("Code", HttpStatus.BAD_REQUEST.value());
+			return new ResponseEntity<Object>(error,HttpStatus.BAD_REQUEST);
+		}
 	}	
 //	@SuppressWarnings("unchecked")
 //	@Consumes(value = "application/json")

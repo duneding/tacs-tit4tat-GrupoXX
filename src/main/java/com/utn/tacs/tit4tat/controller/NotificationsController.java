@@ -8,6 +8,8 @@ import javax.ws.rs.Consumes;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -176,4 +178,27 @@ public class NotificationsController {
 		return "La solicitud " + idNotifications
 				+ " debe compartirse en un ambiente dentro de Facebook";
 	}
+	
+	/**
+	 * Obtiene una solicitud
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/{solId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Object> getSolicitud(@PathVariable(value = "solId") String solId) {
+		Solicitud sol = new Solicitud();		
+
+		sol = this.solicitudService.getSolicitudesById(Long.valueOf(solId));
+		
+		if (sol!=null)
+			return new ResponseEntity<Object>(sol,HttpStatus.OK);
+		else{
+			JSONObject error=new JSONObject();
+			error.put("Error","La solicitud ID: " + solId + " no existe");	
+			error.put("Code", HttpStatus.BAD_REQUEST.value());
+			return new ResponseEntity<Object>(error,HttpStatus.BAD_REQUEST);
+		}
+			
+	}	
 }
